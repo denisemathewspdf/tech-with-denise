@@ -1,0 +1,196 @@
+---
+title: "Arrays Are Just Lists (I Promise)"
+description: "Arrays, map, filter, and find — the four array methods that will change your life."
+topic: "JavaScript"
+difficulty: "beginner"
+emoji: "📋"
+date: "2025-03-25"
+color: "mint"
+---
+
+# Arrays Are Just Lists (I Promise)
+
+An array is a list. That's it. A list of things. It could be a list of names, a list of numbers, a list of pizza toppings — whatever. If you've ever made a grocery list, you already understand arrays.
+
+## Making an Array
+
+<CodeBlock
+  code="// A list of your favorite shows
+const shows = ['Euphoria', 'Wednesday', 'The Bear'];
+
+// A list of numbers
+const scores = [98, 87, 100, 73, 95];
+
+// A list of anything, really
+const randomStuff = ['coffee', 42, true, 'vibes'];"
+  language="javascript"
+  explanation="Square brackets, items separated by commas. That's an array. The first one is a list of strings (text), the second is a list of numbers, and the third is a mix of different types. Usually you'd keep them all the same type, but JavaScript won't stop you from mixing."
+/>
+
+## Getting Items from the List
+
+Every item in an array has a position number, starting at 0 (not 1, I know, it's weird):
+
+<CodeBlock
+  code="const shows = ['Euphoria', 'Wednesday', 'The Bear'];
+//               [0]         [1]          [2]
+
+shows[0];  // 'Euphoria'    (first item)
+shows[1];  // 'Wednesday'   (second item)
+shows[2];  // 'The Bear'    (third item)
+
+// How many items?
+shows.length;  // 3
+
+// Get the last item (no matter how long the list):
+shows[shows.length - 1];  // 'The Bear'"
+  language="javascript"
+  explanation="The number in the brackets is called the index. It starts at 0 because computers are weird like that. So the first item is at index 0, the second at index 1, etc. .length tells you how many items there are. And the trick for getting the last item is using .length - 1 as the index."
+/>
+
+<Callout variant="tip">
+Why does the index start at 0? Short answer: it's a leftover from how computers handle memory. Long answer: it doesn't matter, just remember the first item is at position 0 and you'll be fine.
+</Callout>
+
+## Adding and Removing Items
+
+<CodeBlock
+  code="const playlist = ['Chill Vibes', 'Study Beats'];
+
+// Add to the END:
+playlist.push('Lo-fi Dreams');
+// ['Chill Vibes', 'Study Beats', 'Lo-fi Dreams']
+
+// Remove from the END:
+playlist.pop();
+// ['Chill Vibes', 'Study Beats']
+
+// Add to the BEGINNING:
+playlist.unshift('Morning Jazz');
+// ['Morning Jazz', 'Chill Vibes', 'Study Beats']
+
+// Remove from the BEGINNING:
+playlist.shift();
+// ['Chill Vibes', 'Study Beats']"
+  language="javascript"
+  explanation="push/pop work on the end of the list. unshift/shift work on the beginning. I remember it like this: 'push' shoves something onto the end, 'pop' takes it off. The names for the beginning ones (shift/unshift) are honestly dumb, but you'll memorize them with practice."
+/>
+
+## The Big Four: map, filter, find, forEach
+
+These four methods are what you'll use constantly. They're the reason arrays are so powerful.
+
+### .map() — Transform Every Item
+
+<CodeBlock
+  code="const prices = [10, 20, 30, 40];
+
+// Add tax to every price
+const withTax = prices.map(price => price * 1.08);
+// [10.8, 21.6, 32.4, 43.2]
+
+// Make every name uppercase
+const names = ['denise', 'sarah', 'maya'];
+const shouting = names.map(name => name.toUpperCase());
+// ['DENISE', 'SARAH', 'MAYA']
+
+// In React, map is how you render lists:
+// {names.map(name => <li>{name}</li>)}"
+  language="javascript"
+  explanation="map() goes through every item in the array, does something to it, and gives you a NEW array with the results. The original array stays the same. Think of it like a factory conveyor belt — each item goes in, gets transformed, and comes out the other side. You'll use this ALL the time in React to render lists of things."
+/>
+
+### .filter() — Keep Only What You Want
+
+<CodeBlock
+  code="const scores = [98, 45, 87, 100, 32, 73, 95];
+
+// Keep only passing scores (above 70)
+const passing = scores.filter(score => score > 70);
+// [98, 87, 100, 73, 95]
+
+// Find all the short names
+const names = ['Jo', 'Denise', 'Al', 'Samantha', 'Li'];
+const shortNames = names.filter(name => name.length <= 2);
+// ['Jo', 'Al', 'Li']"
+  language="javascript"
+  explanation="filter() goes through every item and keeps only the ones where your condition is true. It's like a bouncer at a club — items that pass the test get in, items that don't get rejected. The original array stays the same, and you get a new array with only the items that made the cut."
+/>
+
+### .find() — Get the First Match
+
+<CodeBlock
+  code="const users = [
+  { name: 'Denise', role: 'creator' },
+  { name: 'Sarah', role: 'designer' },
+  { name: 'Maya', role: 'developer' },
+];
+
+// Find the designer
+const designer = users.find(user => user.role === 'designer');
+// { name: 'Sarah', role: 'designer' }
+
+// Find returns the FIRST match, or undefined if nothing matches
+const ceo = users.find(user => user.role === 'ceo');
+// undefined (nobody has that role)"
+  language="javascript"
+  explanation="filter() gives you ALL the matches as an array. find() gives you just the FIRST match as a single item. Use find() when you know there's only one (or you only want one), like looking up a user by ID. It's faster because it stops searching as soon as it finds a match."
+/>
+
+### .forEach() — Do Something with Each Item
+
+<CodeBlock
+  code="const tasks = ['Learn arrays', 'Build a project', 'Celebrate'];
+
+// Print each task with a number
+tasks.forEach((task, index) => {
+  console.log((index + 1) + '. ' + task);
+});
+// 1. Learn arrays
+// 2. Build a project
+// 3. Celebrate"
+  language="javascript"
+  explanation="forEach() goes through every item and runs a function on it, but doesn't create a new array. Use it when you want to DO something (like log, send data, update the DOM) rather than TRANSFORM the data. The second argument (index) is optional — it gives you the position number of each item."
+/>
+
+## Chaining Methods Together
+
+The really cool thing is you can chain these together:
+
+<CodeBlock
+  code="const products = [
+  { name: 'Laptop', price: 999, inStock: true },
+  { name: 'Phone', price: 699, inStock: false },
+  { name: 'Tablet', price: 449, inStock: true },
+  { name: 'Watch', price: 299, inStock: true },
+];
+
+// Get names of affordable products that are in stock
+const affordable = products
+  .filter(p => p.inStock)            // Only in-stock items
+  .filter(p => p.price < 500)        // Only under $500
+  .map(p => p.name);                  // Get just the names
+
+// ['Tablet', 'Watch']"
+  language="javascript"
+  explanation="You can chain .filter() and .map() together like a pipeline. First we filter to only in-stock items (3 items left). Then we filter to only items under $500 (2 items left). Then we map to get just the names. Each step gets the result of the previous step. This is how you write clean, readable data transformations."
+/>
+
+<Callout variant="warning">
+map() and filter() return NEW arrays — they don't change the original. This is called being "immutable" and it's actually a good thing. Your original data stays safe and untouched.
+</Callout>
+
+## Quick Recap
+
+- An array is a **list** of items: `['a', 'b', 'c']`
+- Index starts at **0** (first item is `[0]`)
+- `.push()` adds to end, `.pop()` removes from end
+- `.map()` — **transform** every item into something new
+- `.filter()` — **keep** only items that pass a test
+- `.find()` — get the **first** item that matches
+- `.forEach()` — **do something** with each item (no new array)
+- You can **chain** methods together for powerful pipelines
+
+<Callout variant="denise-says">
+If you understand map and filter, you can work with data in JavaScript. Like, for real. These two methods are in basically every React codebase, every Node.js backend, every data processing script. You just learned the tools that professional developers use every single day. That grocery list knowledge really came in clutch.
+</Callout>

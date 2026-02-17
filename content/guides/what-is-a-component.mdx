@@ -1,0 +1,127 @@
+---
+title: "What Is a React Component?"
+description: "Components are just LEGO blocks for websites. Let me show you."
+topic: "React"
+difficulty: "beginner"
+emoji: "⚛️"
+date: "2025-02-24"
+color: "peach"
+---
+
+# What Is a React Component?
+
+If you've heard people talk about React, you've definitely heard the word "component." It sounds intimidating but I promise — you already understand the concept. You just don't know it yet.
+
+## The LEGO Analogy
+
+Think about a LEGO set. You don't build the whole castle as one single piece, right? You build it from smaller blocks — a wall piece, a door piece, a window piece, a tower piece.
+
+A <Term id="component">component</Term> is the same thing but for websites. Instead of writing one massive HTML file for your entire page, you break it into smaller, reusable pieces:
+
+- A **Navbar** component (the menu at the top)
+- A **Button** component (reusable everywhere)
+- A **Card** component (for displaying content)
+- A **Footer** component (the bottom of every page)
+
+<Callout variant="denise-says">
+When I first saw React code, I was like "why is there HTML inside JavaScript??" That's called JSX, and it's actually the magic sauce. It lets you build your UI right next to the logic that powers it. Weird at first, brilliant once it clicks.
+</Callout>
+
+## Your First Component
+
+Here's the simplest component you can write:
+
+<CodeBlock
+  code="function Greeting() {
+  return (
+    <h1>Hey there! Welcome to my site.</h1>
+  );
+}
+
+// That's it. That's a component.
+// Now you can use it like an HTML tag:
+// <Greeting />"
+  language="jsx"
+  explanation="A component is literally just a function that returns some HTML (well, JSX). You give it a name that starts with a capital letter, and then you can use it like a custom HTML tag anywhere in your app. <Greeting /> — boom, it shows up."
+/>
+
+## Making It Reusable with Props
+
+The real power of components is that you can make them flexible. Instead of hardcoding "Hey there!", what if we could change the name?
+
+<CodeBlock
+  code="function Greeting({ name }) {
+  return (
+    <h1>Hey {name}! Welcome to my site.</h1>
+  );
+}
+
+// Now you can use it with different names:
+// <Greeting name='Denise' />   → 'Hey Denise! Welcome...'
+// <Greeting name='Sarah' />    → 'Hey Sarah! Welcome...'
+// <Greeting name='Bestie' />   → 'Hey Bestie! Welcome...'"
+  language="jsx"
+  explanation="Those curly braces { } are how you put JavaScript inside your JSX. The 'name' thing in the parentheses is called a prop — it's like a setting you can change each time you use the component. Think of it like a coffee order: the component is the recipe, and props are your customizations (oat milk, extra shot, etc.)."
+/>
+
+<Term id="props">Props</Term> are how parent components talk to child components. It's a one-way conversation — the parent says "here's your data," and the child displays it.
+
+## A Real Example: Profile Card
+
+Let's build something you'd actually see on a website:
+
+<CodeBlock
+  code="function ProfileCard({ name, role, emoji }) {
+  return (
+    <div className='card'>
+      <span className='avatar'>{emoji}</span>
+      <h2>{name}</h2>
+      <p>{role}</p>
+    </div>
+  );
+}
+
+// Use it like this:
+// <ProfileCard name='Denise' role='Making tech less scary' emoji='💜' />
+// <ProfileCard name='Sarah' role='Frontend wizard' emoji='✨' />
+// <ProfileCard name='Maya' role='Python queen' emoji='🐍' />"
+  language="jsx"
+  explanation="See how we defined one ProfileCard component but can use it three different times with different data? That's the whole point. Write it once, use it everywhere. Each card gets its own name, role, and emoji through props. No copy-pasting HTML!"
+/>
+
+<Callout variant="tip">
+Component names MUST start with a capital letter. `profileCard` won't work — React will think it's a regular HTML tag. Always use `ProfileCard` (PascalCase).
+</Callout>
+
+## Components Inside Components
+
+Here's where it gets really cool — components can contain other components:
+
+<CodeBlock
+  code="function TeamPage() {
+  return (
+    <div>
+      <h1>Meet the Team</h1>
+      <div className='team-grid'>
+        <ProfileCard name='Denise' role='Founder' emoji='💜' />
+        <ProfileCard name='Sarah' role='Designer' emoji='🎨' />
+        <ProfileCard name='Maya' role='Developer' emoji='💻' />
+      </div>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="TeamPage is a component that uses three ProfileCard components inside it. It's components all the way down! Your whole app is just components containing other components. The landing page you're looking at right now? It's a Nav component, a Hero component, a TopicCards component, and a Footer component all stacked together."
+/>
+
+## Quick Recap
+
+- A **component** is a reusable building block (a function that returns JSX)
+- **Props** are how you customize a component (like settings or options)
+- Component names must start with a **capital letter**
+- Components can contain other components (nesting!)
+- The goal: write it once, use it everywhere
+
+<Callout variant="denise-says">
+You now understand components. That's genuinely the most important concept in React — everything else builds on this. Every React app you've ever used (Instagram, Netflix, Airbnb) is just components inside components inside components. And you get it. Go tell someone.
+</Callout>

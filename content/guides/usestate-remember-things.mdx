@@ -1,0 +1,163 @@
+---
+title: "useState: Teaching Your App to Remember"
+description: "How to make your React app remember things — like whether a menu is open, a button was clicked, or how many tacos you've ordered."
+topic: "React"
+difficulty: "beginner"
+emoji: "🧠"
+date: "2025-03-01"
+color: "lavender"
+---
+
+# useState: Teaching Your App to Remember
+
+So you built a button. Cute. But when you click it... nothing happens. That's because your component doesn't have a memory yet. It doesn't know whether the button was clicked. Enter: <Term id="state">state</Term>.
+
+## What Is State?
+
+State is your component's memory. It's how your app keeps track of things that can change:
+
+- Is the menu open or closed?
+- How many items are in the cart?
+- What did the user type in the search box?
+- Is dark mode on?
+
+Without state, your app is like a goldfish — it forgets everything instantly.
+
+<Callout variant="denise-says">
+State confused me for SO long because tutorials kept using abstract examples. So here's my rule: if something on the screen can change after the page loads, that's state. A counter going up? State. A dropdown opening? State. A form field being typed into? State.
+</Callout>
+
+## Your First useState
+
+Here's the simplest example — a counter:
+
+<CodeBlock
+  code="import { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me!
+      </button>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="Let's break this down piece by piece. useState(0) says 'create a piece of memory, and start it at 0.' It gives you back two things: 'count' (the current value) and 'setCount' (a function to update it). When you click the button, setCount(count + 1) bumps the count up by 1, and React automatically re-renders the screen to show the new number. That's it!"
+/>
+
+## The Two Things useState Gives You
+
+This line is the key to everything:
+
+<CodeBlock
+  code="const [count, setCount] = useState(0);
+//     ^^^^^  ^^^^^^^^          ^
+//     |      |                 |
+//     |      |                 Starting value
+//     |      Function to UPDATE it
+//     The CURRENT value"
+  language="javascript"
+  explanation="useState always returns a pair: the value and a setter function. You can name them whatever you want, but the convention is [thing, setThing]. So for a username you'd write [username, setUsername]. For a menu being open: [isOpen, setIsOpen]. The pattern is always the same."
+/>
+
+<Callout variant="tip">
+The naming convention is always `[something, setSomething]`. The setter always starts with "set" followed by the name of your variable. This isn't required by React, but literally every React developer does it this way, so you should too.
+</Callout>
+
+## A Real Example: Toggle Menu
+
+Here's something you'd actually build — a menu that opens and closes:
+
+<CodeBlock
+  code="function MobileMenu() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setIsOpen(!isOpen)}>
+        {isOpen ? 'Close Menu' : 'Open Menu'}
+      </button>
+
+      {isOpen && (
+        <nav>
+          <a href='/'>Home</a>
+          <a href='/about'>About</a>
+          <a href='/contact'>Contact</a>
+        </nav>
+      )}
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="isOpen starts as false (menu is closed). When you click the button, !isOpen flips it — false becomes true, true becomes false. That's a toggle! The {isOpen && (...)} part means 'only show the nav links if isOpen is true.' So clicking the button shows/hides the menu. You just built a hamburger menu."
+/>
+
+## Another Real Example: Like Button
+
+<CodeBlock
+  code="function LikeButton() {
+  const [liked, setLiked] = useState(false);
+
+  return (
+    <button
+      onClick={() => setLiked(!liked)}
+      style={{ color: liked ? 'red' : 'gray' }}
+    >
+      {liked ? 'Liked!' : 'Like'}
+    </button>
+  );
+}"
+  language="jsx"
+  explanation="Same pattern as the menu toggle! liked starts as false. Click it and it flips to true — the heart turns red and the text changes to 'Liked!' Click again and it flips back. Instagram uses this exact pattern for their heart button. You're basically building Instagram right now."
+/>
+
+## Multiple States in One Component
+
+You can use useState as many times as you want in a single component:
+
+<CodeBlock
+  code="function TacoOrder() {
+  const [count, setCount] = useState(0);
+  const [spicy, setSpicy] = useState(false);
+  const [name, setName] = useState('');
+
+  return (
+    <div>
+      <input
+        placeholder='Your name'
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <p>{count} tacos for {name || '...'}</p>
+      <button onClick={() => setCount(count + 1)}>Add Taco</button>
+      <button onClick={() => setSpicy(!spicy)}>
+        {spicy ? 'Make it mild' : 'Make it spicy'}
+      </button>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="Three separate pieces of state: how many tacos, whether they want it spicy, and their name. Each one is independent — changing the count doesn't affect the spicy toggle. The input field uses onChange to update the name state every time someone types. This is how forms work in React!"
+/>
+
+<Callout variant="warning">
+Never modify state directly! Don't write `count = count + 1`. Always use the setter function: `setCount(count + 1)`. If you change the variable directly, React won't know anything changed and your screen won't update.
+</Callout>
+
+## Quick Recap
+
+- **State** = your component's memory (things that can change)
+- `useState(initialValue)` gives you `[value, setValue]`
+- Call the **setter function** to update state (never modify directly)
+- When state changes, React **re-renders** the component automatically
+- You can use **multiple** useStates in one component
+- Common patterns: counters, toggles, form inputs
+
+<Callout variant="denise-says">
+useState is the first React <Term id="hook">hook</Term> most people learn, and honestly it handles like 80% of what you need. You now know how to make your app remember things. That's huge. You went from "my button does nothing" to "I can build a toggle menu, a like button, AND a taco ordering system." Not bad for one concept.
+</Callout>

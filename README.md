@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tech with Denise
+
+Making tech less scary. A personal brand content platform that explains React, Python, AI, Terminal, TypeScript, and Web3 in plain English.
+
+## Tech Stack
+
+- **Framework**: Next.js 14 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS (custom brand palette)
+- **Content**: MDX via `next-mdx-remote`
+- **Fonts**: Quicksand (body), Playfair Display (headings), JetBrains Mono (code)
+- **Syntax Highlighting**: prism-react-renderer
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repo and install dependencies:
+
+```bash
+npm install
+```
+
+2. Copy the environment file:
+
+```bash
+cp .env.example .env.local
+```
+
+3. Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+/app
+  /page.tsx              - Landing page
+  /guides/page.tsx       - All guides listing (filterable by topic)
+  /guides/[slug]/page.tsx - Individual guide page (renders MDX)
+  /glossary/page.tsx     - Tech term glossary
+  /og/route.tsx          - Dynamic OG image generation
+  /sitemap.ts            - Auto-generated sitemap
+  /layout.tsx            - Root layout (nav + footer + fonts + SEO)
 
-## Learn More
+/components
+  /Nav.tsx               - Fixed navigation with mobile hamburger
+  /Footer.tsx            - Site footer with social links
+  /TopicCard.tsx         - Topic card for landing page grid
+  /CodeBlock.tsx         - Syntax highlighted code with "Denise explains" toggle
+  /GlossaryTooltip.tsx   - Hover tooltip for jargon terms in guides
+  /NewsletterSignup.tsx  - Email capture component
+  /GuideCard.tsx         - Card for guide listings
+  /ELI5Toggle.tsx        - Side-by-side code/explanation toggle
+  /Callout.tsx           - Callout box (tip, warning, denise-says variants)
+  /ScrollReveal.tsx      - Scroll-triggered reveal animation
+  /BackgroundShapes.tsx  - Floating decorative background shapes
 
-To learn more about Next.js, take a look at the following resources:
+/content
+  /guides                - MDX guide files (add new guides here!)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+/lib
+  /mdx.ts                - MDX file reading and parsing utilities
+  /mdx-components.tsx    - Custom MDX component registry
+  /glossary.ts           - Glossary data and lookup functions
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Writing Guides
 
-## Deploy on Vercel
+Create a new `.mdx` file in `/content/guides/`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```mdx
+---
+title: "Your Guide Title"
+description: "A short description for cards and SEO."
+topic: "JavaScript"
+difficulty: "beginner"
+emoji: "☕"
+date: "2025-02-17"
+color: "peach"
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Your content here! You can use these custom components:
+
+<CodeBlock code="const x = 1;" language="javascript" explanation="..." />
+<Term id="api">API</Term>
+<Callout variant="tip">A helpful tip!</Callout>
+<Callout variant="denise-says">Personal advice here.</Callout>
+```
+
+Available `color` values: `peach`, `lavender`, `mint`, `pink`, `gold`, `rose`
+
+Available `difficulty` values: `beginner`, `intermediate`, `advanced`
+
+## Deployment
+
+Deploy to Vercel:
+
+```bash
+npx vercel
+```
+
+Or connect your GitHub repo to Vercel for automatic deploys.

@@ -1,0 +1,183 @@
+---
+title: "Your First Python Script"
+description: "Write your first real Python code in 10 minutes. No experience needed — just vibes."
+topic: "Python"
+difficulty: "beginner"
+emoji: "🐍"
+date: "2025-03-05"
+color: "gold"
+---
+
+# Your First Python Script
+
+Python is probably the friendliest programming language out there. It reads almost like English, it doesn't yell at you with semicolons, and it's used for everything from web apps to AI to automating boring spreadsheet tasks. Let's write your first script.
+
+## Why Python?
+
+Before we write any code, here's why Python is great for beginners:
+
+- It reads like **plain English** (no weird symbols everywhere)
+- You get results **fast** (no complicated setup)
+- It's used **everywhere** (Google, Netflix, NASA, Instagram)
+- The community is **massive** (so you can always find help)
+
+<Callout variant="denise-says">
+I started with JavaScript, and when I tried Python for the first time I literally said out loud, "Wait... that's it?" It felt too simple to be real. But that's the beauty of it — Python doesn't make you jump through hoops.
+</Callout>
+
+## Hello, World!
+
+Every programmer's first program. Here's yours:
+
+<CodeBlock
+  code="# This is your first Python script!
+print('Hello, world!')
+
+# You can print anything:
+print('My name is Denise')
+print('I am learning Python')
+print('And it is not scary at all')"
+  language="python"
+  explanation="print() is how you tell Python to show text on the screen. Whatever you put inside the parentheses and quotes, it displays. That's it. You just wrote your first program. The lines starting with # are comments — Python ignores them. They're just notes for humans reading the code."
+/>
+
+## Variables: Labeling Your Stuff
+
+A <Term id="variable">variable</Term> is just a name you give to a piece of data. Think of it as a labeled jar:
+
+<CodeBlock
+  code="# Creating variables (labeled jars)
+name = 'Denise'
+age = 28
+favorite_color = 'lavender'
+loves_coffee = True
+
+# Using them
+print('Hi, my name is ' + name)
+print('I am ' + str(age) + ' years old')
+print('My favorite color is ' + favorite_color)"
+  language="python"
+  explanation="The = sign doesn't mean 'equals' here — it means 'put this value into this jar.' So name = 'Denise' means 'create a jar called name and put Denise in it.' Then when you use the variable name later, Python goes and looks inside the jar. str(age) converts the number 28 to text so we can glue it together with the other words."
+/>
+
+<Callout variant="tip">
+Python variable names use **snake_case** (words separated by underscores). So it's `favorite_color` not `favoriteColor`. This is just a Python convention — it's not wrong to do it differently, but all Python developers do it this way.
+</Callout>
+
+## Making Decisions with If/Else
+
+Your code can make choices:
+
+<CodeBlock
+  code="temperature = 75
+
+if temperature > 80:
+    print('It is HOT. Stay inside.')
+elif temperature > 60:
+    print('Perfect weather! Go outside.')
+else:
+    print('Bundle up, it is chilly.')
+
+# This would print: 'Perfect weather! Go outside.'
+# Because 75 is greater than 60 but not greater than 80"
+  language="python"
+  explanation="This is how you teach your code to make decisions. if checks the first condition. elif (short for 'else if') checks another condition. else is the fallback — if nothing else matched, do this. The indentation (those spaces before print) is how Python knows what belongs inside each block. It matters!"
+/>
+
+<Callout variant="warning">
+Indentation matters in Python! Unlike most languages, Python uses spaces (usually 4) to know what code belongs inside an if block, loop, or function. If your code isn't working, check your indentation first.
+</Callout>
+
+## Lists: Collections of Things
+
+A list is exactly what it sounds like — a list of items:
+
+<CodeBlock
+  code="# A list of your favorite things
+favorites = ['coffee', 'Python', 'rainy days', 'lo-fi music']
+
+# Access items by position (starts at 0, not 1!)
+print(favorites[0])   # 'coffee'
+print(favorites[2])   # 'rainy days'
+
+# Add something new
+favorites.append('sushi')
+
+# How many items?
+print(len(favorites))  # 5
+
+# Loop through every item
+for thing in favorites:
+    print('I love ' + thing)"
+  language="python"
+  explanation="Lists use square brackets and commas. The first item is at position 0 (I know, it's weird — but every programming language does this). .append() adds a new item to the end. len() tells you how many items are in the list. And the for loop goes through each item one by one. So it would print 'I love coffee', 'I love Python', etc."
+/>
+
+## Your First Useful Script
+
+Let's build something actually useful — a simple tip calculator:
+
+<CodeBlock
+  code="# Tip Calculator
+bill = 45.50
+tip_percent = 20
+
+tip_amount = bill * (tip_percent / 100)
+total = bill + tip_amount
+
+print('Bill: $' + str(bill))
+print('Tip (' + str(tip_percent) + '%): $' + str(round(tip_amount, 2)))
+print('Total: $' + str(round(total, 2)))
+
+# Output:
+# Bill: $45.5
+# Tip (20%): $9.1
+# Total: $54.6"
+  language="python"
+  explanation="This calculates a tip! We multiply the bill by the tip percentage (converted to a decimal by dividing by 100). round(tip_amount, 2) rounds to 2 decimal places so you get clean dollar amounts. You could expand this to ask the user for input, split between friends, etc. But even this simple version is a real, working program."
+/>
+
+## Getting User Input
+
+Make your scripts interactive:
+
+<CodeBlock
+  code="# Ask the user questions
+name = input('What is your name? ')
+food = input('What is your favorite food? ')
+
+print('Nice to meet you, ' + name + '!')
+print('I also love ' + food + '!')
+
+# When you run this, it will pause and wait
+# for the user to type something"
+  language="python"
+  explanation="input() pauses the program and waits for someone to type something. Whatever they type gets stored in the variable. So if someone types 'Denise' when asked their name, the variable 'name' now contains 'Denise'. This is how you make your scripts feel interactive and personal."
+/>
+
+## How to Run Python
+
+1. **Install Python**: Download from python.org (it's free)
+2. **Write your code**: Save it as `my_script.py` (the .py extension)
+3. **Run it in the terminal**: `python my_script.py`
+
+Or use an online editor like **repl.it** — no installation needed!
+
+<Callout variant="tip">
+If you have VS Code, install the Python extension. Then you can write and run Python right inside your editor — just click the play button at the top right. Super convenient.
+</Callout>
+
+## Quick Recap
+
+- Python reads like English — no semicolons, no curly braces
+- `print()` shows stuff on screen
+- Variables are labeled jars: `name = 'Denise'`
+- `if/elif/else` for making decisions
+- Lists hold collections: `['item1', 'item2']`
+- `for` loops go through items one by one
+- `input()` lets users type responses
+- Indentation matters!
+
+<Callout variant="denise-says">
+You just wrote real Python. Not fake "hello world and goodbye" Python — you built a tip calculator, you worked with lists, you got user input. These are the building blocks of every Python program ever. Automation scripts, web scrapers, AI models — they all start with the exact concepts you just learned. You're doing amazing.
+</Callout>

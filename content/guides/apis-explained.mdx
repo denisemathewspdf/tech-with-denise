@@ -1,0 +1,211 @@
+---
+title: "APIs Explained: The Restaurant Analogy"
+description: "What an API actually is and how to use one — explained through food, obviously."
+topic: "JavaScript"
+difficulty: "beginner"
+emoji: "🍽️"
+date: "2025-04-03"
+color: "rose"
+---
+
+# APIs Explained: The Restaurant Analogy
+
+You'll hear developers say "just call the API" like it's obvious. It's not. But after this guide, it will be. An <Term id="api">API</Term> is one of those concepts that sounds complicated but is shockingly simple once you get the right analogy.
+
+## The Restaurant
+
+You're at a restaurant. You want food. But you can't just walk into the kitchen and start cooking. Instead:
+
+1. You look at the **menu** (the API documentation)
+2. You tell the **waiter** your order (make an API request)
+3. The waiter goes to the **kitchen** (the server)
+4. The kitchen makes your food (processes the request)
+5. The waiter brings it back to you (the API response)
+
+The API is the waiter. It's the middleman between you (the app) and the kitchen (the server/database). You never interact with the kitchen directly.
+
+<Callout variant="denise-says">
+APIs clicked for me when I realized they're just a way for two programs to talk to each other. Your weather app doesn't have weather scientists inside it — it asks a weather API "what's the forecast?" and gets data back. That's it. Two programs, passing notes.
+</Callout>
+
+## What Does an API Request Look Like?
+
+When you "call" an API, you're basically sending a structured message:
+
+<CodeBlock
+  code="// Asking a weather API for the forecast
+// This is a real API call using fetch():
+
+const response = await fetch(
+  'https://api.weather.com/forecast?city=Los+Angeles'
+);
+
+const data = await response.json();
+
+console.log(data);
+// {
+//   city: 'Los Angeles',
+//   temperature: 72,
+//   condition: 'Sunny',
+//   humidity: 45
+// }"
+  language="javascript"
+  explanation="fetch() is how JavaScript makes API requests. You give it a URL (the API's address), and it sends a request and waits for a response. The response comes back as JSON — which is basically a JavaScript object with curly braces and key-value pairs. That's your data! Now you can show the temperature on your app."
+/>
+
+## The Four Types of Requests
+
+APIs have four main operations, and they map to real-world actions:
+
+<CodeBlock
+  code="GET    → Read data    → 'Show me the menu'
+POST   → Create data   → 'I would like to order the pasta'
+PUT    → Update data   → 'Actually, make that with extra cheese'
+DELETE → Remove data   → 'Cancel my order'
+
+// In code:
+// GET: fetch a list of users
+fetch('/api/users');
+
+// POST: create a new user
+fetch('/api/users', {
+  method: 'POST',
+  body: JSON.stringify({ name: 'Denise', email: 'hi@denise.com' })
+});
+
+// DELETE: remove a user
+fetch('/api/users/123', {
+  method: 'DELETE'
+});"
+  language="javascript"
+  explanation="GET is the most common — it just fetches data. POST creates something new (like signing up for an account). PUT updates existing data (like editing your profile). DELETE removes something. These are called HTTP methods, and every API uses them. When you load a website, your browser is doing a GET request behind the scenes."
+/>
+
+<Callout variant="tip">
+GET requests don't need a body (you're just asking for data). POST and PUT usually need a body (the data you're sending). Think of it like: GET is a question, POST is filling out a form.
+</Callout>
+
+## Status Codes: The API's Mood
+
+When the API responds, it includes a status code that tells you how things went:
+
+| Code | Meaning | Restaurant version |
+|------|---------|-------------------|
+| **200** | OK, here's your data | "Here's your food!" |
+| **201** | Created successfully | "Your order has been placed!" |
+| **400** | Bad request | "I don't understand your order" |
+| **401** | Unauthorized | "Do you have a reservation?" |
+| **403** | Forbidden | "That table is for VIPs only" |
+| **404** | Not found | "We don't serve that here" |
+| **500** | Server error | "The kitchen is on fire" |
+
+<CodeBlock
+  code="const response = await fetch('/api/users/123');
+
+if (response.ok) {
+  // Status 200-299: Everything worked!
+  const user = await response.json();
+  console.log('Got the user:', user);
+} else if (response.status === 404) {
+  console.log('User not found!');
+} else {
+  console.log('Something went wrong:', response.status);
+}"
+  language="javascript"
+  explanation="response.ok is true if the status code is in the 200 range (success). You should always check this before trying to use the data, because if the API returned an error, there won't be useful data in the response. The status code tells you exactly what went wrong so you can handle it gracefully."
+/>
+
+## JSON: The Language APIs Speak
+
+APIs send and receive data as **JSON** (JavaScript Object Notation). It looks like this:
+
+<CodeBlock
+  code="// JSON is basically a JavaScript object:
+{
+  'user': {
+    'name': 'Denise',
+    'email': 'hi@denise.com',
+    'followers': 1500,
+    'topics': ['React', 'Python', 'AI'],
+    'isPro': true
+  }
+}
+
+// Strings, numbers, arrays, booleans, nested objects
+// That's all JSON is. No functions, no fancy stuff."
+  language="json"
+  explanation="JSON is the universal language of APIs. Whether the API is built in Python, Java, Go, or whatever — the data it sends back is almost always JSON. And since JSON looks exactly like JavaScript objects, it's super easy to work with in JS. You'll see this format everywhere."
+/>
+
+## A Real Example: Fetching Pokemon Data
+
+Let's use a real, free API to fetch Pokemon data:
+
+<CodeBlock
+  code="// Fetch data about Pikachu from the Pokemon API
+async function getPokemon(name) {
+  const response = await fetch(
+    'https://pokeapi.co/api/v2/pokemon/' + name
+  );
+
+  if (!response.ok) {
+    console.log('Pokemon not found!');
+    return;
+  }
+
+  const pokemon = await response.json();
+
+  console.log('Name:', pokemon.name);
+  console.log('Height:', pokemon.height);
+  console.log('Types:', pokemon.types.map(t => t.type.name));
+}
+
+getPokemon('pikachu');
+// Name: pikachu
+// Height: 4
+// Types: ['electric']"
+  language="javascript"
+  explanation="This calls a real, free API (the Pokemon API). We send a GET request with the Pokemon's name in the URL. The API sends back a JSON object with all the Pokemon's data. We pull out the name, height, and types. You could build a whole Pokedex app with this! The async/await keywords tell JavaScript to wait for the API to respond before continuing."
+/>
+
+<Callout variant="warning">
+APIs can be slow (they're going across the internet, after all). Always use `async/await` or `.then()` to handle the wait time. If you forget, your code will try to use the data before it arrives, and you'll get `undefined` everywhere.
+</Callout>
+
+## API Keys: Your VIP Pass
+
+Many APIs require an API key — a unique code that identifies you:
+
+<CodeBlock
+  code="// Without an API key (free, public APIs):
+fetch('https://pokeapi.co/api/v2/pokemon/pikachu');
+
+// With an API key (most real APIs):
+fetch('https://api.openai.com/v1/chat/completions', {
+  headers: {
+    'Authorization': 'Bearer your-api-key-here',
+    'Content-Type': 'application/json'
+  },
+  method: 'POST',
+  body: JSON.stringify({
+    model: 'gpt-4',
+    messages: [{ role: 'user', content: 'Hello!' }]
+  })
+});"
+  language="javascript"
+  explanation="An API key is like a membership card. It tells the API who you are, tracks your usage, and lets them control access. You usually get one by signing up on the API provider's website. NEVER put API keys in your frontend code where users can see them — always keep them on your server or in environment variables."
+/>
+
+## Quick Recap
+
+- An **API** is a waiter between your app and a server
+- **GET** reads, **POST** creates, **PUT** updates, **DELETE** removes
+- **Status codes** tell you if it worked (200 = good, 404 = not found, 500 = server broke)
+- **JSON** is the language APIs speak (looks like JavaScript objects)
+- Use **fetch()** in JavaScript to make API requests
+- Always use **async/await** because APIs take time to respond
+- Keep **API keys** secret (never in frontend code)
+
+<Callout variant="denise-says">
+APIs are literally how the internet works. Every time you check the weather, scroll Instagram, or pay for something online, APIs are doing the work behind the scenes. And now you know how to use them. You just unlocked the ability to pull data from anywhere and build apps that connect to real services. That's a superpower.
+</Callout>

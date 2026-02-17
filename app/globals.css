@@ -2,26 +2,137 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* ============================================
+   Tech with Denise — Global Styles
+   ============================================ */
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-quicksand), sans-serif;
+  background: #FFF9FB; /* cream */
+  color: #4A3B52; /* dark */
+  overflow-x: hidden;
+  line-height: 1.7;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+/* Headings use Playfair Display */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-playfair), serif;
+}
+
+/* Code blocks use JetBrains Mono */
+code, pre {
+  font-family: var(--font-jetbrains), monospace;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ============================================
+   Floating background shapes (decorative)
+   ============================================ */
+.bg-shape {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ============================================
+   Scroll reveal animation helper
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   Shimmer highlight effect (used on hero heading)
+   ============================================ */
+.shimmer-highlight {
+  position: relative;
+  display: inline-block;
+}
+
+.shimmer-highlight::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: -4px;
+  width: calc(100% + 8px);
+  height: 14px;
+  background: linear-gradient(90deg, #FCDCE5, #E8E1F5, #FCDCE5);
+  background-size: 200% 100%;
+  border-radius: 4px;
+  z-index: -1;
+  transform: rotate(-1deg);
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ============================================
+   MDX prose styling — makes guide content readable
+   ============================================ */
+.prose h1 {
+  @apply text-3xl font-bold mb-6;
+}
+
+.prose h2 {
+  @apply text-2xl font-bold mt-12 mb-4;
+}
+
+.prose h3 {
+  @apply text-xl font-bold mt-8 mb-3;
+}
+
+.prose p {
+  @apply mb-6 leading-relaxed text-dark-soft;
+}
+
+.prose ul, .prose ol {
+  @apply mb-6 pl-6 text-dark-soft;
+}
+
+.prose li {
+  @apply mb-2;
+}
+
+.prose ul li {
+  @apply list-disc;
+}
+
+.prose ol li {
+  @apply list-decimal;
+}
+
+.prose a {
+  @apply text-lavender font-semibold underline decoration-lavender/30 hover:decoration-lavender transition-colors;
+}
+
+.prose strong {
+  @apply text-dark font-bold;
+}
+
+.prose blockquote {
+  @apply border-l-4 border-lavender-light pl-4 italic text-dark-soft my-6;
+}
+
+.prose code:not(pre code) {
+  @apply bg-lavender-light/50 text-dark px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+.prose hr {
+  @apply my-8 border-lavender-light;
 }

@@ -1,0 +1,172 @@
+---
+title: "What Even Is an AI Agent?"
+description: "AI agents explained without the hype. What they actually are, what they can do, and why everyone's talking about them."
+topic: "AI"
+difficulty: "beginner"
+emoji: "🤖"
+date: "2025-03-10"
+color: "lavender"
+---
+
+# What Even Is an AI Agent?
+
+You've probably heard people throwing around "AI agent" like it's the new hot thing. And honestly? It kind of is. But the way people talk about it makes it sound way more mysterious than it actually is. Let me demystify it.
+
+## The Simple Explanation
+
+An <Term id="ai-agent">AI agent</Term> is an AI that can actually **do things** — not just chat.
+
+Regular AI (like ChatGPT in a basic conversation): You ask it a question, it gives you an answer. That's it.
+
+An AI agent: You give it a **goal**, and it figures out the steps, uses tools, and actually accomplishes the task.
+
+<Callout variant="denise-says">
+The easiest way I explain it to people: regular AI is like texting a really smart friend. An AI agent is like hiring a really smart assistant who has access to your email, calendar, and can actually book things for you. Same brain, but with hands.
+</Callout>
+
+## The Personal Assistant Analogy
+
+Imagine you tell a human assistant: "Book me a flight to Tokyo next month, something under $800."
+
+They would:
+1. **Think** about what you need (dates, budget, preferences)
+2. **Search** flight websites for options
+3. **Compare** prices and times
+4. **Pick** the best option
+5. **Book** the flight
+6. **Report back** to you with the confirmation
+
+An AI agent works the same way. You give it a goal, and it:
+1. **Plans** the steps needed
+2. **Uses tools** (web search, APIs, databases, etc.)
+3. **Makes decisions** along the way
+4. **Takes actions** to accomplish the goal
+5. **Reports** back with results
+
+## What Makes It an "Agent"?
+
+Three things separate an AI agent from a regular chatbot:
+
+<CodeBlock
+  code="Regular AI:
+  You: 'What restaurants are near me?'
+  AI:  'Here are some types of restaurants...'
+  (End of conversation)
+
+AI Agent:
+  You: 'Find me a sushi place nearby, check reviews,
+        and make a reservation for 7pm tonight.'
+  Agent: *searches Yelp*
+  Agent: *reads reviews*
+  Agent: *compares options*
+  Agent: *calls OpenTable API*
+  Agent: 'Done! You have a reservation at Sakura Sushi
+          at 7pm. 4.5 stars, 2 miles away. I sent the
+          confirmation to your email.'"
+  language="text"
+  explanation="See the difference? The regular AI just answered a question. The agent actually DID something — it searched, compared, decided, and took action. It used multiple tools (Yelp, reviews, OpenTable) and made decisions on its own without you micromanaging every step."
+/>
+
+The three superpowers of an agent are:
+1. **Autonomy** — it decides what steps to take
+2. **Tool use** — it can interact with external services
+3. **Memory** — it remembers context across steps
+
+## Real Examples of AI Agents
+
+Here are some things AI agents can actually do right now:
+
+**Coding agents** (like what built this website!):
+- Read your codebase
+- Write new features
+- Fix bugs
+- Run tests
+- Create pull requests
+
+**Research agents**:
+- Search multiple sources
+- Summarize findings
+- Compare information
+- Write reports
+
+**Personal productivity agents**:
+- Manage your email
+- Schedule meetings
+- Create to-do lists from meeting notes
+- Draft responses
+
+**Customer service agents**:
+- Answer questions from a knowledge base
+- Look up order information
+- Process refunds
+- Escalate complex issues to humans
+
+<Callout variant="tip">
+You don't need to build an agent from scratch. Tools like OpenAI's API, LangChain, and CrewAI give you frameworks to build agents without reinventing the wheel. Start with a simple agent that does ONE thing well, then add more capabilities.
+</Callout>
+
+## How Agents Work (The Loop)
+
+Every AI agent runs on the same basic cycle:
+
+<CodeBlock
+  code="The Agent Loop:
+
+1. OBSERVE  → Look at the current situation
+                What info do I have? What's the goal?
+
+2. THINK    → Plan the next step
+                What should I do next to reach the goal?
+
+3. ACT      → Use a tool or take an action
+                Search the web, call an API, write code
+
+4. REFLECT  → Check the result
+                Did it work? Am I closer to the goal?
+
+5. REPEAT   → Go back to step 1
+                Keep going until the goal is achieved
+                (or ask the human for help)"
+  language="text"
+  explanation="This is the 'agentic loop' that everyone in AI talks about. The agent keeps cycling through these steps until it achieves the goal. If step 3 fails (like a search returns nothing useful), the agent goes back to step 2 and tries a different approach. It's like a determined problem-solver that keeps trying different angles."
+/>
+
+## The Difference Between AI Buzzwords
+
+Let's clear up some confusion:
+
+| Term | What it actually means |
+|------|----------------------|
+| **AI** | A computer that can do tasks that usually need human intelligence |
+| **LLM** | The "brain" — a large language model like GPT or Claude |
+| **Chatbot** | AI you can talk to (but it can only chat, not act) |
+| **AI Agent** | AI that can use tools and take actions to achieve goals |
+| **Multi-agent** | Multiple AI agents working together on a task |
+| **RAG** | Teaching an AI about YOUR data (docs, website, etc.) |
+
+<Callout variant="warning">
+Not everything calling itself an "AI agent" is actually an agent. Some products slap "AI agent" on what's basically a chatbot with a fancy UI. A real agent can autonomously take actions and use external tools — not just generate text.
+</Callout>
+
+## Should You Learn to Build Agents?
+
+Honestly? Yes, but not right away. Here's my recommended order:
+
+1. **First**: Understand how to talk to AI (prompt engineering)
+2. **Then**: Learn to use an AI <Term id="api">API</Term> (send requests, get responses)
+3. **Then**: Add tools (let the AI search the web, read files, etc.)
+4. **Finally**: Build a full agent loop (observe → think → act → reflect)
+
+Each step builds on the last. You don't need to jump straight to building Jarvis from Iron Man.
+
+## Quick Recap
+
+- An AI agent is an AI that can **do things**, not just chat
+- Agents have three superpowers: **autonomy**, **tool use**, and **memory**
+- They work in a loop: observe → think → act → reflect → repeat
+- Real agents can code, research, schedule, and more
+- Start simple — learn the basics before building complex agents
+
+<Callout variant="denise-says">
+AI agents are genuinely changing how we work, and understanding them puts you ahead of like 95% of people. You don't need to be an AI researcher to build one — you just need to understand the concept (which you now do) and be willing to experiment. I'll be writing more guides on actually building agents, so stay tuned.
+</Callout>

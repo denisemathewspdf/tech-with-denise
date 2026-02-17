@@ -1,0 +1,190 @@
+---
+title: "Git: Your Code's Time Machine"
+description: "Git saves snapshots of your code so you can always go back if you mess up. Here's how to use it without crying."
+topic: "Terminal"
+difficulty: "beginner"
+emoji: "⏰"
+date: "2025-03-30"
+color: "mint"
+---
+
+# Git: Your Code's Time Machine
+
+You know that feeling when you're working on something and you accidentally delete everything? Or you make a bunch of changes and suddenly nothing works and you have no idea what you broke? <Term id="git">Git</Term> fixes that. It's a time machine for your code.
+
+## What Is Git?
+
+Git takes **snapshots** of your code at specific moments. Each snapshot is called a "commit." If you ever mess something up, you can go back to any previous snapshot.
+
+Think of it like saving your game in a video game. You save at certain checkpoints, and if your character dies, you load the last save.
+
+<Callout variant="denise-says">
+Before I learned Git, I used to make copies of my folders like "my-project-v2", "my-project-v2-final", "my-project-v2-final-ACTUALLY-FINAL." We've all been there. Git is the grown-up version of that, and it's SO much better.
+</Callout>
+
+## Setting Up Git
+
+First, install Git (it's probably already installed). Then tell it who you are:
+
+<CodeBlock
+  code="# Check if Git is installed:
+git --version
+
+# Tell Git your name and email (one-time setup):
+git config --global user.name 'Denise'
+git config --global user.email 'hello@techwithdenise.com'
+
+# Start tracking a project:
+cd my-project
+git init
+# That's it! Git is now watching this folder."
+  language="bash"
+  explanation="git init creates a hidden folder called .git inside your project. This is where Git stores all your snapshots. You only need to do this once per project. The --global config stuff is a one-time setup so Git knows who's making the commits."
+/>
+
+## The Three Steps of Saving
+
+Git has a three-step save process. It sounds extra, but it gives you control over exactly what you save:
+
+<CodeBlock
+  code="# Step 1: Check what changed
+git status
+# Shows you which files were modified, added, or deleted
+
+# Step 2: Stage the changes you want to save
+git add index.html
+git add style.css
+# Or add everything at once:
+git add .
+
+# Step 3: Save the snapshot with a message
+git commit -m 'Added navbar and styled the homepage'"
+  language="bash"
+  explanation="Think of it like packing a box to ship. 'git status' is looking at everything sitting on your desk. 'git add' is putting specific things into the box. 'git commit' is sealing the box and labeling it. The -m flag lets you write a short description of what's in the box."
+/>
+
+## A Visual Walkthrough
+
+<CodeBlock
+  code="Your project timeline:
+
+  Commit 1          Commit 2          Commit 3
+  'Initial setup'   'Added navbar'    'Styled homepage'
+  [Save #1]  ───→   [Save #2]  ───→   [Save #3]  ← YOU ARE HERE
+
+  Oh no! The homepage looks terrible now!
+
+  You can go back to Commit 2:
+  git checkout [commit-2-id]
+
+  Or just see what changed:
+  git diff
+
+  Or undo the last commit entirely:
+  git revert HEAD"
+  language="text"
+  explanation="Every commit is a checkpoint you can return to. You're never stuck. Made a mistake? Go back. Want to see what changed? Git shows you a side-by-side comparison. The safety net is always there."
+/>
+
+<Callout variant="tip">
+Write commit messages that explain WHY you made the change, not WHAT you changed. Git already shows you what changed. Bad: "updated files." Good: "Fixed navbar not showing on mobile."
+</Callout>
+
+## The Commands You'll Actually Use
+
+Here's your Git starter pack:
+
+| Command | What it does | When to use it |
+|---------|-------------|---------------|
+| `git status` | See what changed | Before every commit |
+| `git add .` | Stage all changes | When you're ready to save |
+| `git commit -m "message"` | Save a snapshot | After staging changes |
+| `git log --oneline` | See your commit history | When you want to review |
+| `git diff` | See exactly what changed | When you want details |
+| `git branch` | See/create branches | When starting new features |
+| `git checkout -b name` | Create and switch to a new branch | Starting a new feature |
+| `git merge branch-name` | Combine branches | When a feature is done |
+| `git push` | Upload to GitHub | When you want to share/backup |
+| `git pull` | Download latest changes | When working with a team |
+
+## Branches: Parallel Universes
+
+Branches are like parallel universes for your code. You can experiment without messing up the main version:
+
+<CodeBlock
+  code="# You're on the main branch (the 'official' version)
+git branch
+# * main
+
+# Create a new branch for a feature
+git checkout -b add-dark-mode
+
+# Now you're in a parallel universe!
+# Make changes, break things, experiment...
+# The main branch is completely unaffected.
+
+# Happy with your changes? Merge them back:
+git checkout main
+git merge add-dark-mode
+
+# Your dark mode feature is now part of the main code!"
+  language="bash"
+  explanation="Think of the main branch as your published book. When you want to write a new chapter, you don't scribble in the published copy — you work on a draft. That draft is a branch. Once the chapter is perfect, you merge it into the published book. If the chapter doesn't work out, you just delete the branch and the book is untouched."
+/>
+
+<Callout variant="warning">
+Never work directly on the `main` branch for big changes. Always create a new branch first. This way, if things go wrong, your main code stays safe. It's the number one habit that separates beginners from people who've been burned before.
+</Callout>
+
+## GitHub: Git in the Cloud
+
+Git lives on your computer. **GitHub** is where you put your code online so you can:
+- **Back up** your code (in case your laptop breaks)
+- **Share** code with teammates
+- **Show off** your projects (it's like a portfolio for developers)
+
+<CodeBlock
+  code="# Connect your local project to GitHub:
+git remote add origin https://github.com/yourname/my-project.git
+
+# Upload your code:
+git push -u origin main
+
+# Download someone else's project:
+git clone https://github.com/someone/cool-project.git"
+  language="bash"
+  explanation="'origin' is just a nickname for the GitHub URL. 'push' uploads your commits to GitHub. 'clone' downloads an entire project (with all its history) to your computer. After the first push with -u, you can just type 'git push' and it knows where to send it."
+/>
+
+## The "Oh No" Commands
+
+Things go wrong. Here's how to fix them:
+
+<CodeBlock
+  code="# Undo changes to a file (before staging):
+git checkout -- filename.js
+
+# Unstage a file (you added it but changed your mind):
+git reset HEAD filename.js
+
+# Undo the last commit (but keep the changes):
+git reset --soft HEAD~1
+
+# See what a file looked like 3 commits ago:
+git show HEAD~3:filename.js"
+  language="bash"
+  explanation="These are your emergency commands. The most useful one is 'git reset --soft HEAD~1' — it undoes your last commit but keeps all the changes in your files so you can redo them differently. HEAD~1 just means 'one commit before now.'"
+/>
+
+## Quick Recap
+
+- Git takes **snapshots** (commits) of your code
+- Three steps: `git add` (stage) → `git commit` (save) → `git push` (upload)
+- **Branches** let you experiment without breaking the main code
+- **GitHub** = Git in the cloud (backup + sharing)
+- Write **good commit messages** (explain why, not what)
+- When in doubt, **make a new branch** before experimenting
+
+<Callout variant="denise-says">
+Git felt overwhelming to me at first — so many commands! But honestly, you'll use the same 5 commands 95% of the time: status, add, commit, push, and pull. That's your daily workflow. Everything else is for special situations. Start with those five and you're golden. You'll never lose code again, and future you will be SO grateful.
+</Callout>
