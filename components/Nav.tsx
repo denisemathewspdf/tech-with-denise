@@ -38,10 +38,10 @@ export default function Nav() {
         <NavLink href="/languages">Languages</NavLink>
         <NavLink href="/glossary">Glossary</NavLink>
         <Link
-          href="/#subscribe"
-          className="bg-dark text-white px-6 py-2.5 rounded-full font-semibold text-sm transition-all hover:-translate-y-0.5 hover:shadow-card no-underline"
+          href="/build"
+          className="bg-gradient-to-r from-peach via-pink to-lavender text-white px-6 py-2.5 rounded-full font-semibold text-sm transition-all hover:-translate-y-0.5 hover:shadow-hover no-underline"
         >
-          Subscribe
+          Start Building ✨
         </Link>
       </div>
 
@@ -78,11 +78,11 @@ export default function Nav() {
             Glossary
           </MobileNavLink>
           <Link
-            href="/#subscribe"
+            href="/build"
             onClick={() => setMenuOpen(false)}
-            className="bg-dark text-white px-6 py-3 rounded-full font-semibold text-sm text-center no-underline"
+            className="bg-gradient-to-r from-peach via-pink to-lavender text-white px-6 py-3 rounded-full font-semibold text-sm text-center no-underline"
           >
-            Subscribe
+            Start Building ✨
           </Link>
         </div>
       )}

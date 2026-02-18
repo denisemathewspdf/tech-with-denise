@@ -233,6 +233,36 @@ export default function HomePage() {
         </ScrollReveal>
       </section>
 
+      {/* ============ BUILD CTA ============ */}
+      <section className="relative z-10 px-6 md:px-10 py-24">
+        <ScrollReveal>
+          <div className="max-w-[900px] mx-auto relative overflow-hidden rounded-3xl p-10 md:p-16">
+            {/* Gradient background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-peach via-pink to-lavender opacity-90" />
+            {/* Decorative */}
+            <div className="absolute -top-12 -right-12 w-40 h-40 bg-white rounded-full opacity-10 blur-xl" />
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white rounded-full opacity-10 blur-xl" />
+
+            <div className="relative z-10 text-center">
+              <span className="text-4xl block mb-4">🚀</span>
+              <h2 className="font-heading text-[clamp(2rem,4vw,3rem)] text-white mb-4">
+                Don&apos;t just learn it. Build it.
+              </h2>
+              <p className="text-white/80 text-base max-w-[520px] mx-auto mb-8">
+                Tell me what you want to create and I&apos;ll walk you through
+                your very first lines of code — starting simple, building up.
+              </p>
+              <a
+                href="/build"
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-dark font-bold text-sm no-underline transition-all hover:-translate-y-1 hover:shadow-hover"
+              >
+                Start Building →
+              </a>
+            </div>
+          </div>
+        </ScrollReveal>
+      </section>
+
       {/* ============ VIBE ============ */}
       <section className="relative z-10 px-6 md:px-10 py-24" id="vibe">
         <ScrollReveal>

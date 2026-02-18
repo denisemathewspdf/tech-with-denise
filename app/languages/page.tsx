@@ -439,26 +439,27 @@ export default function LanguagesPage() {
       </div>
 
       {/* Bottom CTA */}
-      <div className="mt-16 p-8 bg-lavender-light/50 rounded-2xl text-center">
+      <div className="mt-16 p-8 bg-gradient-to-br from-peach-light/60 via-pink-light/40 to-lavender-light/60 rounded-2xl text-center border border-peach/20">
+        <span className="text-3xl block mb-3">🚀</span>
         <p className="font-heading text-xl font-bold mb-2">
-          Still not sure? Start with JavaScript or Python.
+          Know which language? Let&apos;s build something.
         </p>
         <p className="text-dark-soft text-sm mb-5 max-w-md mx-auto">
-          They&apos;re the two most versatile languages and will give you the best
-          foundation no matter where you end up. You can always learn more later.
+          Tell me what you want to create and I&apos;ll walk you through your
+          first lines of code — no experience needed.
         </p>
         <div className="flex gap-3 justify-center flex-wrap">
           <Link
-            href="/guides?topic=JavaScript"
+            href="/build"
             className="px-6 py-3 rounded-full bg-dark text-white font-bold text-sm no-underline transition-all hover:-translate-y-0.5 hover:shadow-hover"
           >
-            Start with JavaScript →
+            Start Building ✨
           </Link>
           <Link
-            href="/guides?topic=Python"
+            href="/guides?topic=JavaScript"
             className="px-6 py-3 rounded-full bg-white text-dark font-bold text-sm no-underline border-2 border-lavender-light transition-all hover:border-lavender hover:-translate-y-0.5"
           >
-            Start with Python →
+            Browse Guides →
           </Link>
         </div>
       </div>

@@ -86,19 +86,20 @@ export default function GuidePage({ params }: GuidePageProps) {
         <MDXRemote source={content} components={mdxComponents} />
       </div>
 
-      {/* Bottom CTA */}
-      <div className="mt-16 p-8 bg-lavender-light/50 rounded-2xl text-center">
+      {/* Build CTA */}
+      <div className="mt-16 p-8 bg-gradient-to-br from-peach-light/60 via-pink-light/40 to-lavender-light/60 rounded-2xl text-center border border-peach/20">
+        <span className="text-3xl block mb-3">🚀</span>
         <p className="font-heading text-xl font-bold mb-2">
-          Want more guides like this?
+          Want to keep going?
         </p>
         <p className="text-dark-soft text-sm mb-4">
-          New guides drop every week. No spam, no jargon — just vibes.
+          Tell me what you want to build next and I&apos;ll help you write the code.
         </p>
         <Link
-          href="/#subscribe"
+          href="/build"
           className="inline-block px-6 py-3 rounded-full bg-dark text-white font-bold text-sm no-underline transition-all hover:-translate-y-0.5 hover:shadow-hover"
         >
-          Join the Newsletter ✨
+          Start Building ✨
         </Link>
       </div>
     </article>
