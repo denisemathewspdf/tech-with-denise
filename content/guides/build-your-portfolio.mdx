@@ -1,0 +1,264 @@
+---
+title: "Build Your Dream Portfolio Website"
+description: "Create a gorgeous portfolio site that actually looks like YOU — not a boring template. Step by step, from scratch."
+topic: "Projects"
+difficulty: "beginner"
+emoji: "✨"
+date: "2025-04-15"
+color: "lavender"
+---
+
+# Build Your Dream Portfolio Website
+
+Every tutorial portfolio site looks the same — dark theme, generic "Hi, I'm a developer" text, the same three project cards. Boring. Let's build one that actually has personality. YOUR personality.
+
+## What We're Building
+
+A portfolio that has:
+- A hero section with your name and vibe
+- An about section that doesn't read like a resume
+- A projects grid that shows off your work
+- A contact section that's not just a sad email link
+- Your own color palette and fonts (not Bootstrap defaults)
+
+<Callout variant="denise-says">
+Your portfolio is literally your first impression. It should make someone go "oh, I like this person" not "oh, another developer template." I'm going to show you how to build one that stands out, and you don't need React or any fancy framework — just HTML, CSS, and a tiny bit of JavaScript.
+</Callout>
+
+## Step 1: The HTML Structure
+
+Let's start with the bones:
+
+<CodeBlock
+  code={'<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Your Name — Designer & Developer</title>\n  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n  <section class="hero">\n    <p class="greeting">hey, i\'m</p>\n    <h1>Your Name</h1>\n    <p class="tagline">i design and build things for the internet</p>\n    <div class="hero-links">\n      <a href="#projects">see my work</a>\n      <a href="#contact">say hi</a>\n    </div>\n  </section>\n\n  <section class="about" id="about">\n    <h2>a little about me</h2>\n    <p>I\'m a self-taught developer who got into tech because\n    I wanted to build my own app. Now I make websites,\n    experiment with design, and drink way too much matcha.</p>\n  </section>\n\n  <section class="projects" id="projects">\n    <h2>things i\'ve built</h2>\n    <div class="project-grid">\n      <!-- Project cards go here -->\n    </div>\n  </section>\n\n  <section class="contact" id="contact">\n    <h2>let\'s connect</h2>\n    <p>I\'m always down to chat about projects or matcha.</p>\n    <div class="social-links">\n      <a href="#">GitHub</a>\n      <a href="#">LinkedIn</a>\n      <a href="#">Twitter</a>\n      <a href="mailto:you@email.com">Email</a>\n    </div>\n  </section>\n\n</body>\n</html>'}
+  language="html"
+  explanation="This is the skeleton of your portfolio. Simple, clean sections: hero (the big intro), about (who you are), projects (what you've built), and contact (how to reach you). Notice the tone — it's casual and personal, not corporate. 'hey, i'm' hits different than 'Welcome to my professional portfolio.'"
+/>
+
+## Step 2: Make It Beautiful with CSS
+
+Here's where the magic happens. Pick a color palette that feels like you:
+
+<CodeBlock
+  code="/* style.css — make it YOUR vibe */
+
+:root {
+  /* CHANGE THESE to match your personality! */
+  --bg: #FFF8F0;          /* warm cream background */
+  --text: #2D2D2D;        /* almost-black text */
+  --accent: #E8A0BF;      /* pink accent */
+  --accent-light: #F5D5E0; /* light pink */
+  --subtle: #957DAD;       /* muted purple */
+  --card-bg: #FFFFFF;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Sora', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* HERO — the first thing people see */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 10%;
+}
+
+.greeting {
+  font-size: 1.1rem;
+  color: var(--subtle);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.hero h1 {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  color: var(--subtle);
+  margin-bottom: 40px;
+}
+
+.hero-links {
+  display: flex;
+  gap: 16px;
+}
+
+.hero-links a {
+  padding: 12px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.hero-links a:first-child {
+  background: var(--accent);
+  color: white;
+}
+
+.hero-links a:last-child {
+  border: 2px solid var(--accent-light);
+  color: var(--text);
+}
+
+.hero-links a:hover {
+  transform: translateY(-3px);
+}"
+  language="css"
+  explanation="The CSS variables at the top (--bg, --accent, etc.) are your palette. Change these 5 colors and your whole site transforms. The hero takes up the full screen height (100vh) and centers your name big and bold. The clamp() on the font size makes it responsive — big on desktop, smaller on mobile, automatically."
+/>
+
+## Step 3: Project Cards
+
+<CodeBlock
+  code="/* Project cards */
+.projects {
+  padding: 80px 10%;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  margin-top: 40px;
+}
+
+.project-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-8px);
+}
+
+.project-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.project-info {
+  padding: 24px;
+}
+
+.project-info h3 {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.project-info p {
+  color: var(--subtle);
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.project-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.project-tags span {
+  background: var(--accent-light);
+  color: var(--subtle);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}"
+  language="css"
+  explanation="The grid automatically adjusts — 3 cards on big screens, 2 on medium, 1 on mobile. No media queries needed! Each card lifts up slightly when you hover, which gives it a satisfying, interactive feel. The tags at the bottom show what tech you used."
+/>
+
+Now add the project cards to your HTML:
+
+<CodeBlock
+  code={'<div class="project-grid">\n  <div class="project-card">\n    <img src="project1.jpg" alt="Outfit Planner App">\n    <div class="project-info">\n      <h3>Outfit Planner</h3>\n      <p>An app that categorizes your closet and generates outfit combos.</p>\n      <div class="project-tags">\n        <span>React</span>\n        <span>CSS</span>\n        <span>JavaScript</span>\n      </div>\n    </div>\n  </div>\n\n  <div class="project-card">\n    <img src="project2.jpg" alt="Mood Board Creator">\n    <div class="project-info">\n      <h3>Mood Board Creator</h3>\n      <p>Drag-and-drop mood board for planning aesthetics and vibes.</p>\n      <div class="project-tags">\n        <span>HTML</span>\n        <span>CSS</span>\n        <span>Drag API</span>\n      </div>\n    </div>\n  </div>\n\n  <div class="project-card">\n    <img src="project3.jpg" alt="Self Care Tracker">\n    <div class="project-info">\n      <h3>Self-Care Tracker</h3>\n      <p>Track water, sleep, mood, and skincare. Cute UI, actually useful.</p>\n      <div class="project-tags">\n        <span>React</span>\n        <span>localStorage</span>\n      </div>\n    </div>\n  </div>\n</div>'}
+  language="html"
+  explanation="Three project cards with images, descriptions, and tech tags. Replace the images with screenshots of your actual projects. Don't have projects yet? Build the other apps in this guide series and you'll have a full portfolio in no time!"
+/>
+
+<Callout variant="tip">
+Don't wait until you have "impressive" projects. Put up what you've built, even if it's simple. A finished outfit planner app is more impressive than an unfinished complex app. Hiring managers and collaborators want to see that you can ship something.
+</Callout>
+
+## Step 4: Smooth Scroll + Animation
+
+Add a tiny bit of JavaScript for polish:
+
+<CodeBlock
+  code={"// Smooth scroll for navigation links\ndocument.querySelectorAll('a[href^=\"#\"]').forEach(link => {\n  link.addEventListener('click', e => {\n    e.preventDefault();\n    const target = document.querySelector(link.getAttribute('href'));\n    if (target) target.scrollIntoView({ behavior: 'smooth' });\n  });\n});\n\n// Fade-in animation on scroll\nconst observer = new IntersectionObserver(entries => {\n  entries.forEach(entry => {\n    if (entry.isIntersecting) {\n      entry.target.classList.add('visible');\n    }\n  });\n}, { threshold: 0.1 });\n\ndocument.querySelectorAll('section').forEach(section => {\n  section.classList.add('fade-in');\n  observer.observe(section);\n});"}
+  language="javascript"
+  explanation="The first part makes anchor links scroll smoothly instead of jumping. The second part adds a fade-in animation when sections come into view as you scroll down. It uses IntersectionObserver — which watches for elements entering the viewport. Add the CSS below to make the fade-in work."
+/>
+
+<CodeBlock
+  code="/* Add this to your CSS for the fade-in effect */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}"
+  language="css"
+  explanation="Sections start invisible and slightly below their final position. When they scroll into view, the JavaScript adds the 'visible' class, which triggers the smooth fade-up animation. This small detail makes your portfolio feel so much more polished."
+/>
+
+## Step 5: Deploy It for Free
+
+Put it online so people can actually see it:
+
+1. Push your code to **GitHub**
+2. Go to your repo settings
+3. Scroll to **GitHub Pages**
+4. Select your branch and save
+5. Your site is live at `yourusername.github.io/portfolio`
+
+Or use **Vercel** or **Netlify** for even easier deployment — just drag and drop your folder.
+
+## Palette Ideas
+
+Not sure what colors to use? Here are some palettes to try:
+
+<CodeBlock
+  code="/* Soft & Feminine */
+--bg: #FFF8F0; --accent: #E8A0BF; --subtle: #957DAD;
+
+/* Cool Girl */
+--bg: #F0F4F8; --accent: #7C9CBF; --subtle: #5A7A9A;
+
+/* Earthy & Warm */
+--bg: #FDF6EC; --accent: #D4A574; --subtle: #8B7355;
+
+/* Bold & Fun */
+--bg: #FFFBF0; --accent: #FF6B6B; --subtle: #845EC2;
+
+/* Minimal & Clean */
+--bg: #FAFAFA; --accent: #333333; --subtle: #888888;"
+  language="css"
+  explanation="Just swap the three variables and your entire site changes vibe. The background (--bg) should be light and easy on the eyes. The accent is your pop of color — buttons, highlights, links. The subtle color is for secondary text. Try a few and see which one feels most like you!"
+/>
+
+<Callout variant="denise-says">
+Your portfolio doesn't need to be perfect to go online. Seriously. A simple, clean site with 2-3 projects and personality beats a fancy template with no soul. Put it up, share the link, and keep improving it over time. The best portfolio is a live one.
+</Callout>

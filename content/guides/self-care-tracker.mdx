@@ -1,0 +1,357 @@
+---
+title: "Build a Self-Care Tracker App"
+description: "Track your water, sleep, mood, skincare, and workouts with a cute app you built yourself."
+topic: "Projects"
+difficulty: "beginner"
+emoji: "🧘‍♀️"
+date: "2025-04-25"
+color: "lavender"
+---
+
+# Build a Self-Care Tracker App
+
+You've downloaded a million self-care apps. They're either ugly, full of ads, or track things you don't care about. What if you built your own? One that tracks exactly what matters to YOU, looks cute, and doesn't cost $9.99/month?
+
+## What We're Building
+
+A daily tracker for:
+- Water intake (glasses per day)
+- Sleep hours
+- Mood (emoji-based, obviously)
+- Skincare routine (morning/night checklist)
+- Movement (did you move your body today?)
+- A daily affirmation or journal note
+
+<Callout variant="denise-says">
+This app taught me localStorage, date handling, and state management — all because I wanted to know if I was drinking enough water. Learning is so much easier when you're building something for yourself.
+</Callout>
+
+## Step 1: The Data Structure
+
+<CodeBlock
+  code="// What one day of tracking looks like:
+const todayEntry = {
+  date: '2025-04-25',
+  water: 6,            // glasses
+  sleep: 7.5,          // hours
+  mood: 'great',       // great, good, meh, rough
+  skincare: {
+    morning: true,
+    night: false,
+  },
+  movement: true,
+  note: 'Had a really productive day! Finally fixed that bug.',
+};
+
+// Mood options with emojis
+const moods = {
+  great: { emoji: '✨', label: 'Amazing', color: '#C4B8E8' },
+  good: { emoji: '😊', label: 'Good', color: '#A8D8EA' },
+  meh: { emoji: '😐', label: 'Meh', color: '#F0D9A0' },
+  rough: { emoji: '💜', label: 'Rough day', color: '#F2A5C0' },
+};"
+  language="javascript"
+  explanation="Each day gets its own entry object with all your tracked data. The mood options use emojis instead of numbers because 'rough day with a purple heart' feels better than 'mood: 2/5.' Notice there's no 'bad' mood — even rough days get a gentle label. The app should feel supportive, not judgmental."
+/>
+
+## Step 2: Water Tracker Component
+
+<CodeBlock
+  code="import { useState } from 'react';
+
+function WaterTracker({ glasses, onUpdate }) {
+  const goal = 8; // daily goal
+
+  return (
+    <div className='tracker-card'>
+      <h3>Water</h3>
+      <p className='tracker-subtitle'>Goal: {goal} glasses</p>
+
+      {/* Visual water glasses */}
+      <div className='water-glasses'>
+        {Array.from({ length: goal }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => onUpdate(i + 1)}
+            className={`glass ${i < glasses ? 'filled' : 'empty'}`}
+          >
+            💧
+          </button>
+        ))}
+      </div>
+
+      <p className='tracker-progress'>
+        {glasses}/{goal} glasses
+        {glasses >= goal && ' — you did it! 🎉'}
+      </p>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="This shows 8 water drop buttons. Click on one and all the drops up to that number fill in. So clicking the 5th drop means you've had 5 glasses. When you hit your goal, you get a little celebration message. The Array.from trick creates an array of 8 items so we can map over them to render 8 buttons."
+/>
+
+## Step 3: Mood Picker
+
+<CodeBlock
+  code="function MoodPicker({ currentMood, onSelect }) {
+  const moods = [
+    { id: 'great', emoji: '✨', label: 'Amazing' },
+    { id: 'good', emoji: '😊', label: 'Good' },
+    { id: 'meh', emoji: '😐', label: 'Meh' },
+    { id: 'rough', emoji: '💜', label: 'Rough day' },
+  ];
+
+  return (
+    <div className='tracker-card'>
+      <h3>How are you feeling?</h3>
+      <div className='mood-options'>
+        {moods.map(mood => (
+          <button
+            key={mood.id}
+            onClick={() => onSelect(mood.id)}
+            className={`mood-btn ${currentMood === mood.id ? 'selected' : ''}`}
+          >
+            <span className='mood-emoji'>{mood.emoji}</span>
+            <span className='mood-label'>{mood.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="Four mood buttons with emojis. Tap one and it highlights as selected. This is a pattern you'll see everywhere — a list of options where one can be selected. The 'selected' class triggers different styling (a border, background color, whatever you want) to show which mood is active."
+/>
+
+## Step 4: Skincare Checklist
+
+<CodeBlock
+  code="function SkincareTracker({ skincare, onToggle }) {
+  const routines = [
+    { id: 'morning', label: 'Morning routine', emoji: '🌅' },
+    { id: 'night', label: 'Night routine', emoji: '🌙' },
+  ];
+
+  return (
+    <div className='tracker-card'>
+      <h3>Skincare</h3>
+      {routines.map(routine => (
+        <label key={routine.id} className='checklist-item'>
+          <input
+            type='checkbox'
+            checked={skincare[routine.id]}
+            onChange={() => onToggle(routine.id)}
+          />
+          <span className='checkmark'></span>
+          <span>{routine.emoji} {routine.label}</span>
+        </label>
+      ))}
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="Simple checkboxes for morning and night skincare routines. When you check one, onToggle flips the boolean in the data. You could expand this with individual steps (cleanser, toner, moisturizer, SPF) if you want to get detailed. The checkbox input is hidden and replaced with a custom styled checkmark for a cuter look."
+/>
+
+## Step 5: Save Data with localStorage
+
+<CodeBlock
+  code="// Save today's data to localStorage (persists between sessions)
+function saveDay(date, data) {
+  const allData = JSON.parse(localStorage.getItem('selfcare') || '{}');
+  allData[date] = data;
+  localStorage.setItem('selfcare', JSON.stringify(allData));
+}
+
+// Load today's data
+function loadDay(date) {
+  const allData = JSON.parse(localStorage.getItem('selfcare') || '{}');
+  return allData[date] || {
+    water: 0,
+    sleep: 0,
+    mood: null,
+    skincare: { morning: false, night: false },
+    movement: false,
+    note: '',
+  };
+}
+
+// Get the last 7 days for a weekly view
+function getWeekData() {
+  const days = [];
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split('T')[0];
+    days.push({
+      date: dateStr,
+      ...loadDay(dateStr),
+    });
+  }
+  return days;
+}"
+  language="javascript"
+  explanation="localStorage lets you save data in the browser that persists even when you close the tab. saveDay stores a day's data under its date key. loadDay retrieves it (or returns defaults if it's a new day). getWeekData grabs the last 7 days so you can see your trends. No database needed — it all lives in your browser."
+/>
+
+## Step 6: Putting It All Together
+
+<CodeBlock
+  code="import { useState, useEffect } from 'react';
+
+function SelfCareApp() {
+  const today = new Date().toISOString().split('T')[0];
+  const [data, setData] = useState(loadDay(today));
+
+  // Auto-save whenever data changes
+  useEffect(() => {
+    saveDay(today, data);
+  }, [data, today]);
+
+  const updateField = (field, value) => {
+    setData(prev => ({ ...prev, [field]: value }));
+  };
+
+  return (
+    <div className='self-care-app'>
+      <header>
+        <h1>Daily Check-in</h1>
+        <p className='date'>{new Date().toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric'
+        })}</p>
+      </header>
+
+      <MoodPicker
+        currentMood={data.mood}
+        onSelect={mood => updateField('mood', mood)}
+      />
+
+      <WaterTracker
+        glasses={data.water}
+        onUpdate={count => updateField('water', count)}
+      />
+
+      <SkincareTracker
+        skincare={data.skincare}
+        onToggle={routine => updateField('skincare', {
+          ...data.skincare,
+          [routine]: !data.skincare[routine]
+        })}
+      />
+
+      {/* Movement toggle */}
+      <div className='tracker-card'>
+        <h3>Movement</h3>
+        <button
+          onClick={() => updateField('movement', !data.movement)}
+          className={`movement-btn ${data.movement ? 'active' : ''}`}
+        >
+          {data.movement ? 'Yes! I moved today 💪' : 'Did you move today?'}
+        </button>
+      </div>
+
+      {/* Daily note */}
+      <div className='tracker-card'>
+        <h3>Daily Note</h3>
+        <textarea
+          value={data.note}
+          onChange={e => updateField('note', e.target.value)}
+          placeholder='How was your day? Any wins? Anything on your mind?'
+          rows={3}
+        />
+      </div>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="This is the main app component that ties everything together. Each tracker component gets its current data and a function to update it. The useEffect auto-saves to localStorage whenever anything changes, so you never lose your data. The date shows at the top so you know what day you're tracking."
+/>
+
+## Step 7: Make It Cute (CSS)
+
+<CodeBlock
+  code=".self-care-app {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.tracker-card {
+  background: white;
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.tracker-card h3 {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.water-glasses {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.glass {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  opacity: 0.3;
+  transition: all 0.2s;
+}
+
+.glass.filled {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.mood-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.mood-btn {
+  padding: 16px 8px;
+  border-radius: 16px;
+  border: 2px solid #f0f0f0;
+  background: white;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.mood-btn.selected {
+  border-color: #C4B8E8;
+  background: #F3F0FA;
+}
+
+.mood-emoji {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 4px;
+}"
+  language="css"
+  explanation="Mobile-first design (max-width 480px) because you'll probably use this app on your phone. Rounded cards, soft shadows, and smooth transitions make it feel like a real app. The water drops start translucent and become solid when filled. The selected mood gets a lavender border."
+/>
+
+## Level Up Ideas
+
+- **Weekly view** — show a 7-day grid with mood emojis and water progress
+- **Streaks** — track how many days in a row you've hit your water goal
+- **Custom habits** — let users add their own trackable habits
+- **Export data** — download your data as a CSV for analysis
+- **Period tracker** — add cycle tracking with predictions
+- **PWA** — make it installable on your phone like a real app
+
+<Callout variant="denise-says">
+You built a self-care app. An app that's actually about YOU and what you need. Not some generic tracker made by a company that wants your data — one that lives in your browser, looks the way you want, and tracks what matters to you. This is why coding is a superpower. You can build tools that fit your life perfectly.
+</Callout>

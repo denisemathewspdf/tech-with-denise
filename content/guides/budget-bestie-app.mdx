@@ -1,0 +1,311 @@
+---
+title: "Build a Budget Bestie App"
+description: "A cute expense tracker that actually makes you want to manage your money. No boring spreadsheets allowed."
+topic: "Projects"
+difficulty: "beginner"
+emoji: "💸"
+date: "2025-04-30"
+color: "gold"
+---
+
+# Build a Budget Bestie App
+
+Budgeting apps are either way too complicated or way too ugly. Let's build one that's simple, cute, and actually helpful — like a bestie who's good with money.
+
+## What We're Building
+
+- Add expenses with categories (food, shopping, coffee, going out, subscriptions)
+- See a visual breakdown of where your money goes
+- Set monthly budgets per category
+- Get a vibe check on your spending (are you on track or nah?)
+
+<Callout variant="denise-says">
+I built my first budget app because I needed to understand where my money kept disappearing. Turns out it was Uber Eats. The app I built to track it was also how I learned about arrays, reduce(), and localStorage. Win-win (except for Uber Eats).
+</Callout>
+
+## Step 1: The Data
+
+<CodeBlock
+  code="// Categories with colors and emojis
+const categories = [
+  { id: 'food', name: 'Food & Groceries', emoji: '🍕', color: '#F4A7BB' },
+  { id: 'coffee', name: 'Coffee & Drinks', emoji: '☕', color: '#F0D9A0' },
+  { id: 'shopping', name: 'Shopping', emoji: '🛍️', color: '#C4B8E8' },
+  { id: 'going-out', name: 'Going Out', emoji: '🎉', color: '#A8D8EA' },
+  { id: 'subscriptions', name: 'Subscriptions', emoji: '📱', color: '#F2A5C0' },
+  { id: 'transport', name: 'Transport', emoji: '🚗', color: '#F5C2D0' },
+  { id: 'self-care', name: 'Self Care', emoji: '💅', color: '#E8E1F5' },
+  { id: 'other', name: 'Other', emoji: '✨', color: '#FEF1C7' },
+];
+
+// What an expense looks like:
+const expense = {
+  id: 1,
+  amount: 6.50,
+  category: 'coffee',
+  note: 'Oat milk latte (I deserved it)',
+  date: '2025-04-30',
+};"
+  language="javascript"
+  explanation="Each category gets an emoji and a color for the visual breakdown. Each expense tracks the amount, which category it belongs to, an optional note (for when you need to justify that latte), and the date. The notes make it personal and fun — way better than a cold spreadsheet."
+/>
+
+## Step 2: Add Expense Form
+
+<CodeBlock
+  code="import { useState } from 'react';
+
+function AddExpense({ onAdd }) {
+  const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('food');
+  const [note, setNote] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!amount) return;
+
+    onAdd({
+      id: Date.now(),
+      amount: parseFloat(amount),
+      category,
+      note,
+      date: new Date().toISOString().split('T')[0],
+    });
+
+    // Reset form
+    setAmount('');
+    setNote('');
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className='add-expense'>
+      <h3>Add Expense</h3>
+
+      {/* Amount input */}
+      <div className='amount-input'>
+        <span className='dollar-sign'>$</span>
+        <input
+          type='number'
+          step='0.01'
+          placeholder='0.00'
+          value={amount}
+          onChange={e => setAmount(e.target.value)}
+        />
+      </div>
+
+      {/* Category picker — emoji buttons */}
+      <div className='category-grid'>
+        {categories.map(cat => (
+          <button
+            key={cat.id}
+            type='button'
+            onClick={() => setCategory(cat.id)}
+            className={`cat-btn ${category === cat.id ? 'selected' : ''}`}
+            style={{ borderColor: category === cat.id ? cat.color : 'transparent' }}
+          >
+            <span>{cat.emoji}</span>
+            <span className='cat-label'>{cat.name}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* Note */}
+      <input
+        type='text'
+        placeholder='What was it for? (optional)'
+        value={note}
+        onChange={e => setNote(e.target.value)}
+        className='note-input'
+      />
+
+      <button type='submit' className='submit-btn'>
+        Add Expense
+      </button>
+    </form>
+  );
+}"
+  language="jsx"
+  explanation="The form has three parts: a big amount input with a dollar sign, emoji category buttons (way more fun than a dropdown), and an optional note. When submitted, it creates an expense object with a unique ID (using Date.now()), parses the amount as a number, and calls onAdd to save it. Then it resets so you can add another one."
+/>
+
+## Step 3: Spending Summary
+
+<CodeBlock
+  code="function SpendingSummary({ expenses, month }) {
+  // Total spent this month
+  const total = expenses.reduce((sum, e) => sum + e.amount, 0);
+
+  // Spending by category
+  const byCategory = categories.map(cat => {
+    const catExpenses = expenses.filter(e => e.category === cat.id);
+    const catTotal = catExpenses.reduce((sum, e) => sum + e.amount, 0);
+    const percentage = total > 0 ? (catTotal / total) * 100 : 0;
+
+    return {
+      ...cat,
+      total: catTotal,
+      percentage: Math.round(percentage),
+      count: catExpenses.length,
+    };
+  }).filter(cat => cat.total > 0); // Only show categories with spending
+
+  return (
+    <div className='summary'>
+      <h3>This Month</h3>
+      <p className='total-amount'>${total.toFixed(2)}</p>
+
+      {/* Visual bar breakdown */}
+      <div className='spending-bar'>
+        {byCategory.map(cat => (
+          <div
+            key={cat.id}
+            className='bar-segment'
+            style={{
+              width: cat.percentage + '%',
+              backgroundColor: cat.color,
+            }}
+            title={cat.name + ': $' + cat.total.toFixed(2)}
+          />
+        ))}
+      </div>
+
+      {/* Category breakdown list */}
+      <div className='category-list'>
+        {byCategory
+          .sort((a, b) => b.total - a.total)
+          .map(cat => (
+            <div key={cat.id} className='category-row'>
+              <span className='cat-dot' style={{ background: cat.color }} />
+              <span className='cat-name'>{cat.emoji} {cat.name}</span>
+              <span className='cat-amount'>${cat.total.toFixed(2)}</span>
+              <span className='cat-percent'>{cat.percentage}%</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="This component does the math on your spending. reduce() adds up all the amounts to get your total. Then it groups expenses by category and calculates what percentage each category is. The colored bar at the top gives you an instant visual — if the coffee segment is suspiciously large, you know why. Categories are sorted by most spending first."
+/>
+
+## Step 4: Vibe Check (Budget Status)
+
+<CodeBlock
+  code="function VibeCheck({ totalSpent, monthlyBudget }) {
+  const percentage = (totalSpent / monthlyBudget) * 100;
+  const remaining = monthlyBudget - totalSpent;
+  const daysLeft = getDaysLeftInMonth();
+  const dailyBudget = remaining > 0 ? remaining / daysLeft : 0;
+
+  // Determine the vibe
+  let vibe;
+  if (percentage < 50) {
+    vibe = { emoji: '✨', message: 'Looking great! You are well under budget.', color: '#A8D8EA' };
+  } else if (percentage < 75) {
+    vibe = { emoji: '👀', message: 'Doing okay! Just keep an eye on it.', color: '#F0D9A0' };
+  } else if (percentage < 100) {
+    vibe = { emoji: '😬', message: 'Getting close to your limit...', color: '#F2A5C0' };
+  } else {
+    vibe = { emoji: '🫣', message: 'Over budget! Time to chill on spending.', color: '#F4A7BB' };
+  }
+
+  return (
+    <div className='vibe-check' style={{ borderColor: vibe.color }}>
+      <span className='vibe-emoji'>{vibe.emoji}</span>
+      <p className='vibe-message'>{vibe.message}</p>
+      <div className='budget-details'>
+        <p>${totalSpent.toFixed(2)} / ${monthlyBudget.toFixed(2)}</p>
+        {remaining > 0 && (
+          <p className='daily-budget'>
+            ~${dailyBudget.toFixed(2)}/day left for {daysLeft} days
+          </p>
+        )}
+      </div>
+
+      {/* Progress bar */}
+      <div className='progress-track'>
+        <div
+          className='progress-fill'
+          style={{
+            width: Math.min(percentage, 100) + '%',
+            backgroundColor: vibe.color,
+          }}
+        />
+      </div>
+    </div>
+  );
+}
+
+function getDaysLeftInMonth() {
+  const now = new Date();
+  const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  return lastDay.getDate() - now.getDate();
+}"
+  language="jsx"
+  explanation="The vibe check gives you a friendly status update instead of cold numbers. Under 50% of budget? You're thriving. Over 100%? The emoji says it all. The daily budget breakdown tells you how much you can spend per day for the rest of the month. It's honest but never mean — this is a supportive bestie, not a judgmental accountant."
+/>
+
+## Step 5: Recent Expenses List
+
+<CodeBlock
+  code="function RecentExpenses({ expenses, onDelete }) {
+  // Show most recent first
+  const sorted = [...expenses].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+
+  return (
+    <div className='recent'>
+      <h3>Recent</h3>
+      {sorted.length === 0 ? (
+        <p className='empty'>No expenses yet. Living for free? Teach me.</p>
+      ) : (
+        sorted.slice(0, 10).map(expense => {
+          const cat = categories.find(c => c.id === expense.category);
+          return (
+            <div key={expense.id} className='expense-row'>
+              <span className='expense-emoji'>{cat?.emoji}</span>
+              <div className='expense-details'>
+                <span className='expense-note'>
+                  {expense.note || cat?.name}
+                </span>
+                <span className='expense-date'>{expense.date}</span>
+              </div>
+              <span className='expense-amount'>
+                -${expense.amount.toFixed(2)}
+              </span>
+              <button
+                onClick={() => onDelete(expense.id)}
+                className='delete-btn'
+              >
+                x
+              </button>
+            </div>
+          );
+        })
+      )}
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="A scrollable list of your recent expenses, newest first. Each row shows the category emoji, the note (or category name if no note), the date, and the amount. The delete button lets you remove mistakes. The empty state message adds personality — because even your empty states should be fun."
+/>
+
+<Callout variant="tip">
+Store your expenses in localStorage (like we did in the self-care tracker) so they persist between sessions. Use the same saveDay/loadDay pattern but keyed by month instead of day.
+</Callout>
+
+## Level Up Ideas
+
+- **Monthly comparison** — see if you're spending more or less than last month
+- **Savings goals** — set goals ("concert tickets: $200") and track progress
+- **Receipt scanner** — use your phone camera to auto-fill expense amounts
+- **Recurring expenses** — auto-add subscriptions on the 1st of every month
+- **Export to CSV** — download your data for spreadsheet nerds
+- **Split expenses** — track shared costs with friends and who owes who
+
+<Callout variant="denise-says">
+Building this app teaches you forms, state management, data manipulation, and UI design — basically all the core skills of frontend development. And you end up with an app you'll actually open every day. That's the dream: learning by building things that improve your actual life. Your coding skills AND your bank account will thank you.
+</Callout>

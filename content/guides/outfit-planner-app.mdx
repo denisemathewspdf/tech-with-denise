@@ -1,0 +1,265 @@
+---
+title: "Build an Outfit Planner App"
+description: "Categorize your closet, plan outfits, and never say 'I have nothing to wear' again — all with code you wrote yourself."
+topic: "Projects"
+difficulty: "beginner"
+emoji: "👗"
+date: "2025-04-10"
+color: "pink"
+---
+
+# Build an Outfit Planner App
+
+You know that moment where you're standing in front of your closet, late for brunch, staring at a pile of clothes like "I literally have nothing to wear" even though you have 47 tops? Let's fix that. With code.
+
+We're building an app where you can:
+- Add clothing items with categories (tops, bottoms, shoes, accessories)
+- Tag them by color, season, and vibe
+- Create and save outfit combos
+- Get random outfit suggestions when you're feeling indecisive
+
+## What We're Building
+
+<CodeBlock
+  code="// Our app will have:
+// 1. A closet — your full wardrobe, categorized
+// 2. An outfit builder — drag items together
+// 3. A 'surprise me' button — random outfit generator
+
+// Here's what a clothing item looks like:
+const item = {
+  id: 1,
+  name: 'Oversized blazer',
+  category: 'outerwear',    // tops, bottoms, shoes, outerwear, accessories
+  color: 'black',
+  season: ['fall', 'spring'],
+  vibe: ['office', 'date night', 'brunch'],
+  image: '/closet/black-blazer.jpg'
+};"
+  language="javascript"
+  explanation="Every piece of clothing becomes a little data card in your app. The category helps organize it, the color and season help with filtering, and the vibe tags are the fun part — you can search your closet by 'what do I have for date night?' instead of digging through drawers."
+/>
+
+<Callout variant="denise-says">
+This is genuinely how I got excited about coding. I was bored by tutorial apps that tracked "users" and "posts." But an app that helps me get dressed? NOW we're talking. The best way to learn is to build something you'll actually use.
+</Callout>
+
+## Step 1: Set Up Your Closet Data
+
+First, let's create the structure for your wardrobe:
+
+<CodeBlock
+  code="// closet-data.js — your wardrobe lives here!
+
+const closet = [
+  {
+    id: 1,
+    name: 'White crop top',
+    category: 'tops',
+    color: 'white',
+    season: ['summer', 'spring'],
+    vibe: ['casual', 'brunch', 'beach'],
+  },
+  {
+    id: 2,
+    name: 'High-waisted jeans',
+    category: 'bottoms',
+    color: 'blue',
+    season: ['all'],
+    vibe: ['casual', 'brunch', 'shopping'],
+  },
+  {
+    id: 3,
+    name: 'White Air Forces',
+    category: 'shoes',
+    color: 'white',
+    season: ['all'],
+    vibe: ['casual', 'shopping', 'concert'],
+  },
+  {
+    id: 4,
+    name: 'Gold hoop earrings',
+    category: 'accessories',
+    color: 'gold',
+    season: ['all'],
+    vibe: ['brunch', 'date night', 'going out'],
+  },
+  {
+    id: 5,
+    name: 'Black mini skirt',
+    category: 'bottoms',
+    color: 'black',
+    season: ['summer', 'spring'],
+    vibe: ['date night', 'going out', 'concert'],
+  },
+];"
+  language="javascript"
+  explanation="This is your wardrobe as data. Each item has everything you need to filter and match. The 'vibe' array is the most fun part — you can tag items with multiple vibes so they show up in different contexts. Your white Air Forces work for casual AND concerts? Tag both!"
+/>
+
+## Step 2: Filter Your Closet
+
+Now let's write functions to search your closet:
+
+<CodeBlock
+  code="// Get all items in a category
+function getByCategory(category) {
+  return closet.filter(item => item.category === category);
+}
+
+// Get items that match a vibe
+function getByVibe(vibe) {
+  return closet.filter(item => item.vibe.includes(vibe));
+}
+
+// Get items for a specific season
+function getBySeason(season) {
+  return closet.filter(item =>
+    item.season.includes(season) || item.season.includes('all')
+  );
+}
+
+// Combine filters — 'show me casual tops for summer'
+function filterCloset(category, vibe, season) {
+  return closet.filter(item =>
+    item.category === category &&
+    item.vibe.includes(vibe) &&
+    (item.season.includes(season) || item.season.includes('all'))
+  );
+}
+
+// Try it!
+console.log(getByVibe('date night'));
+// Returns: Black mini skirt, Gold hoop earrings"
+  language="javascript"
+  explanation="These are your search functions. getByVibe('brunch') gives you everything tagged with brunch vibes. filterCloset('tops', 'casual', 'summer') gives you casual summer tops only. This is the .filter() method from arrays — it goes through every item and keeps only the ones that match your criteria."
+/>
+
+## Step 3: Random Outfit Generator
+
+The best part — a "surprise me" button:
+
+<CodeBlock
+  code="// Pick a random item from a list
+function pickRandom(items) {
+  const index = Math.floor(Math.random() * items.length);
+  return items[index];
+}
+
+// Generate a complete random outfit
+function surpriseMe(vibe) {
+  const tops = getByCategory('tops');
+  const bottoms = getByCategory('bottoms');
+  const shoes = getByCategory('shoes');
+  const accessories = getByCategory('accessories');
+
+  // If a vibe is specified, filter by it
+  const filteredTops = vibe ? tops.filter(t => t.vibe.includes(vibe)) : tops;
+  const filteredBottoms = vibe ? bottoms.filter(b => b.vibe.includes(vibe)) : bottoms;
+  const filteredShoes = vibe ? shoes.filter(s => s.vibe.includes(vibe)) : shoes;
+  const filteredAccs = vibe ? accessories.filter(a => a.vibe.includes(vibe)) : accessories;
+
+  return {
+    top: pickRandom(filteredTops),
+    bottom: pickRandom(filteredBottoms),
+    shoes: pickRandom(filteredShoes),
+    accessory: pickRandom(filteredAccs),
+  };
+}
+
+// Generate a date night outfit:
+const outfit = surpriseMe('date night');
+console.log('Top:', outfit.top?.name);
+console.log('Bottom:', outfit.bottom?.name);
+console.log('Shoes:', outfit.shoes?.name);
+console.log('Accessory:', outfit.accessory?.name);"
+  language="javascript"
+  explanation="pickRandom grabs a random item from any list. surpriseMe builds a full outfit by picking one random item from each category. If you pass a vibe like 'date night,' it only picks from items tagged with that vibe. The ?. (optional chaining) handles cases where you might not have items in every category yet."
+/>
+
+## Step 4: Build the UI with React
+
+Here's a simple React component for displaying your closet:
+
+<CodeBlock
+  code="import { useState } from 'react';
+
+function ClosetApp() {
+  const [activeVibe, setActiveVibe] = useState('all');
+  const [outfit, setOutfit] = useState(null);
+
+  const vibes = ['all', 'casual', 'brunch', 'date night', 'going out'];
+
+  const displayedItems = activeVibe === 'all'
+    ? closet
+    : closet.filter(item => item.vibe.includes(activeVibe));
+
+  return (
+    <div className='app'>
+      <h1>My Closet</h1>
+
+      {/* Vibe filter buttons */}
+      <div className='vibes'>
+        {vibes.map(vibe => (
+          <button
+            key={vibe}
+            onClick={() => setActiveVibe(vibe)}
+            className={activeVibe === vibe ? 'active' : ''}
+          >
+            {vibe}
+          </button>
+        ))}
+      </div>
+
+      {/* Surprise me button */}
+      <button onClick={() => setOutfit(surpriseMe(
+        activeVibe === 'all' ? null : activeVibe
+      ))}>
+        Surprise Me!
+      </button>
+
+      {/* Show generated outfit */}
+      {outfit && (
+        <div className='outfit-result'>
+          <h2>Your Outfit:</h2>
+          <p>Top: {outfit.top?.name}</p>
+          <p>Bottom: {outfit.bottom?.name}</p>
+          <p>Shoes: {outfit.shoes?.name}</p>
+          <p>Accessory: {outfit.accessory?.name}</p>
+        </div>
+      )}
+
+      {/* Closet grid */}
+      <div className='closet-grid'>
+        {displayedItems.map(item => (
+          <div key={item.id} className='closet-card'>
+            <span className='category-tag'>{item.category}</span>
+            <h3>{item.name}</h3>
+            <p>{item.vibe.join(', ')}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="This is a React component that puts it all together. The vibe buttons filter your closet view. The Surprise Me button generates a random outfit. Each item shows up as a card with its name, category, and vibes. You could add images, drag-and-drop outfit building, and a 'saved outfits' section to make it even more useful."
+/>
+
+<Callout variant="tip">
+Want to add photos? You can use your phone to snap quick pics of each item, save them in a `/public/closet/` folder, and add an `image` field to each item. Then display them with an `img` tag in the cards. Your app starts looking like a real fashion app!
+</Callout>
+
+## Level Up Ideas
+
+Once you've got the basics working, try adding:
+
+- **Photo upload** — snap pics of your clothes and display them
+- **Saved outfits** — save combos you love (use localStorage)
+- **Weather integration** — use a weather API to suggest season-appropriate outfits
+- **Color matching** — suggest items that go well together based on color theory
+- **Wear tracking** — log which outfits you've worn so you don't repeat
+
+<Callout variant="denise-says">
+You just planned out a legit app. Not a boring to-do list — an app that helps you get dressed. This is the kind of project that makes your portfolio stand out AND that you'll actually enjoy building. Every feature you add teaches you something new: photos teach you file handling, weather teaches you APIs, saving outfits teaches you data persistence. Learning by building stuff you care about is literally the cheat code.
+</Callout>

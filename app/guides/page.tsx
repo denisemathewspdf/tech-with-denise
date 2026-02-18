@@ -19,6 +19,7 @@ const allTopics = [
   "Terminal",
   "TypeScript",
   "Web3",
+  "Projects",
 ];
 
 type GuidesPageProps = {

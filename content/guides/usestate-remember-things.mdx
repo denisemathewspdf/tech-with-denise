@@ -12,6 +12,18 @@ color: "lavender"
 
 So you built a button. Cute. But when you click it... nothing happens. That's because your component doesn't have a memory yet. It doesn't know whether the button was clicked. Enter: <Term id="state">state</Term>.
 
+## Why Does State Matter in Real Life?
+
+Every interactive thing on the internet uses state. Every. Single. One.
+
+- **TikTok**: The app remembers which video you're on, whether you've liked it, whether the comments are open, and your scroll position. All state.
+- **Online shopping**: Your cart items, the selected size, the color you picked, the quantity — that's all state living in the app's memory until you check out.
+- **Google Maps**: Whether you're viewing the map or satellite, your current search, the route it's showing, whether the side panel is expanded — all state.
+- **Dark mode toggle**: When you flip a switch and the whole app changes from light to dark? That's one piece of state (`isDarkMode: true`) controlling the entire UI.
+- **Forms**: Every character you type into a text field is state being updated in real time. The app remembers what you've typed so it can validate it, submit it, or clear it.
+
+Without state, websites would be static documents — no interactivity, no memory, no personality. useState is how you bring a dead page to life.
+
 ## What Is State?
 
 State is your component's memory. It's how your app keeps track of things that can change:

@@ -1,0 +1,281 @@
+---
+title: "Build a Digital Mood Board App"
+description: "Create a drag-and-drop mood board for planning aesthetics, projects, and vibes. Pinterest but make it yours."
+topic: "Projects"
+difficulty: "beginner"
+emoji: "🎨"
+date: "2025-05-05"
+color: "rose"
+---
+
+# Build a Digital Mood Board App
+
+Pinterest is great but sometimes you just want a blank canvas where you can throw images, colors, text, and vibes together without an algorithm telling you what to look at. Let's build your own mood board app.
+
+## Why Would You Build This?
+
+Real talk — mood boards aren't just for aesthetics (although they're great for that). People use them for:
+
+- **Planning a rebrand** — collecting colors, fonts, and visual inspo before redesigning a website or social media
+- **Apartment decorating** — pulling together furniture, paint colors, and textures before you commit
+- **Event planning** — weddings, parties, photoshoots — visualizing the vibe before spending money
+- **Creative projects** — album art, YouTube thumbnails, merch designs
+- **Vision boards** — goals, affirmations, dream life visualization
+
+And building it yourself means no watermarks, no subscription fees, and no ads for things you already bought.
+
+<Callout variant="denise-says">
+I use mood boards for literally everything — redesigning my website, planning content, even figuring out what I want my apartment to look like. Building one as a coding project means you learn drag-and-drop, canvas layouts, and image handling, all while making something you'll genuinely use.
+</Callout>
+
+## What We're Building
+
+- A blank canvas you can add items to
+- Drag and drop to rearrange
+- Add images (from URL or upload)
+- Add color swatches
+- Add text notes
+- Save your board to come back to later
+
+## Step 1: The Board Data
+
+<CodeBlock
+  code="// Each item on the board has a position, size, and content
+const boardItem = {
+  id: 1,
+  type: 'image',        // 'image', 'color', 'text'
+  content: 'https://example.com/photo.jpg',  // URL, hex color, or text
+  x: 120,               // position from left
+  y: 80,                // position from top
+  width: 200,
+  height: 250,
+  rotation: -3,          // slight tilt for that collage feel
+};
+
+// A board is just a collection of items
+const board = {
+  id: 'spring-vibes',
+  name: 'Spring Vibes',
+  items: [],
+  background: '#FFF8F0',
+};"
+  language="javascript"
+  explanation="Every item on the board tracks its type (image, color swatch, or text), its content, and its position/size on the canvas. The rotation property adds that slight tilt that makes mood boards look organic instead of rigid. A board is just an object with a name and a list of items."
+/>
+
+## Step 2: Draggable Item Component
+
+<CodeBlock
+  code="import { useState } from 'react';
+
+function BoardItem({ item, onMove, onDelete }) {
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - item.x,
+      y: e.clientY - item.y,
+    });
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    onMove(item.id, {
+      x: e.clientX - dragStart.x,
+      y: e.clientY - dragStart.y,
+    });
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  return (
+    <div
+      className={`board-item ${isDragging ? 'dragging' : ''}`}
+      style={{
+        left: item.x,
+        top: item.y,
+        width: item.width,
+        transform: 'rotate(' + item.rotation + 'deg)',
+      }}
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+    >
+      {item.type === 'image' && (
+        <img src={item.content} alt='' draggable={false} />
+      )}
+      {item.type === 'color' && (
+        <div className='color-swatch' style={{ background: item.content }} />
+      )}
+      {item.type === 'text' && (
+        <p className='board-text'>{item.content}</p>
+      )}
+
+      <button className='delete-item' onClick={() => onDelete(item.id)}>x</button>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="This component makes items draggable. When you click and hold (mouseDown), it starts tracking your mouse position. As you move (mouseMove), it updates the item's position. When you let go (mouseUp), it stops. The rotation gives each item a slightly tilted, collage-style look. Each item type renders differently — images show the photo, colors show a swatch, text shows the note."
+/>
+
+## Step 3: The Toolbar
+
+<CodeBlock
+  code="function Toolbar({ onAddItem }) {
+  const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const addImage = () => {
+    const url = prompt('Paste an image URL:');
+    if (url) {
+      onAddItem({
+        type: 'image',
+        content: url,
+        width: 200,
+        height: 250,
+        rotation: Math.random() * 6 - 3,  // random tilt between -3 and 3
+      });
+    }
+  };
+
+  const addText = () => {
+    const text = prompt('What do you want to add?');
+    if (text) {
+      onAddItem({
+        type: 'text',
+        content: text,
+        width: 180,
+        height: 'auto',
+        rotation: Math.random() * 4 - 2,
+      });
+    }
+  };
+
+  const addColor = (color) => {
+    onAddItem({
+      type: 'color',
+      content: color,
+      width: 80,
+      height: 80,
+      rotation: Math.random() * 8 - 4,
+    });
+    setShowColorPicker(false);
+  };
+
+  const presetColors = [
+    '#F4A7BB', '#C4B8E8', '#A8D8EA', '#F0D9A0',
+    '#F2A5C0', '#F5C2D0', '#FEF1C7', '#957DAD',
+    '#FF6B6B', '#4ECDC4', '#2D2D2D', '#FFFFFF',
+  ];
+
+  return (
+    <div className='toolbar'>
+      <button onClick={addImage}>🖼️ Image</button>
+      <button onClick={addText}>✏️ Text</button>
+      <button onClick={() => setShowColorPicker(!showColorPicker)}>
+        🎨 Color
+      </button>
+
+      {showColorPicker && (
+        <div className='color-grid'>
+          {presetColors.map(color => (
+            <button
+              key={color}
+              className='color-option'
+              style={{ background: color }}
+              onClick={() => addColor(color)}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="The toolbar has three buttons: add an image (from URL), add text, or add a color swatch. The random rotation on each new item means your board looks organic and hand-placed, not grid-locked. The color picker shows preset swatches — you could also add a custom color input for more flexibility."
+/>
+
+## Step 4: The Full Board
+
+<CodeBlock
+  code="function MoodBoard() {
+  const [items, setItems] = useState([]);
+  const [boardName, setBoardName] = useState('My Mood Board');
+
+  const addItem = (itemData) => {
+    setItems(prev => [...prev, {
+      ...itemData,
+      id: Date.now(),
+      x: 100 + Math.random() * 200,
+      y: 100 + Math.random() * 200,
+    }]);
+  };
+
+  const moveItem = (id, position) => {
+    setItems(prev => prev.map(item =>
+      item.id === id ? { ...item, ...position } : item
+    ));
+  };
+
+  const deleteItem = (id) => {
+    setItems(prev => prev.filter(item => item.id !== id));
+  };
+
+  const saveBoard = () => {
+    const data = { name: boardName, items };
+    localStorage.setItem('moodboard', JSON.stringify(data));
+  };
+
+  return (
+    <div className='mood-board-app'>
+      <header className='board-header'>
+        <input
+          value={boardName}
+          onChange={e => setBoardName(e.target.value)}
+          className='board-name-input'
+        />
+        <button onClick={saveBoard} className='save-btn'>
+          Save Board
+        </button>
+      </header>
+
+      <Toolbar onAddItem={addItem} />
+
+      <div className='canvas'>
+        {items.map(item => (
+          <BoardItem
+            key={item.id}
+            item={item}
+            onMove={moveItem}
+            onDelete={deleteItem}
+          />
+        ))}
+        {items.length === 0 && (
+          <p className='empty-canvas'>
+            Click the buttons above to start adding to your board ✨
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}"
+  language="jsx"
+  explanation="The main component manages all the items on the board. New items get placed at a slightly random position so they don't all stack on top of each other. The board name is editable (click on it and type). Save Board stores everything in localStorage so you can close the tab and come back to it."
+/>
+
+## Level Up Ideas
+
+- **Multiple boards** — save and switch between different mood boards
+- **File upload** — drag images from your computer instead of pasting URLs
+- **Resize handles** — drag corners to resize items
+- **Layers** — bring items forward or send them backward
+- **Export as image** — save your board as a PNG to share
+- **Collaborative** — share a board link and build together in real-time
+
+<Callout variant="denise-says">
+This project teaches you drag-and-drop interactions, dynamic positioning, state management with arrays, and localStorage — all real skills that show up in professional apps. And you end up with something beautiful that you can use for your next project, room makeover, or event. Building pretty things that teach you real skills? That's the vibe.
+</Callout>

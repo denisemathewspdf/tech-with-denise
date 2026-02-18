@@ -1,0 +1,128 @@
+---
+title: "Organize Your Messy Desktop with Python"
+description: "Write a Python script that automatically sorts your desktop files into folders. Never look at 200 scattered screenshots again."
+topic: "Projects"
+difficulty: "beginner"
+emoji: "🗂️"
+date: "2025-04-20"
+color: "mint"
+---
+
+# Organize Your Messy Desktop with Python
+
+Be honest. How many random files are on your desktop right now? Screenshots from three months ago? That PDF you downloaded once? A folder called "New Folder (3)"? Let's write a Python script that cleans that mess up automatically.
+
+## What We're Building
+
+A script that:
+- Scans your desktop (or any folder)
+- Sorts files into organized folders by type (Images, Documents, Music, etc.)
+- Runs in seconds
+- Can be scheduled to run automatically
+
+<Callout variant="denise-says">
+This was one of the first Python scripts I ever wrote that felt USEFUL. Not a tutorial exercise, not a fake project — something that saved me actual time. After running it once I was like "wait, coding can just... solve problems in my life?" Yes. Yes it can.
+</Callout>
+
+## Step 1: The Plan
+
+Here's how files will get sorted:
+
+<CodeBlock
+  code={"Before:\nDesktop/\n  IMG_4521.png\n  resume_final_v3.pdf\n  song.mp3\n  notes.txt\n  screenshot_2025.jpg\n  project.zip\n  video.mp4\n\nAfter:\nDesktop/\n  Images/\n    IMG_4521.png\n    screenshot_2025.jpg\n  Documents/\n    resume_final_v3.pdf\n    notes.txt\n  Music/\n    song.mp3\n  Videos/\n    video.mp4\n  Archives/\n    project.zip"}
+  language="text"
+  explanation="The script looks at each file's extension (.png, .pdf, .mp3) and moves it to the right folder. Simple, but so satisfying to watch it work."
+/>
+
+## Step 2: Map File Types to Folders
+
+<CodeBlock
+  code={"# file_organizer.py\n\nimport os\nimport shutil\n\n# Map file extensions to folder names\nFILE_CATEGORIES = {\n    'Images': ['.jpg', '.jpeg', '.png', '.gif', '.svg', '.webp', '.heic'],\n    'Documents': ['.pdf', '.doc', '.docx', '.txt', '.xlsx', '.pptx', '.csv'],\n    'Music': ['.mp3', '.wav', '.flac', '.aac', '.m4a'],\n    'Videos': ['.mp4', '.mov', '.avi', '.mkv', '.wmv'],\n    'Archives': ['.zip', '.rar', '.7z', '.tar', '.gz'],\n    'Code': ['.py', '.js', '.html', '.css', '.json', '.ts', '.jsx'],\n    'Design': ['.psd', '.ai', '.fig', '.sketch', '.xd'],\n}"}
+  language="python"
+  explanation="This dictionary maps each category to its file extensions. When the script sees a .png file, it checks this dictionary and knows it goes in the Images folder. You can customize this however you want — add a 'Screenshots' category, a 'School' category, whatever makes sense for your life."
+/>
+
+## Step 3: The Sorting Function
+
+<CodeBlock
+  code="def get_category(filename):
+    '''Figure out which folder a file belongs in based on its extension.'''
+    extension = os.path.splitext(filename)[1].lower()
+
+    for category, extensions in FILE_CATEGORIES.items():
+        if extension in extensions:
+            return category
+
+    return 'Other'  # Files that don't match any category
+
+
+def organize_folder(folder_path):
+    '''Sort all files in a folder into categorized subfolders.'''
+
+    # Count how many files we moved
+    moved = 0
+
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+
+        # Skip folders — we only want to sort files
+        if os.path.isdir(file_path):
+            continue
+
+        # Skip hidden files (like .DS_Store on Mac)
+        if filename.startswith('.'):
+            continue
+
+        # Figure out where this file goes
+        category = get_category(filename)
+
+        # Create the category folder if it doesn't exist
+        category_path = os.path.join(folder_path, category)
+        if not os.path.exists(category_path):
+            os.makedirs(category_path)
+            print(f'  Created folder: {category}/')
+
+        # Move the file!
+        destination = os.path.join(category_path, filename)
+        shutil.move(file_path, destination)
+        print(f'  Moved: {filename} -> {category}/')
+        moved += 1
+
+    return moved"
+  language="python"
+  explanation="The organize_folder function goes through every file in the folder. For each file, it checks the extension to figure out the category, creates the category folder if needed, and moves the file. It skips folders and hidden files so it doesn't mess up anything important. The print statements show you exactly what's happening as it runs."
+/>
+
+## Step 4: Make It Interactive
+
+<CodeBlock
+  code={"# Add this at the bottom of file_organizer.py\n\nif __name__ == '__main__':\n    print('Desktop File Organizer')\n    print('=' * 40)\n\n    # Default to Desktop, but let the user choose\n    desktop = os.path.expanduser('~/Desktop')\n\n    folder = input('Folder to organize (press Enter for Desktop): ').strip()\n    if not folder:\n        folder = desktop\n\n    # Safety check\n    if not os.path.exists(folder):\n        print('Folder not found: ' + folder)\n    else:\n        print('Organizing: ' + folder)\n        print()\n        count = organize_folder(folder)\n        print()\n        print('Done! Moved ' + str(count) + ' files.')\n        print('Your folder is now organized!')"}
+  language="python"
+  explanation="This makes the script interactive. When you run it, it asks which folder to organize (defaults to your Desktop if you just hit Enter). It shows you each file it moves and gives you a summary at the end. Run it with: python file_organizer.py"
+/>
+
+<Callout variant="warning">
+Test this on a folder with copies first before running it on your actual Desktop! Create a test folder with some dummy files to make sure it works the way you want. Once you're confident, unleash it on the real mess.
+</Callout>
+
+## Step 5: Add an Undo Feature
+
+Because sometimes you want your mess back:
+
+<CodeBlock
+  code={"import json\nfrom datetime import datetime\n\ndef organize_folder_with_log(folder_path):\n    '''Same as organize_folder, but saves a log so you can undo.'''\n    log = []\n    moved = 0\n\n    for filename in os.listdir(folder_path):\n        file_path = os.path.join(folder_path, filename)\n\n        if os.path.isdir(file_path) or filename.startswith('.'):\n            continue\n\n        category = get_category(filename)\n        category_path = os.path.join(folder_path, category)\n\n        if not os.path.exists(category_path):\n            os.makedirs(category_path)\n\n        destination = os.path.join(category_path, filename)\n        shutil.move(file_path, destination)\n\n        log.append({\n            'file': filename,\n            'from': file_path,\n            'to': destination\n        })\n        moved += 1\n\n    # Save the log so we can undo later\n    log_path = os.path.join(folder_path, '.organize_log.json')\n    with open(log_path, 'w') as f:\n        json.dump(log, f, indent=2)\n\n    return moved\n\n\ndef undo_organize(folder_path):\n    '''Move everything back to where it was.'''\n    log_path = os.path.join(folder_path, '.organize_log.json')\n\n    if not os.path.exists(log_path):\n        print('No log found. Nothing to undo.')\n        return\n\n    with open(log_path, 'r') as f:\n        log = json.load(f)\n\n    for entry in log:\n        if os.path.exists(entry['to']):\n            shutil.move(entry['to'], entry['from'])\n            print('  Restored: ' + entry['file'])\n\n    os.remove(log_path)\n    print('Undo complete!')"}
+  language="python"
+  explanation="The organize function now saves a log file (.organize_log.json) that remembers where every file came from. The undo function reads that log and moves everything back. It's like Ctrl+Z for your file system. The log file is hidden (starts with a dot) so it won't clutter your folder."
+/>
+
+## Level Up Ideas
+
+- **Schedule it** — use cron (Mac/Linux) or Task Scheduler (Windows) to run it daily
+- **Sort by date** — create subfolders like Images/2025-04/ based on when files were created
+- **Smart rename** — rename screenshots from "IMG_4521.png" to "screenshot-2025-04-20.png"
+- **Desktop wallpaper** — randomly set your wallpaper from your Images folder
+- **Size report** — show how much space each category takes up
+
+<Callout variant="denise-says">
+You just wrote a real automation script. This is exactly the kind of thing Python developers do at their jobs — automate repetitive tasks that nobody wants to do by hand. You could put this on your portfolio, show it in an interview, or just enjoy having a clean desktop for once. All three are valid.
+</Callout>

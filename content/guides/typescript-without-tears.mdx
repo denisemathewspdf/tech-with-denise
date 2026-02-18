@@ -12,7 +12,20 @@ color: "pink"
 
 Okay, <Term id="typescript">TypeScript</Term> has a reputation for being confusing. I get it — the first time you see `type Props = { name: string; age: number }` your brain goes "nope." But here's the thing: TypeScript is literally just JavaScript with spell-check. Let me show you.
 
-## Why TypeScript Exists
+## Why Would You Use TypeScript? (Real Examples)
+
+"But JavaScript already works, why add extra stuff?" Here's why real companies and developers switched and never looked back:
+
+- **Airbnb**: They estimated that 38% of their bugs could have been prevented by TypeScript. They migrated their entire codebase and bug reports dropped significantly.
+- **Slack**: Their desktop app was full of hard-to-find bugs from passing wrong data between components. TypeScript caught those errors instantly.
+- **Your editor gets superpowers**: With TypeScript, VS Code can autocomplete property names, show you what a function expects, and underline errors as you type — like Google Docs' grammar suggestions but for code.
+- **Team collaboration**: When someone else writes a function, TypeScript tells you exactly what it expects and returns. No more guessing, no more reading through someone's code to figure out what data shape it needs.
+- **Refactoring without fear**: Want to rename a field from `userName` to `displayName`? TypeScript highlights every place in your entire codebase that needs to change. In JavaScript, you'd find out you missed one when a user reports a bug at 2am.
+- **Job listings**: The majority of frontend job postings now require or prefer TypeScript. It's not a "nice to have" anymore — it's expected.
+
+Basically: JavaScript lets you do whatever you want, which sounds nice until you realize "whatever you want" includes accidentally breaking your app. TypeScript gently stops you from shooting yourself in the foot.
+
+## The Core Idea
 
 Have you ever written JavaScript and then spent 45 minutes debugging, only to realize you typed `user.nme` instead of `user.name`? JavaScript wouldn't tell you about that typo until your code actually runs and breaks.
 
