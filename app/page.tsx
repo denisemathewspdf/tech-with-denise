@@ -109,16 +109,16 @@ export default function HomePage() {
           {/* Buttons */}
           <div className="flex gap-4 justify-center flex-wrap opacity-0 animate-fade-up [animation-delay:0.45s]">
             <a
+              href="/build"
+              className="px-8 py-3.5 rounded-full bg-gradient-to-r from-peach via-pink to-lavender text-white font-bold text-sm no-underline transition-all hover:-translate-y-1 hover:shadow-hover inline-flex items-center gap-2"
+            >
+              Start Building ✨
+            </a>
+            <a
               href="#topics"
               className="px-8 py-3.5 rounded-full bg-dark text-white font-bold text-sm no-underline transition-all hover:-translate-y-1 hover:shadow-hover inline-flex items-center gap-2"
             >
               Start Learning →
-            </a>
-            <a
-              href="#subscribe"
-              className="px-8 py-3.5 rounded-full bg-white text-dark font-bold text-sm no-underline border-2 border-lavender-light transition-all hover:border-lavender hover:-translate-y-1"
-            >
-              Join the Newsletter
             </a>
           </div>
 
