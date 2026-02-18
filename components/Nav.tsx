@@ -34,6 +34,7 @@ export default function Nav() {
       {/* Desktop links */}
       <div className="hidden md:flex items-center gap-8">
         <NavLink href="/guides">Guides</NavLink>
+        <NavLink href="/programs">Programs</NavLink>
         <NavLink href="/glossary">Glossary</NavLink>
         <NavLink href="/#topics">Topics</NavLink>
         <Link
@@ -66,6 +67,9 @@ export default function Nav() {
         <div className="absolute top-full left-0 w-full bg-cream/95 backdrop-blur-xl border-b border-lavender/20 py-6 px-6 flex flex-col gap-4 md:hidden">
           <MobileNavLink href="/guides" onClick={() => setMenuOpen(false)}>
             Guides
+          </MobileNavLink>
+          <MobileNavLink href="/programs" onClick={() => setMenuOpen(false)}>
+            Programs
           </MobileNavLink>
           <MobileNavLink href="/glossary" onClick={() => setMenuOpen(false)}>
             Glossary
