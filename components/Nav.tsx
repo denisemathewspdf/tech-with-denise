@@ -35,8 +35,8 @@ export default function Nav() {
       <div className="hidden md:flex items-center gap-8">
         <NavLink href="/guides">Guides</NavLink>
         <NavLink href="/programs">Programs</NavLink>
+        <NavLink href="/languages">Languages</NavLink>
         <NavLink href="/glossary">Glossary</NavLink>
-        <NavLink href="/#topics">Topics</NavLink>
         <Link
           href="/#subscribe"
           className="bg-dark text-white px-6 py-2.5 rounded-full font-semibold text-sm transition-all hover:-translate-y-0.5 hover:shadow-card no-underline"
@@ -71,11 +71,11 @@ export default function Nav() {
           <MobileNavLink href="/programs" onClick={() => setMenuOpen(false)}>
             Programs
           </MobileNavLink>
+          <MobileNavLink href="/languages" onClick={() => setMenuOpen(false)}>
+            Languages
+          </MobileNavLink>
           <MobileNavLink href="/glossary" onClick={() => setMenuOpen(false)}>
             Glossary
-          </MobileNavLink>
-          <MobileNavLink href="/#topics" onClick={() => setMenuOpen(false)}>
-            Topics
           </MobileNavLink>
           <Link
             href="/#subscribe"
