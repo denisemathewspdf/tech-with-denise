@@ -19,6 +19,30 @@ const demos = [
     href: "/demos/outfit-planner",
     gradient: "from-pink via-peach to-lavender",
   },
+  {
+    title: "Self-Care Tracker",
+    description:
+      "Track water, sleep, mood, skincare, and movement with a cute daily check-in.",
+    emoji: "🧘‍♀️",
+    href: "/demos/self-care-tracker",
+    gradient: "from-lavender via-mint to-lavender",
+  },
+  {
+    title: "Budget Bestie",
+    description:
+      "Add expenses, see where your money goes, and get a vibe check on your spending.",
+    emoji: "💸",
+    href: "/demos/budget-bestie",
+    gradient: "from-gold via-peach to-pink",
+  },
+  {
+    title: "Mood Board",
+    description:
+      "Drag-and-drop images, colors, and text onto a canvas. Pinterest but make it yours.",
+    emoji: "🎨",
+    href: "/demos/mood-board",
+    gradient: "from-rose via-lavender to-mint",
+  },
 ];
 
 export default function ProgramsPage() {
