@@ -24,16 +24,16 @@ export default function BuildPage() {
   return (
     <>
       <BackgroundShapes />
-      <div className="relative z-10 px-4 sm:px-6 md:px-10 pt-28 pb-8 max-w-[800px] mx-auto">
+      <div className="relative z-10 px-4 sm:px-6 md:px-10 pt-28 pb-8 max-w-[1000px] mx-auto">
         {/* Header */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-8">
           <span className="text-4xl block mb-2">🚀</span>
           <h1 className="font-heading text-3xl md:text-4xl font-bold mb-2">
-            What do you want to build?
+            Write your first code
           </h1>
-          <p className="text-dark-soft text-sm max-w-md mx-auto">
-            Tell me your idea — even if it&apos;s vague — and I&apos;ll walk you
-            through your very first lines of code. No experience needed.
+          <p className="text-dark-soft text-sm max-w-lg mx-auto">
+            Pick a project, type each line of code yourself, and learn what every
+            single line does. No copy-pasting — you&apos;re actually coding.
           </p>
         </div>
 
