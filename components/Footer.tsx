@@ -5,21 +5,18 @@ export default function Footer() {
     <footer className="relative z-10 text-center py-10 px-6">
       {/* Social icons */}
       <div className="flex justify-center gap-6 mb-4">
-        <SocialLink href="#" label="YouTube">
-          ▶
-        </SocialLink>
-        <SocialLink href="#" label="Twitter/X">
+        <SocialLink href="https://x.com/Dmatx2" label="X / Twitter">
           𝕏
         </SocialLink>
-        <SocialLink href="#" label="TikTok">
-          ♪
-        </SocialLink>
-        <SocialLink href="#" label="Instagram">
+        <SocialLink href="https://instagram.com/denise_thehackergirl" label="Instagram">
           ◎
+        </SocialLink>
+        <SocialLink href="http://www.linkedin.com/in/denmath" label="LinkedIn">
+          in
         </SocialLink>
       </div>
 
-      <p className="text-dark-soft text-sm">
+      <p className="text-dark-soft dark:text-[#C4B0D8] text-sm">
         Made with 💜 by Denise · © {new Date().getFullYear()}{" "}
         <Link href="/" className="text-lavender font-semibold no-underline">
           Tech with Denise
@@ -42,7 +39,9 @@ function SocialLink({
     <a
       href={href}
       title={label}
-      className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-lg border border-lavender-light transition-all hover:-translate-y-1 hover:shadow-soft no-underline"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="w-10 h-10 bg-white dark:bg-white/5 rounded-full flex items-center justify-center text-lg border border-lavender-light dark:border-lavender/20 text-dark-soft dark:text-[#C4B0D8] transition-all hover:-translate-y-1 hover:shadow-soft no-underline"
     >
       {children}
     </a>

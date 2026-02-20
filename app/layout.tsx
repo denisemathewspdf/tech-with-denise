@@ -70,7 +70,15 @@ export default function RootLayout({
       lang="en"
       className={`${quicksand.variable} ${playfair.variable} ${jetbrains.variable}`}
     >
-      <body className="font-body bg-cream text-dark antialiased">
+      <head>
+        {/* Prevent dark mode flash — runs before React hydrates */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})()`,
+          }}
+        />
+      </head>
+      <body className="font-body bg-cream text-dark antialiased transition-colors duration-300">
         <Nav />
         <main>{children}</main>
         <Footer />

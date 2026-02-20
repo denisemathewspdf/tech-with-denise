@@ -136,3 +136,90 @@ html {
 .prose hr {
   @apply my-8 border-lavender-light;
 }
+
+/* ============================================
+   Dark mode overrides
+   ============================================ */
+
+/* Base */
+.dark body {
+  background: #150E1F;
+  color: #F0EBF8;
+}
+
+/* White surfaces become dark purple cards */
+.dark .bg-white {
+  background-color: #1E1530;
+}
+
+/* Cream background */
+.dark .bg-cream {
+  background-color: #150E1F;
+}
+
+/* Text colors */
+.dark .text-dark {
+  color: #F0EBF8;
+}
+.dark .text-dark-soft {
+  color: #C4B0D8;
+}
+
+/* Borders */
+.dark .border-lavender-light {
+  border-color: rgba(196, 184, 232, 0.15);
+}
+.dark .border-lavender\/20 {
+  border-color: rgba(196, 184, 232, 0.12);
+}
+
+/* Background shapes — less intense in dark mode */
+.dark .bg-shape {
+  opacity: 0.12;
+}
+
+/* Pastel backgrounds used in callouts, topic cards */
+.dark .bg-lavender-light {
+  background-color: rgba(196, 184, 232, 0.12);
+}
+.dark .bg-peach-light {
+  background-color: rgba(244, 167, 187, 0.12);
+}
+.dark .bg-mint-light {
+  background-color: rgba(168, 216, 234, 0.12);
+}
+.dark .bg-pink-light {
+  background-color: rgba(242, 165, 192, 0.12);
+}
+.dark .bg-butter {
+  background-color: rgba(240, 217, 160, 0.12);
+}
+.dark .bg-gold-light {
+  background-color: rgba(240, 217, 160, 0.12);
+}
+
+/* Prose in dark mode */
+.dark .prose p,
+.dark .prose ul,
+.dark .prose ol {
+  color: #C4B0D8;
+}
+.dark .prose strong {
+  color: #F0EBF8;
+}
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  color: #F0EBF8;
+}
+.dark .prose a {
+  color: #C4B8E8;
+}
+.dark .prose blockquote {
+  color: #C4B0D8;
+}
+.dark .prose code:not(pre code) {
+  background-color: rgba(196, 184, 232, 0.15);
+  color: #F0EBF8;
+}

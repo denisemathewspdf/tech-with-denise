@@ -3,6 +3,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 import TopicCard from "@/components/TopicCard";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
+import InteractiveCodeBlock from "@/components/InteractiveCodeBlock";
 
 // Topic data matching the original landing page
 const topics = [
@@ -216,48 +217,8 @@ export default function HomePage() {
                 </a>
               </div>
 
-              {/* Right: code demo */}
-              <div className="bg-[#2D2139] rounded-2xl p-6 font-mono text-sm text-[#e0e0e0] leading-loose relative overflow-hidden">
-                {/* Gradient bar */}
-                <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-peach via-lavender via-mint to-pink" />
-
-                {/* Window dots */}
-                <div className="flex gap-1.5 mb-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-peach" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-gold" />
-                  <span className="w-2.5 h-2.5 rounded-full bg-mint" />
-                </div>
-
-                {/* Code */}
-                <div>
-                  <span className="text-[#A99BB5]">
-                    {"// What it looks like in the wild:"}
-                  </span>
-                  <br />
-                  <span className="text-peach">const</span>{" "}
-                  <span className="text-gold">greet</span> = (
-                  <span className="text-gold">name</span>){" "}
-                  <span className="text-peach">=&gt;</span> {"{"}
-                  <br />
-                  {"  "}
-                  <span className="text-peach">return</span>{" "}
-                  <span className="text-mint">{"`Hey ${name}!`"}</span>
-                  <br />
-                  {"}"}
-                </div>
-
-                {/* Arrow */}
-                <div className="text-center text-lavender text-lg my-3">↓</div>
-
-                {/* Plain English explanation */}
-                <div className="bg-white/[0.06] rounded-xl p-4 font-body text-peach-light text-sm leading-relaxed border-l-[3px] border-peach">
-                  <strong>Denise explains:</strong> This is just a recipe. You
-                  give it a name, it says hey back. That&apos;s it! The arrow
-                  (=&gt;) is just JavaScript being fancy instead of writing
-                  &quot;function.&quot; You&apos;re basically teaching your
-                  computer to be polite. 💅
-                </div>
-              </div>
+              {/* Right: interactive code playground */}
+              <InteractiveCodeBlock />
             </div>
           </div>
         </ScrollReveal>
