@@ -1,88 +1,73 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { healModules } from "@/lib/heal-modules";
+import HealProgressBar from "@/components/HealProgressBar";
 
-export const metadata: Metadata = {
-  title: "My Dashboard — Heal from Within",
-};
+export const metadata: Metadata = { title: "My Dashboard" };
 
-// Demo progress data — simulating a student partway through the course
-type Status = "completed" | "in-progress" | "not-started" | "locked";
+type Status = "completed" | "in-progress" | "not-started";
 
 const progress: Record<number, { completed: number; status: Status }> = {
   1: { completed: 4, status: "completed" },
   2: { completed: 2, status: "in-progress" },
-  3: { completed: 0, status: "not-started" },
-  4: { completed: 0, status: "locked" },
-  5: { completed: 0, status: "locked" },
-  6: { completed: 0, status: "locked" },
+  3: { completed: 1, status: "in-progress" },
+  4: { completed: 0, status: "not-started" },
+  5: { completed: 0, status: "not-started" },
+  6: { completed: 0, status: "not-started" },
 };
 
-const statusConfig: Record<Status, { label: string; bg: string; text: string }> = {
-  completed: {
-    label: "Completed ✓",
-    bg: "bg-sage-light dark:bg-sage/10",
-    text: "text-sage",
-  },
-  "in-progress": {
-    label: "In Progress",
-    bg: "bg-amber-light dark:bg-amber/10",
-    text: "text-amber",
-  },
-  "not-started": {
-    label: "Not Started",
-    bg: "bg-lavender-light dark:bg-lavender/10",
-    text: "text-dark-soft dark:text-[#C4B0D8]",
-  },
-  locked: {
-    label: "🔒 Locked",
-    bg: "bg-white/50 dark:bg-white/5",
-    text: "text-dark-soft/50 dark:text-[#C4B0D8]/40",
-  },
+// Modules 4-6 are locked (Starter tier demo)
+const LOCKED = new Set([4, 5, 6]);
+
+const statusStyle: Record<Status, { label: string; bg: string; color: string }> = {
+  completed:    { label: "Completed ✓", bg: "#E8F0E4", color: "#3B7A57" },
+  "in-progress":{ label: "In Progress", bg: "#FBF0E0", color: "#C17849" },
+  "not-started":{ label: "Not Started", bg: "#F0EDE8", color: "#9CAF88" },
 };
 
 const totalLessons = 28;
-const completedLessons = Object.values(progress).reduce((sum, p) => sum + p.completed, 0);
+const completedLessons = Object.values(progress).reduce((s, p) => s + p.completed, 0);
 
 export default function DashboardPage() {
-  const pct = Math.round((completedLessons / totalLessons) * 100);
-
   return (
     <div className="min-h-screen pt-28 pb-20 px-6 md:px-10 max-w-[1100px] mx-auto">
+
       {/* Header */}
       <div className="mb-12">
-        <div className="flex items-center gap-3 mb-1">
-          <Link
-            href="/heal-from-within"
-            className="text-xs font-semibold text-dark-soft/60 dark:text-[#C4B0D8]/50 no-underline hover:text-amber transition-colors"
-          >
-            ← Heal from Within
-          </Link>
-        </div>
-        <h1 className="font-heading text-3xl md:text-4xl text-dark dark:text-white mb-2">
+        <Link
+          href="/heal-from-within"
+          className="no-underline text-xs font-semibold inline-block mb-4 transition-colors hover:opacity-70"
+          style={{ color: "#8B6914", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+        >
+          ← Back to Heal from Within
+        </Link>
+
+        <h1
+          className="mb-2"
+          style={{
+            fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
+            fontSize: "clamp(2rem, 4vw, 3rem)",
+            color: "#1A3C2A",
+          }}
+        >
           Welcome back 👋
         </h1>
-        <p className="text-dark-soft dark:text-[#C4B0D8]">
+        <p style={{ color: "#5C5C5C", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}>
           You&apos;ve completed{" "}
-          <span className="font-bold text-dark dark:text-white">{completedLessons}</span> of{" "}
-          <span className="font-bold text-dark dark:text-white">{totalLessons}</span> lessons
+          <strong style={{ color: "#1A3C2A" }}>{completedLessons}</strong> of{" "}
+          <strong style={{ color: "#1A3C2A" }}>{totalLessons}</strong> lessons
         </p>
 
-        {/* Overall progress bar */}
-        <div className="mt-6 max-w-[500px]">
-          <div className="flex justify-between text-xs font-semibold text-dark-soft dark:text-[#C4B0D8] mb-2">
+        {/* Overall progress */}
+        <div className="mt-6 max-w-[480px]">
+          <div
+            className="flex justify-between text-xs font-semibold mb-2"
+            style={{ color: "#5C5C5C", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+          >
             <span>Overall Progress</span>
-            <span>{pct}%</span>
+            <span>{Math.round((completedLessons / totalLessons) * 100)}%</span>
           </div>
-          <div className="h-3 bg-lavender-light dark:bg-lavender/15 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all duration-700"
-              style={{
-                width: `${pct}%`,
-                background: "linear-gradient(90deg, #D4A574, #9B8EC4)",
-              }}
-            />
-          </div>
+          <HealProgressBar value={completedLessons} max={totalLessons} />
         </div>
       </div>
 
@@ -90,77 +75,95 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {healModules.map((mod) => {
           const p = progress[mod.id];
-          const isLocked = p.status === "locked";
-          const modPct = Math.round((p.completed / mod.lessonCount) * 100);
-          const config = statusConfig[p.status];
+          const locked = LOCKED.has(mod.id);
+          const cfg = statusStyle[p.status];
 
           return (
             <div
               key={mod.id}
-              className={`relative rounded-2xl p-6 border transition-all ${
-                isLocked
-                  ? "bg-white/40 dark:bg-white/3 border-lavender-light/40 dark:border-lavender/8 opacity-55"
-                  : "bg-white dark:bg-[#1E1530] border-lavender-light dark:border-lavender/15 hover:-translate-y-1 hover:shadow-card"
-              }`}
+              className="relative rounded-2xl p-6 transition-all overflow-hidden"
+              style={{
+                background: locked ? "rgba(251,248,243,0.5)" : "#FBF8F3",
+                border: `1px solid ${locked ? "rgba(26,60,42,0.05)" : "rgba(26,60,42,0.08)"}`,
+                boxShadow: locked ? "none" : "0 4px 20px rgba(26,60,42,0.06)",
+                opacity: locked ? 0.6 : 1,
+              }}
             >
-              {/* Module header */}
+              {/* Lock overlay */}
+              {locked && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center rounded-2xl gap-2 z-10"
+                  style={{ background: "rgba(251,248,243,0.7)", backdropFilter: "blur(2px)" }}>
+                  <span className="text-3xl">🔒</span>
+                  <a
+                    href="/heal-from-within#pricing"
+                    className="no-underline text-xs font-bold px-4 py-2 rounded-full transition-all hover:-translate-y-0.5"
+                    style={{
+                      background: "#C17849",
+                      color: "#fff",
+                      fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)",
+                    }}
+                  >
+                    Upgrade to unlock
+                  </a>
+                </div>
+              )}
+
+              {/* Card content */}
               <div className="flex items-start gap-3 mb-4">
-                <span className="text-2xl mt-0.5">{isLocked ? "🔒" : mod.emoji}</span>
+                <span className="text-2xl mt-0.5">{mod.emoji}</span>
                 <div>
-                  <p className="text-[10px] font-bold text-dark-soft/50 dark:text-[#C4B0D8]/40 uppercase tracking-widest mb-0.5">
+                  <p
+                    className="text-[10px] font-bold uppercase tracking-widest mb-0.5"
+                    style={{ color: "#9CAF88", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+                  >
                     Module {mod.id}
                   </p>
-                  <h3 className="font-heading font-bold text-dark dark:text-white text-sm leading-tight">
+                  <h3
+                    className="font-bold text-sm leading-snug"
+                    style={{ fontFamily: "var(--font-playfair, 'Playfair Display', serif)", color: "#1A3C2A" }}
+                  >
                     {mod.title}
                   </h3>
                 </div>
               </div>
 
               {/* Status badge */}
-              <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4 ${config.bg} ${config.text}`}>
-                {config.label}
+              <span
+                className="inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4"
+                style={{ background: cfg.bg, color: cfg.color, fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+              >
+                {cfg.label}
               </span>
 
-              {/* Per-module progress bar */}
-              {!isLocked && (
-                <div className="mb-5">
-                  <div className="flex justify-between text-[11px] text-dark-soft/60 dark:text-[#C4B0D8]/50 mb-1.5">
-                    <span>{p.completed} of {mod.lessonCount} lessons</span>
-                    <span>{modPct}%</span>
-                  </div>
-                  <div className="h-2 bg-lavender-light dark:bg-lavender/15 rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all duration-500"
-                      style={{
-                        width: `${modPct}%`,
-                        background: "linear-gradient(90deg, #D4A574, #9B8EC4)",
-                      }}
-                    />
-                  </div>
+              {/* Per-module progress */}
+              <div className="mb-5">
+                <div
+                  className="flex justify-between text-[11px] mb-1.5"
+                  style={{ color: "#9CAF88", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+                >
+                  <span>{p.completed} of {mod.lessonCount} lessons</span>
+                  <span>{Math.round((p.completed / mod.lessonCount) * 100)}%</span>
                 </div>
-              )}
+                <HealProgressBar value={p.completed} max={mod.lessonCount} />
+              </div>
 
               {/* CTA */}
-              {isLocked ? (
-                <a
-                  href="/heal-from-within#pricing"
-                  className="block text-center text-xs font-bold px-4 py-2.5 rounded-full border border-amber-light dark:border-amber/20 text-dark-soft/50 dark:text-[#C4B0D8]/40 no-underline hover:border-amber hover:text-dark-soft transition-all"
-                >
-                  Upgrade to unlock
-                </a>
-              ) : (
-                <Link
-                  href={`/heal-from-within/module/${mod.id}`}
-                  className="block text-center text-xs font-bold px-4 py-2.5 rounded-full text-white no-underline transition-all hover:-translate-y-0.5 hover:shadow-soft"
-                  style={{ background: "linear-gradient(135deg, #D4A574, #9B8EC4)" }}
-                >
-                  {p.status === "completed"
-                    ? "Review Module"
-                    : p.status === "in-progress"
-                    ? "Continue →"
-                    : "Start Module →"}
-                </Link>
-              )}
+              <Link
+                href={`/heal-from-within/module/${mod.id}`}
+                className="block text-center text-xs font-bold rounded-full no-underline transition-all hover:-translate-y-0.5"
+                style={{
+                  padding: "0.625rem 1rem",
+                  background: "#1A3C2A",
+                  color: "#F5F0E8",
+                  fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)",
+                }}
+              >
+                {p.status === "completed"
+                  ? "Review Module"
+                  : p.status === "in-progress"
+                  ? "Continue →"
+                  : "Start Module →"}
+              </Link>
             </div>
           );
         })}

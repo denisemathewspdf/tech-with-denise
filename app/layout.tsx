@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Quicksand, Playfair_Display, JetBrains_Mono } from "next/font/google";
+import { Quicksand, Playfair_Display, JetBrains_Mono, DM_Sans } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import "./globals.css";
 
-// Load brand fonts via next/font/google (automatic optimization + no layout shift)
 const quicksand = Quicksand({
   subsets: ["latin"],
   variable: "--font-quicksand",
@@ -23,7 +22,12 @@ const jetbrains = JetBrains_Mono({
   display: "swap",
 });
 
-// Site-wide metadata — individual pages can override these
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: {
     default: "Tech with Denise — Making Tech Less Scary",
@@ -68,10 +72,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${quicksand.variable} ${playfair.variable} ${jetbrains.variable}`}
+      className={`${quicksand.variable} ${playfair.variable} ${jetbrains.variable} ${dmSans.variable}`}
     >
       <head>
-        {/* Prevent dark mode flash — runs before React hydrates */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})()`,

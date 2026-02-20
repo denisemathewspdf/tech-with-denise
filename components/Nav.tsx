@@ -2,11 +2,15 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function Nav() {
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+
+  if (pathname.startsWith("/heal-from-within")) return null;
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);

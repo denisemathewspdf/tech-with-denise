@@ -33,29 +33,43 @@ export default function HealFaq() {
       {faqs.map((faq, i) => (
         <div
           key={i}
-          className="bg-white dark:bg-[#1E1530] rounded-2xl border border-amber-light dark:border-amber/20 overflow-hidden"
+          className="rounded-2xl overflow-hidden transition-all"
+          style={{
+            background: "#FBF8F3",
+            border: `1px solid ${open === i ? "#C49A3C" : "#EDE6D6"}`,
+            boxShadow: open === i ? "0 4px 20px rgba(196,154,60,0.1)" : "none",
+          }}
         >
           <button
             onClick={() => setOpen(open === i ? null : i)}
             className="w-full flex justify-between items-center px-6 py-5 text-left gap-4"
+            style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
           >
-            <span className="font-semibold text-dark dark:text-white text-sm md:text-base">
+            <span className="font-semibold text-sm md:text-base" style={{ color: "#2C2C2C" }}>
               {faq.q}
             </span>
+            {/* Leaf/chevron icon */}
             <span
-              className={`text-amber text-2xl font-light flex-shrink-0 transition-transform duration-300 ${
-                open === i ? "rotate-45" : ""
-              }`}
+              className="flex-shrink-0 transition-transform duration-300"
+              style={{
+                transform: open === i ? "rotate(180deg)" : "rotate(0deg)",
+                color: "#C49A3C",
+              }}
             >
-              +
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2C12 2 4 8 4 14a8 8 0 0 0 16 0C20 8 12 2 12 2z" />
+                <line x1="12" y1="22" x2="12" y2="10" />
+              </svg>
             </span>
           </button>
           <div
-            className={`overflow-hidden transition-all duration-300 ease-in-out ${
-              open === i ? "max-h-40" : "max-h-0"
-            }`}
+            className="overflow-hidden transition-all duration-300 ease-in-out"
+            style={{ maxHeight: open === i ? "160px" : "0px" }}
           >
-            <p className="px-6 pb-5 text-dark-soft dark:text-[#C4B0D8] text-sm leading-relaxed">
+            <p
+              className="px-6 pb-5 text-sm leading-relaxed"
+              style={{ color: "#5C5C5C", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+            >
               {faq.a}
             </p>
           </div>

@@ -1,21 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+  if (pathname.startsWith("/heal-from-within")) return null;
+
   return (
     <footer className="relative z-10 text-center py-10 px-6">
-      {/* Social icons */}
       <div className="flex justify-center gap-6 mb-4">
-        <SocialLink href="https://x.com/Dmatx2" label="X / Twitter">
-          𝕏
-        </SocialLink>
-        <SocialLink href="https://instagram.com/denise_thehackergirl" label="Instagram">
-          ◎
-        </SocialLink>
-        <SocialLink href="http://www.linkedin.com/in/denmath" label="LinkedIn">
-          in
-        </SocialLink>
+        <SocialLink href="https://x.com/Dmatx2" label="X / Twitter">𝕏</SocialLink>
+        <SocialLink href="https://instagram.com/denise_thehackergirl" label="Instagram">◎</SocialLink>
+        <SocialLink href="http://www.linkedin.com/in/denmath" label="LinkedIn">in</SocialLink>
       </div>
-
       <p className="text-dark-soft dark:text-[#C4B0D8] text-sm">
         Made with 💜 by Denise · © {new Date().getFullYear()}{" "}
         <Link href="/" className="text-lavender font-semibold no-underline">
@@ -26,15 +24,7 @@ export default function Footer() {
   );
 }
 
-function SocialLink({
-  href,
-  label,
-  children,
-}: {
-  href: string;
-  label: string;
-  children: React.ReactNode;
-}) {
+function SocialLink({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
   return (
     <a
       href={href}
