@@ -6,7 +6,7 @@ import ScrollReveal from "@/components/ScrollReveal";
 export const metadata: Metadata = {
   title: "About Denise",
   description:
-    "Meet Denise — builder, educator, and blockchain investigator making tech accessible for everyone.",
+    "Meet Denise — early stage startup people + ops, AI builder, and former internet nerd making tech accessible for everyone.",
 };
 
 const projects = [
@@ -20,6 +20,7 @@ const projects = [
     iconBg: "bg-lavender-light dark:bg-lavender/10",
     corner: "bg-lavender",
     href: "/",
+    external: false,
   },
   {
     emoji: "🧠",
@@ -30,7 +31,8 @@ const projects = [
     tagColor: "bg-peach-light dark:bg-peach/10 text-[#B8728A]",
     iconBg: "bg-peach-light dark:bg-peach/10",
     corner: "bg-peach",
-    href: "#",
+    href: "http://www.microhabitslab.com",
+    external: true,
   },
   {
     emoji: "🧘",
@@ -42,6 +44,7 @@ const projects = [
     iconBg: "bg-mint-light dark:bg-mint/10",
     corner: "bg-mint",
     href: "#",
+    external: false,
   },
 ];
 
@@ -64,10 +67,9 @@ export default function AboutPage() {
           <h1 className="font-heading text-[clamp(2.5rem,5vw,4rem)] leading-[1.15] mb-6 text-dark dark:text-white">
             I&apos;m Denise. 👋
             <br />
-            <span className="shimmer-highlight">builder</span>,{" "}
-            <em className="italic">educator</em>,
+            <span className="shimmer-highlight">startup</span> people &amp; ops,
             <br />
-            blockchain investigator.
+            <em className="italic">AI builder</em> &amp; former internet nerd.
           </h1>
 
           <p className="text-dark-soft dark:text-[#C4B0D8] text-lg max-w-[520px] mx-auto leading-relaxed">
@@ -87,7 +89,7 @@ export default function AboutPage() {
               <span className="block text-dark dark:text-white font-bold font-heading text-lg mb-3">
                 &ldquo;Tech is for everyone.&rdquo;
               </span>
-              I&apos;m Denise &mdash; a builder, educator, and blockchain investigator who believes tech should be for everyone. I created Tech with Denise to be the resource I wish I had when I was starting out. No jargon, no gatekeeping, just real talk.
+              I&apos;m Denise &mdash; an early stage startup ops person, AI builder, and former internet nerd who believes tech should be for everyone. I created Tech with Denise to be the resource I wish I had when I was starting out. No jargon, no gatekeeping, just real talk.
             </p>
           </div>
         </ScrollReveal>
@@ -116,6 +118,7 @@ export default function AboutPage() {
             <ScrollReveal key={p.name} delay={i * 80}>
               <Link
                 href={p.href}
+                {...(p.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="block bg-white dark:bg-[#1E1530] rounded-2xl p-8 relative overflow-hidden transition-all duration-300 border border-transparent dark:border-lavender/10 hover:-translate-y-1.5 hover:shadow-hover hover:border-lavender-light dark:hover:border-lavender/20 no-underline group"
               >
                 <div
