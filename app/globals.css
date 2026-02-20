@@ -138,6 +138,20 @@ html {
 }
 
 /* ============================================
+   Heal from Within — animated hero gradient
+   ============================================ */
+.heal-hero-bg {
+  background: linear-gradient(135deg, #F5E6D3, #E8E0F0, #E8F0E4, #F5E6D3);
+  background-size: 400% 400%;
+  animation: gradientShift 8s ease-in-out infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ============================================
    Dark mode overrides
    ============================================ */
 
@@ -196,6 +210,12 @@ html {
 }
 .dark .bg-gold-light {
   background-color: rgba(240, 217, 160, 0.12);
+}
+.dark .bg-amber-light {
+  background-color: rgba(212, 165, 116, 0.12);
+}
+.dark .bg-sage-light {
+  background-color: rgba(168, 197, 160, 0.12);
 }
 
 /* Prose in dark mode */

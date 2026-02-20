@@ -46,6 +46,18 @@ const projects = [
     href: "#",
     external: false,
   },
+  {
+    emoji: "🦋",
+    name: "Heal from Within",
+    description:
+      "A self-paced training academy to help you rewire your mind and reclaim your life — through meditation, nature, affirmations, and hypnosis.",
+    tag: "Coming Soon",
+    tagColor: "bg-amber-light dark:bg-amber/10 text-[#A07840]",
+    iconBg: "bg-amber-light dark:bg-amber/10",
+    corner: "bg-amber",
+    href: "/heal-from-within",
+    external: false,
+  },
 ];
 
 // Placeholder video slots — ready for real embeds later
@@ -113,7 +125,7 @@ export default function AboutPage() {
           </p>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[1000px] mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-[1200px] mx-auto">
           {projects.map((p, i) => (
             <ScrollReveal key={p.name} delay={i * 80}>
               <Link

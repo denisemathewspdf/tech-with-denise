@@ -16,6 +16,8 @@ const config: Config = {
         mint: { DEFAULT: "#A8D8EA", light: "#D4ECF5" },
         pink: { DEFAULT: "#F2A5C0", light: "#FAD0E0" },
         cream: "#FFF9FB",
+        amber: { DEFAULT: "#D4A574", light: "#F5E6D3" },
+        sage: { DEFAULT: "#A8C5A0", light: "#E8F0E4" },
         dark: { DEFAULT: "#4A3B52", soft: "#7B6B88" },
         gold: { DEFAULT: "#F0D9A0", light: "#FBF0D6" },
         rose: "#F5C2D0",
