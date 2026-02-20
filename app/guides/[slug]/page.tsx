@@ -3,6 +3,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { getAllGuideSlugs, getGuideBySlug } from "@/lib/mdx";
 import { mdxComponents } from "@/lib/mdx-components";
 import Link from "next/link";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
+import ReadingProgress from "@/components/ReadingProgress";
 import type { Metadata } from "next";
 
 type GuidePageProps = {
@@ -47,6 +49,9 @@ export default function GuidePage({ params }: GuidePageProps) {
   const { frontmatter, readingTime, content } = guide;
 
   return (
+    <>
+    {/* Gradient reading progress bar — shows scroll position */}
+    <ReadingProgress />
     <article className="relative z-10 px-6 md:px-10 pt-32 pb-24 max-w-3xl mx-auto">
       {/* Back link */}
       <Link
@@ -86,6 +91,11 @@ export default function GuidePage({ params }: GuidePageProps) {
         <MDXRemote source={content} components={mdxComponents} />
       </div>
 
+      {/* REPLACE WITH YOUR PHOTO — Photo break between guide content and CTA */}
+      <div className="flex justify-center my-12">
+        <PhotoPlaceholder size="small" gradient={3} />
+      </div>
+
       {/* Build CTA */}
       <div className="mt-16 p-8 bg-gradient-to-br from-peach-light/60 via-pink-light/40 to-lavender-light/60 rounded-2xl text-center border border-peach/20">
         <span className="text-3xl block mb-3">🚀</span>
@@ -103,5 +113,6 @@ export default function GuidePage({ params }: GuidePageProps) {
         </Link>
       </div>
     </article>
+    </>
   );
 }

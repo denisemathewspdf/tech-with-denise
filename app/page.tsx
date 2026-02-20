@@ -2,6 +2,7 @@ import BackgroundShapes from "@/components/BackgroundShapes";
 import ScrollReveal from "@/components/ScrollReveal";
 import TopicCard from "@/components/TopicCard";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 
 // Topic data matching the original landing page
 const topics = [
@@ -126,6 +127,11 @@ export default function HomePage() {
           <div className="mt-16 text-xs text-dark-soft uppercase tracking-widest font-semibold opacity-0 animate-fade-up [animation-delay:0.6s]">
             ↓ scroll to explore
           </div>
+
+          {/* REPLACE WITH YOUR PHOTO — Hero headshot/brand photo */}
+          <div className="mt-12 flex justify-center opacity-0 animate-fade-up [animation-delay:0.75s]">
+            <PhotoPlaceholder size="hero" gradient={0} />
+          </div>
         </div>
       </section>
 
@@ -155,6 +161,30 @@ export default function HomePage() {
             </ScrollReveal>
           ))}
         </div>
+      </section>
+
+      {/* ============ ABOUT / PHOTO MOMENT ============ */}
+      <section className="relative z-10 px-6 md:px-10 py-16">
+        <ScrollReveal>
+          <div className="max-w-[900px] mx-auto flex flex-col md:flex-row items-center gap-10">
+            {/* REPLACE WITH YOUR PHOTO — About/lifestyle photo */}
+            <PhotoPlaceholder size="inline" gradient={1} className="shrink-0" />
+            <div>
+              <h2 className="font-heading text-2xl md:text-3xl mb-4">
+                Who&apos;s behind all this? 👋
+              </h2>
+              <p className="text-dark-soft leading-relaxed mb-3">
+                I&apos;m Denise — a tech girlie who believes everyone deserves to
+                understand how the internet works. I started this because I was
+                tired of tutorials that made me feel dumb.
+              </p>
+              <p className="text-dark-soft leading-relaxed">
+                So I made the resource I wish I had: warm, clear, and
+                judgment-free. Welcome — you&apos;re in the right place. 💜
+              </p>
+            </div>
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* ============ ELI5 DEMO ============ */}
@@ -294,6 +324,16 @@ export default function HomePage() {
             </ScrollReveal>
           ))}
         </div>
+      </section>
+
+      {/* ============ PHOTO BREAK ============ */}
+      <section className="relative z-10 px-6 md:px-10 py-12">
+        <ScrollReveal>
+          <div className="flex justify-center">
+            {/* REPLACE WITH YOUR PHOTO — Lifestyle/working photo */}
+            <PhotoPlaceholder size="small" gradient={2} />
+          </div>
+        </ScrollReveal>
       </section>
 
       {/* ============ NEWSLETTER CTA ============ */}
