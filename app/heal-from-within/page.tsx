@@ -25,11 +25,14 @@ const moduleCards = [
   {emoji:"\uD83D\uDCAC",num:4,title:"The Power of Affirmations",description:"Reprogram your inner dialogue with affirmations that work for YOUR brain — not generic Instagram quotes.",lessons:5,image:"https://images.unsplash.com/photo-1518173946687-a243849e534e?w=800&q=80"},
   {emoji:"\uD83E\uDDE0",num:5,title:"Breaking Self-Sabotage",description:"Understand why your brain fights change and learn the micro-habits approach to interrupt your patterns for good.",lessons:5,image:"https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=800&q=80"},
   {emoji:"\uD83C\uDF00",num:6,title:"Hypnosis & Deep Reprogramming",description:"Go beneath the conscious mind with guided self-hypnosis sessions for lasting transformation.",lessons:5,image:"https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80"},
+  {emoji:"💔",num:7,title:"Healing from Trauma",description:"Understand how trauma lives in the body, learn somatic release techniques, and begin the journey of reclaiming your story.",lessons:5,image:"https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80"},
+  {emoji:"🎵",num:8,title:"The Power of Music",description:"Discover how sound frequencies, rhythm, and intentional listening can regulate your nervous system and unlock deep emotional healing.",lessons:5,image:"https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=80"},
+  {emoji:"✨",num:9,title:"Manifesting Your Dreams",description:"Combine everything you've learned to design your dream life — visualization, goal setting, and aligned action powered by a healed nervous system.",lessons:5,image:"https://images.unsplash.com/photo-1464802686167-b939a6910659?w=800&q=80"},
 ];
 
 const included=[
-  {icon:"\uD83C\uDFA5",label:"28 video lessons",sub:"Step-by-step guidance you can follow at your own pace"},
-  {icon:"\uD83D\uDCDD",label:"6 worksheets & journal prompts",sub:"Downloadable PDFs to deepen every module"},
+  {icon:"\uD83C\uDFA5",label:"43 video lessons",sub:"Step-by-step guidance you can follow at your own pace"},
+  {icon:"\uD83D\uDCDD",label:"9 worksheets & journal prompts",sub:"Downloadable PDFs to deepen every module"},
   {icon:"\uD83C\uDFA7",label:"5+ guided audio tracks",sub:"Meditation & hypnosis sessions you can return to again and again"},
   {icon:"\u23F0",label:"Fully self-paced",sub:"Go as fast or slow as you need — no deadlines, no pressure"},
   {icon:"\u267E\uFE0F",label:"Lifetime access",sub:"Once you purchase, the content is yours forever"},
