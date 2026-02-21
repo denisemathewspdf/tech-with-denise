@@ -9,48 +9,62 @@ export const metadata: Metadata = {
     "A self-paced training academy that teaches you how to transform your life through meditation, breathwork, nature healing, affirmations, and hypnosis.",
 };
 
-/* ─── Data ──────────────────────────────────────────────────────────── */
+/* ─── Image URLs ─────────────────────────────────────────────────────── */
 
-const modules = [
+const IMG = {
+  hero:          "https://images.unsplash.com/photo-1583470790878-4f4f3811a01f?w=1920&q=80",
+  foliage:       "https://images.unsplash.com/photo-1560851691-ebb64b584d3d?w=1920&q=80",
+  riceTerraces:  "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1920&q=80",
+  sunCanopy:     "https://images.unsplash.com/photo-1448375240586-882707db888b?w=1920&q=80",
+  tropicalLeaves:"https://images.unsplash.com/photo-1509587584298-0f3b3a3a1797?w=800&q=80",
+};
+
+const moduleCards = [
   {
     emoji: "🔥", num: 1, title: "The Wake-Up Call",
     description: "Understand where you are, why you're stuck, and how your nervous system keeps you in survival mode.",
     lessons: 4,
+    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=800&q=80",
   },
   {
     emoji: "🌿", num: 2, title: "Healing Through Nature",
     description: "Reconnect with the natural world and learn science-backed grounding practices for nervous system regulation.",
     lessons: 4,
+    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
   },
   {
     emoji: "🧘", num: 3, title: "Meditation & Breathwork",
     description: "Build a meditation practice that actually sticks — with guided sessions for morning energy and evening calm.",
     lessons: 5,
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80",
   },
   {
     emoji: "💬", num: 4, title: "The Power of Affirmations",
     description: "Reprogram your inner dialogue with affirmations that work for YOUR brain — not generic Instagram quotes.",
     lessons: 5,
+    image: "https://images.unsplash.com/photo-1518173946687-a243849e534e?w=800&q=80",
   },
   {
     emoji: "🧠", num: 5, title: "Breaking Self-Sabotage",
     description: "Understand why your brain fights change and learn the micro-habits approach to interrupt your patterns for good.",
     lessons: 5,
+    image: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=800&q=80",
   },
   {
     emoji: "🌀", num: 6, title: "Hypnosis & Deep Reprogramming",
     description: "Go beneath the conscious mind with guided self-hypnosis sessions for lasting transformation.",
     lessons: 5,
+    image: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=800&q=80",
   },
 ];
 
 const included = [
-  { icon: "🎬", text: "28 video lessons" },
-  { icon: "📝", text: "6 downloadable worksheets & journal prompts" },
-  { icon: "🎧", text: "5+ guided audio tracks (meditation & hypnosis)" },
-  { icon: "⏰", text: "Self-paced — go at your own speed" },
-  { icon: "♾️", text: "Lifetime access" },
-  { icon: "📱", text: "Mobile friendly" },
+  { icon: "🎬", label: "28 video lessons", sub: "Step-by-step guidance you can follow at your own pace" },
+  { icon: "📝", label: "6 worksheets & journal prompts", sub: "Downloadable PDFs to deepen every module" },
+  { icon: "🎧", label: "5+ guided audio tracks", sub: "Meditation & hypnosis sessions you can return to again and again" },
+  { icon: "⏰", label: "Fully self-paced", sub: "Go as fast or slow as you need — no deadlines, no pressure" },
+  { icon: "♾️", label: "Lifetime access", sub: "Once you purchase, the content is yours forever" },
+  { icon: "📱", label: "Mobile friendly", sub: "Learn on any device, anywhere in the world" },
 ];
 
 const pricing = [
@@ -71,54 +85,12 @@ const pricing = [
   },
 ];
 
-/* ─── Leaf SVG decorations ───────────────────────────────────────────── */
-
-function LeafLarge({ style }: { style?: React.CSSProperties }) {
+/* ─── Small decorative leaf SVG ─────────────────────────────────────── */
+function CornerLeaf({ style }: { style?: React.CSSProperties }) {
   return (
-    <svg width="360" height="520" viewBox="0 0 360 520" fill="none" style={style}>
-      <path
-        d="M180,0 C290,70 340,220 300,380 C260,500 100,540 40,420 C-20,300 40,120 180,0 Z"
-        fill="#3B7A57"
-      />
-      <path
-        d="M180,0 C175,120 165,280 120,400"
-        stroke="#2D5A3F" strokeWidth="2.5" fill="none"
-      />
-    </svg>
-  );
-}
-
-function LeafMedium({ style }: { style?: React.CSSProperties }) {
-  return (
-    <svg width="220" height="340" viewBox="0 0 220 340" fill="none" style={style}>
-      <path
-        d="M110,0 C190,55 210,180 175,280 C140,360 40,360 15,260 C-10,160 30,60 110,0 Z"
-        fill="#2D5A3F"
-      />
-      <path
-        d="M110,0 C106,90 98,200 75,275"
-        stroke="#1A3C2A" strokeWidth="2" fill="none"
-      />
-    </svg>
-  );
-}
-
-function LeafSmall({ style }: { style?: React.CSSProperties }) {
-  return (
-    <svg width="140" height="210" viewBox="0 0 140 210" fill="none" style={style}>
-      <path
-        d="M70,0 C120,35 130,110 105,170 C80,220 20,215 5,155 C-10,95 20,35 70,0 Z"
-        fill="#1A3C2A"
-      />
-    </svg>
-  );
-}
-
-/* Corner leaf accent for module cards */
-function CardLeaf() {
-  return (
-    <svg width="60" height="80" viewBox="0 0 60 80" fill="none" className="absolute top-0 right-0 opacity-[0.07]">
-      <path d="M60,0 C60,0 60,40 30,60 C15,68 0,70 0,80 C20,60 40,20 60,0 Z" fill="#3B7A57" />
+    <svg width="200" height="280" viewBox="0 0 200 280" fill="none" style={style} aria-hidden="true">
+      <path d="M100,0 C170,50 190,160 155,230 C120,290 20,280 5,200 C-10,120 30,40 100,0 Z" fill="#3B7A57" />
+      <path d="M100,0 C96,80 88,180 65,225" stroke="#2D5A3F" strokeWidth="1.5" fill="none" />
     </svg>
   );
 }
@@ -128,22 +100,39 @@ function CardLeaf() {
 export default function HealFromWithinPage() {
   return (
     <>
-      {/* ══════════════════════ HERO ══════════════════════ */}
+
+      {/* ══════════════════════════════════════════════════════════════
+          HERO — full-viewport cinematic with rainforest canopy photo
+      ══════════════════════════════════════════════════════════════ */}
       <section
-        className="relative min-h-screen flex items-center justify-center px-6 md:px-10 pt-32 pb-0 text-center overflow-hidden"
-        style={{ background: "linear-gradient(150deg, #0A1A10 0%, #1A3C2A 45%, #0D2218 80%, #091510 100%)" }}
+        className="relative flex items-center justify-center text-center overflow-hidden"
+        style={{ minHeight: "100vh" }}
       >
-        {/* Leaf silhouettes */}
-        <LeafLarge style={{ position: "absolute", top: -40, right: -60, opacity: 0.08, transform: "rotate(15deg)" }} />
-        <LeafMedium style={{ position: "absolute", bottom: 60, left: -40, opacity: 0.1, transform: "rotate(-20deg)" }} />
-        <LeafSmall style={{ position: "absolute", top: "30%", right: "8%", opacity: 0.07, transform: "rotate(35deg)" }} />
-        <LeafSmall style={{ position: "absolute", top: "15%", left: "12%", opacity: 0.06, transform: "rotate(-10deg)" }} />
+        {/* Photo background with Ken Burns zoom */}
+        <div
+          className="absolute inset-0 heal-ken-burns"
+          style={{
+            backgroundImage: `url(${IMG.hero})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            transformOrigin: "center center",
+          }}
+        />
+
+        {/* Dark gradient overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, rgba(10,26,17,0.72) 60%, rgba(26,60,42,0.88) 100%)",
+          }}
+        />
 
         {/* Firefly particles */}
         <HealParticles />
 
         {/* Content */}
-        <div className="relative z-10 max-w-[820px]">
+        <div className="relative z-10 px-6 md:px-10 max-w-[820px] pt-32 pb-24">
+          {/* Badge */}
           <div
             className="inline-flex items-center gap-2 px-5 py-2 rounded-full text-xs font-semibold uppercase tracking-widest mb-8"
             style={{
@@ -158,21 +147,22 @@ export default function HealFromWithinPage() {
           </div>
 
           <h1
-            className="mb-5 leading-[1.1]"
+            className="mb-5 leading-[1.08]"
             style={{
               fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
               fontSize: "clamp(3rem, 7vw, 5.5rem)",
               color: "#F5F0E8",
+              textShadow: "0 2px 20px rgba(0,0,0,0.4)",
             }}
           >
             Heal from Within
           </h1>
 
           <p
-            className="italic mb-7"
+            className="italic mb-8"
             style={{
               fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
-              fontSize: "clamp(1.2rem, 2.5vw, 1.7rem)",
+              fontSize: "clamp(1.2rem, 2.5vw, 1.75rem)",
               color: "#D4A44C",
             }}
           >
@@ -180,9 +170,9 @@ export default function HealFromWithinPage() {
           </p>
 
           <p
-            className="max-w-[620px] mx-auto mb-10 leading-relaxed"
+            className="max-w-[600px] mx-auto mb-12 leading-relaxed"
             style={{
-              color: "rgba(245,240,232,0.75)",
+              color: "rgba(245,240,232,0.80)",
               fontSize: "1.05rem",
               fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)",
             }}
@@ -194,19 +184,30 @@ export default function HealFromWithinPage() {
 
           <a
             href="#pricing"
-            className="inline-flex items-center gap-2 rounded-full font-bold text-sm text-white no-underline transition-all hover:-translate-y-1 hover:brightness-110"
+            className="inline-flex items-center gap-2 rounded-full font-bold text-sm text-white no-underline transition-all hover:-translate-y-1"
             style={{
               background: "#C17849",
-              padding: "1rem 2.25rem",
+              padding: "1rem 2.5rem",
               fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)",
-              boxShadow: "0 8px 32px rgba(193,120,73,0.35)",
+              boxShadow: "0 8px 32px rgba(193,120,73,0.4), 0 0 0 0 rgba(212,164,76,0)",
+              fontSize: "1rem",
             }}
           >
             Start Your Journey ✨
           </a>
         </div>
 
-        {/* Bottom wave cutout */}
+        {/* Scroll indicator */}
+        <div
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 heal-bounce z-10 flex flex-col items-center gap-2"
+          style={{ color: "rgba(245,240,232,0.5)" }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </div>
+
+        {/* Wave divider */}
         <div className="absolute bottom-0 left-0 w-full" style={{ lineHeight: 0 }}>
           <svg viewBox="0 0 1440 80" preserveAspectRatio="none" className="w-full" style={{ height: "70px", display: "block" }}>
             <path d="M0,80 C360,20 1080,80 1440,20 L1440,80 L0,80 Z" fill="#F5F0E8" />
@@ -214,7 +215,9 @@ export default function HealFromWithinPage() {
         </div>
       </section>
 
-      {/* ══════════════════════ MODULES ══════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════════
+          MODULE CARDS — cinematic photo cards
+      ══════════════════════════════════════════════════════════════ */}
       <section className="px-6 md:px-10 py-24" id="modules" style={{ background: "#F5F0E8" }}>
         <ScrollReveal>
           <p
@@ -246,104 +249,152 @@ export default function HealFromWithinPage() {
         </ScrollReveal>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-[1100px] mx-auto">
-          {modules.map((m, i) => (
+          {moduleCards.map((m, i) => (
             <ScrollReveal key={m.num} delay={i * 70}>
+              {/* Cinematic photo card — image fills card, text at bottom over gradient */}
               <div
-                className="relative rounded-2xl p-8 overflow-hidden transition-all hover:-translate-y-1.5"
-                style={{
-                  background: "#FBF8F3",
-                  boxShadow: "0 6px 28px rgba(26,60,42,0.07)",
-                  border: "1px solid rgba(26,60,42,0.06)",
-                }}
+                className="relative rounded-2xl overflow-hidden group"
+                style={{ height: "320px", cursor: "default" }}
               >
-                <CardLeaf />
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl">{m.emoji}</span>
-                  <span
-                    className="text-xs font-bold uppercase tracking-wider"
-                    style={{ color: "#8B6914", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+                {/* Photo background */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={m.image}
+                  alt={m.title}
+                  loading="lazy"
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+
+                {/* Dark gradient overlay — heavier at bottom for text legibility */}
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.3) 55%, rgba(0,0,0,0.05) 100%)",
+                  }}
+                />
+
+                {/* Module number badge — top left */}
+                <div
+                  className="absolute top-4 left-4 text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
+                  style={{
+                    background: "rgba(196,154,60,0.25)",
+                    border: "1px solid rgba(196,154,60,0.5)",
+                    color: "#D4A44C",
+                    fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)",
+                    backdropFilter: "blur(4px)",
+                  }}
+                >
+                  {m.emoji} Module {m.num}
+                </div>
+
+                {/* Text overlay — bottom */}
+                <div
+                  className="absolute bottom-0 left-0 right-0 p-5"
+                  style={{ color: "#F5F0E8" }}
+                >
+                  <h3
+                    className="font-bold mb-1.5 leading-tight"
+                    style={{
+                      fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
+                      fontSize: "1.1rem",
+                    }}
                   >
-                    Module {m.num}
+                    {m.title}
+                  </h3>
+                  <p
+                    className="text-xs leading-relaxed mb-3 opacity-80"
+                    style={{ fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+                  >
+                    {m.description}
+                  </p>
+                  <span
+                    className="text-xs font-semibold"
+                    style={{
+                      color: "#D4A44C",
+                      fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)",
+                    }}
+                  >
+                    {m.lessons} lessons
                   </span>
                 </div>
-                <h3
-                  className="text-lg font-bold mb-3"
-                  style={{ fontFamily: "var(--font-playfair, 'Playfair Display', serif)", color: "#1A3C2A" }}
-                >
-                  {m.title}
-                </h3>
-                <p
-                  className="text-sm leading-relaxed mb-4"
-                  style={{ color: "#5C5C5C", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
-                >
-                  {m.description}
-                </p>
-                <span
-                  className="text-xs font-semibold"
-                  style={{ color: "#9CAF88", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
-                >
-                  {m.lessons} lessons
-                </span>
               </div>
             </ScrollReveal>
           ))}
         </div>
       </section>
 
-      {/* ══════════════════════ WHAT'S INCLUDED ══════════════════════ */}
-      <section className="px-6 md:px-10 py-20 relative overflow-hidden" style={{ background: "#E8F0E4" }}>
-        {/* Decorative leaf */}
-        <LeafLarge style={{ position: "absolute", right: -80, top: -60, opacity: 0.06, transform: "rotate(-10deg)" }} />
+      {/* ══════════════════════════════════════════════════════════════
+          WHAT'S INCLUDED — jungle foliage photo background
+      ══════════════════════════════════════════════════════════════ */}
+      <section
+        className="px-6 md:px-10 py-24 relative overflow-hidden"
+        style={{
+          backgroundImage: `url(${IMG.foliage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        {/* Dark overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "rgba(10,26,17,0.82)" }}
+        />
 
-        <ScrollReveal>
-          <p
-            className="text-center text-xs font-bold tracking-[3px] uppercase mb-3"
-            style={{ color: "#3B7A57", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
-          >
-            What You Get
-          </p>
-        </ScrollReveal>
-        <ScrollReveal delay={80}>
-          <h2
-            className="text-center mb-14"
-            style={{
-              fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
-              fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
-              color: "#1A3C2A",
-            }}
-          >
-            Everything You Need to Heal
-          </h2>
-        </ScrollReveal>
+        <div className="relative z-10">
+          <ScrollReveal>
+            <p
+              className="text-center text-xs font-bold tracking-[3px] uppercase mb-3"
+              style={{ color: "#9CAF88", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+            >
+              What You Get
+            </p>
+          </ScrollReveal>
+          <ScrollReveal delay={80}>
+            <h2
+              className="text-center mb-16"
+              style={{
+                fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
+                fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
+                color: "#F5F0E8",
+              }}
+            >
+              Everything You Need to Heal
+            </h2>
+          </ScrollReveal>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-[900px] mx-auto">
-          {included.map((item, i) => (
-            <ScrollReveal key={i} delay={i * 60}>
-              <div className="flex items-start gap-4">
-                <span className="text-2xl shrink-0">{item.icon}</span>
-                <p
-                  className="font-semibold text-sm leading-snug pt-1"
-                  style={{ color: "#2C2C2C", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
-                >
-                  {item.text}
-                </p>
-              </div>
-            </ScrollReveal>
-          ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-[960px] mx-auto">
+            {included.map((item, i) => (
+              <ScrollReveal key={i} delay={i * 60}>
+                <div className="flex items-start gap-4">
+                  <span className="text-3xl shrink-0">{item.icon}</span>
+                  <div>
+                    <p
+                      className="font-bold text-sm mb-1"
+                      style={{ color: "#F5F0E8", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+                    >
+                      {item.label}
+                    </p>
+                    <p
+                      className="text-xs leading-relaxed opacity-70"
+                      style={{ color: "#F5F0E8", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+                    >
+                      {item.sub}
+                    </p>
+                  </div>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Wave between included and about */}
-      <div style={{ background: "#E8F0E4", lineHeight: 0 }}>
-        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" className="w-full" style={{ height: "50px", display: "block" }}>
-          <path d="M0,0 C480,60 960,0 1440,50 L1440,60 L0,60 Z" fill="#F5F0E8" />
-        </svg>
-      </div>
-
-      {/* ══════════════════════ ABOUT YOUR GUIDE ══════════════════════ */}
-      <section className="px-6 md:px-10 py-24 relative overflow-hidden" style={{ background: "#F5F0E8" }}>
-        {/* Corner leaf */}
-        <LeafMedium style={{ position: "absolute", bottom: -20, left: -30, opacity: 0.07, transform: "rotate(20deg)" }} />
+      {/* ══════════════════════════════════════════════════════════════
+          ABOUT YOUR GUIDE
+      ══════════════════════════════════════════════════════════════ */}
+      <section className="px-6 md:px-10 py-28 relative overflow-hidden" style={{ background: "#F5F0E8" }}>
+        {/* Corner leaf decoration */}
+        <CornerLeaf style={{ position: "absolute", bottom: -40, left: -20, opacity: 0.06, transform: "rotate(20deg)" }} />
 
         <ScrollReveal>
           <p
@@ -355,10 +406,10 @@ export default function HealFromWithinPage() {
         </ScrollReveal>
         <ScrollReveal delay={80}>
           <h2
-            className="text-center mb-14"
+            className="text-center mb-16"
             style={{
               fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
-              fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
+              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
               color: "#1A3C2A",
             }}
           >
@@ -367,27 +418,40 @@ export default function HealFromWithinPage() {
         </ScrollReveal>
 
         <ScrollReveal delay={160}>
-          <div className="max-w-[820px] mx-auto flex flex-col md:flex-row items-center gap-12">
-            {/* Photo placeholder */}
+          <div className="max-w-[820px] mx-auto flex flex-col md:flex-row items-center gap-14">
+            {/* Photo circle — tropical leaves blurred as bg */}
             <div
-              className="w-48 h-48 md:w-60 md:h-60 rounded-full shrink-0 flex items-center justify-center relative overflow-hidden"
+              className="w-52 h-52 md:w-64 md:h-64 rounded-full shrink-0 relative overflow-hidden"
               style={{
-                background: "linear-gradient(135deg, #EDE6D6, #D4C9B0, #C8BFA8)",
-                border: "4px solid rgba(196,154,60,0.3)",
-                boxShadow: "0 12px 40px rgba(26,60,42,0.12)",
+                border: "4px solid rgba(196,154,60,0.4)",
+                boxShadow: "0 16px 48px rgba(26,60,42,0.18)",
               }}
             >
-              <div className="flex flex-col items-center gap-2 opacity-40">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#8B6914" strokeWidth="1.5">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={IMG.tropicalLeaves}
+                alt="Tropical leaves"
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{ filter: "blur(1px) brightness(0.7)" }}
+              />
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+                style={{ background: "rgba(26,60,42,0.35)" }}
+              >
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="rgba(245,240,232,0.6)" strokeWidth="1.5">
                   <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
                   <circle cx="12" cy="13" r="4" />
                 </svg>
-                <span className="text-xs font-semibold" style={{ color: "#8B6914", fontFamily: "var(--font-dm-sans)" }}>
-                  Photo coming
+                <span
+                  className="text-xs font-semibold"
+                  style={{ color: "rgba(245,240,232,0.7)", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+                >
+                  Photo coming soon
                 </span>
               </div>
             </div>
 
+            {/* Bio */}
             <div>
               <p
                 className="leading-relaxed text-base border-l-4 pl-6"
@@ -395,7 +459,8 @@ export default function HealFromWithinPage() {
                   color: "#4A4A4A",
                   borderColor: "#C49A3C",
                   fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)",
-                  lineHeight: 1.85,
+                  lineHeight: 1.9,
+                  fontSize: "1.05rem",
                 }}
               >
                 I&apos;m Denise — a builder, educator, and someone who&apos;s done the inner work
@@ -409,13 +474,56 @@ export default function HealFromWithinPage() {
         </ScrollReveal>
       </section>
 
-      {/* ══════════════════════ PRICING ══════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════════
+          PULL QUOTE — Bali rice terraces background
+      ══════════════════════════════════════════════════════════════ */}
       <section
-        className="px-6 md:px-10 py-24 relative overflow-hidden"
+        className="relative px-6 md:px-10 py-28 flex items-center justify-center overflow-hidden"
+        style={{
+          backgroundImage: `url(${IMG.riceTerraces})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        {/* Dark overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "rgba(10,22,14,0.72)" }}
+        />
+        <div className="relative z-10 text-center max-w-[700px]">
+          <p
+            className="italic leading-relaxed"
+            style={{
+              fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
+              fontSize: "clamp(1.35rem, 3vw, 2rem)",
+              color: "#F5F0E8",
+              textShadow: "0 2px 16px rgba(0,0,0,0.3)",
+            }}
+          >
+            &ldquo;The journey of healing isn&apos;t about becoming someone new — it&apos;s about
+            coming home to who you&apos;ve always been.&rdquo;
+          </p>
+          <p
+            className="mt-6 text-sm font-semibold"
+            style={{ color: "#D4A44C", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
+          >
+            — Denise
+          </p>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          PRICING
+      ══════════════════════════════════════════════════════════════ */}
+      <section
+        className="px-6 md:px-10 py-28 relative overflow-hidden"
         id="pricing"
         style={{ background: "#EDE6D6" }}
       >
-        <LeafSmall style={{ position: "absolute", top: 20, right: 30, opacity: 0.06, transform: "rotate(30deg)" }} />
+        {/* Subtle leaf watermarks */}
+        <CornerLeaf style={{ position: "absolute", top: -20, right: -30, opacity: 0.05, transform: "rotate(-20deg)" }} />
+        <CornerLeaf style={{ position: "absolute", bottom: -30, left: -20, opacity: 0.04, transform: "rotate(15deg) scaleX(-1)" }} />
 
         <ScrollReveal>
           <p
@@ -427,10 +535,10 @@ export default function HealFromWithinPage() {
         </ScrollReveal>
         <ScrollReveal delay={80}>
           <h2
-            className="text-center mb-4"
+            className="text-center mb-3"
             style={{
               fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
-              fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
+              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
               color: "#1A3C2A",
             }}
           >
@@ -439,10 +547,10 @@ export default function HealFromWithinPage() {
         </ScrollReveal>
         <ScrollReveal delay={160}>
           <p
-            className="text-center text-base max-w-[440px] mx-auto mb-16"
+            className="text-center text-base max-w-[440px] mx-auto mb-20"
             style={{ color: "#5C5C5C", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
           >
-            Start where you are. Go at your pace. Upgrade whenever you&apos;re ready.
+            Invest in yourself. You&apos;re worth it.
           </p>
         </ScrollReveal>
 
@@ -450,18 +558,16 @@ export default function HealFromWithinPage() {
           {pricing.map((p, i) => (
             <ScrollReveal key={p.tier} delay={i * 80}>
               {p.featured ? (
-                /* Gold-bordered featured card */
                 <div
                   className="relative h-full"
                   style={{
                     background: "linear-gradient(135deg, #C49A3C, #D4A44C, #C49A3C)",
                     padding: "2px",
                     borderRadius: "24px",
-                    boxShadow: "0 20px 60px rgba(196,154,60,0.22)",
+                    boxShadow: "0 20px 60px rgba(196,154,60,0.25)",
                     transform: "scale(1.03)",
                   }}
                 >
-                  {/* Most Popular badge */}
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
                     <span
                       className="text-white text-xs font-bold px-5 py-1.5 rounded-full whitespace-nowrap"
@@ -484,7 +590,7 @@ export default function HealFromWithinPage() {
                   style={{
                     background: "#FBF8F3",
                     border: "1px solid rgba(26,60,42,0.1)",
-                    boxShadow: "0 6px 24px rgba(26,60,42,0.06)",
+                    boxShadow: "0 6px 24px rgba(26,60,42,0.07)",
                   }}
                 >
                   <PricingCardInner p={p} />
@@ -494,9 +600,9 @@ export default function HealFromWithinPage() {
           ))}
         </div>
 
-        <ScrollReveal delay={280}>
+        <ScrollReveal delay={320}>
           <p
-            className="text-center text-sm mt-8"
+            className="text-center text-sm mt-10"
             style={{ color: "#9CAF88", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
           >
             Payment plans coming soon
@@ -504,7 +610,9 @@ export default function HealFromWithinPage() {
         </ScrollReveal>
       </section>
 
-      {/* ══════════════════════ FAQ ══════════════════════ */}
+      {/* ══════════════════════════════════════════════════════════════
+          FAQ
+      ══════════════════════════════════════════════════════════════ */}
       <section className="px-6 md:px-10 py-24" id="faq" style={{ background: "#F5F0E8" }}>
         <ScrollReveal>
           <p
@@ -516,14 +624,14 @@ export default function HealFromWithinPage() {
         </ScrollReveal>
         <ScrollReveal delay={80}>
           <h2
-            className="text-center mb-12"
+            className="text-center mb-14"
             style={{
               fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
-              fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
+              fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)",
               color: "#1A3C2A",
             }}
           >
-            Frequently Asked
+            Questions? We&apos;ve got you.
           </h2>
         </ScrollReveal>
 
@@ -531,11 +639,61 @@ export default function HealFromWithinPage() {
           <HealFaq />
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════════════════════════
+          FINAL CTA — sunlight through canopy
+      ══════════════════════════════════════════════════════════════ */}
+      <section
+        className="relative px-6 md:px-10 py-32 flex items-center justify-center overflow-hidden text-center"
+        style={{
+          backgroundImage: `url(${IMG.sunCanopy})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+        }}
+      >
+        {/* Dark gradient overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: "linear-gradient(to bottom, rgba(10,26,17,0.55), rgba(26,60,42,0.80))" }}
+        />
+        <div className="relative z-10 max-w-[680px]">
+          <ScrollReveal>
+            <h2
+              className="mb-8 leading-tight"
+              style={{
+                fontFamily: "var(--font-playfair, 'Playfair Display', serif)",
+                fontSize: "clamp(2rem, 5vw, 3.4rem)",
+                color: "#F5F0E8",
+                textShadow: "0 2px 20px rgba(0,0,0,0.3)",
+              }}
+            >
+              Your healing journey starts with one step.
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal delay={120}>
+            <a
+              href="#pricing"
+              className="inline-flex items-center gap-2 rounded-full font-bold text-white no-underline transition-all hover:-translate-y-1 hover:brightness-110"
+              style={{
+                background: "#C17849",
+                padding: "1rem 2.5rem",
+                fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)",
+                fontSize: "1rem",
+                boxShadow: "0 8px 32px rgba(193,120,73,0.4)",
+              }}
+            >
+              Start Now ✨
+            </a>
+          </ScrollReveal>
+        </div>
+      </section>
+
     </>
   );
 }
 
-/* ─── Shared pricing card inner content ─────────────────────────────── */
+/* ─── Pricing card inner content ────────────────────────────────────── */
 function PricingCardInner({
   p,
 }: {

@@ -16,6 +16,7 @@ export type HealModule = {
   lessonCount: number;
   lessons: Lesson[];
   downloads: Download[];
+  image: string;
 };
 
 export const healModules: HealModule[] = [
@@ -26,6 +27,7 @@ export const healModules: HealModule[] = [
     description:
       "Understand where you are, why you're stuck, and how your nervous system keeps you in survival mode.",
     lessonCount: 4,
+    image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
     lessons: [
       { id: 1, title: "Why You're Not Broken — You're Patterned", duration: "8 min" },
       { id: 2, title: "Understanding Your Nervous System", duration: "10 min" },
@@ -41,6 +43,7 @@ export const healModules: HealModule[] = [
     description:
       "Reconnect with the natural world and learn science-backed grounding practices for nervous system regulation.",
     lessonCount: 4,
+    image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e",
     lessons: [
       { id: 1, title: "The Science of Nature Healing", duration: "9 min" },
       { id: 2, title: "Grounding Practices You Can Do Today", duration: "11 min" },
@@ -56,6 +59,7 @@ export const healModules: HealModule[] = [
     description:
       "Build a meditation practice that actually sticks — with guided sessions for morning energy and evening calm.",
     lessonCount: 5,
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d",
     lessons: [
       { id: 1, title: "Why Meditation Feels Hard (And How to Fix It)", duration: "7 min" },
       { id: 2, title: "Your First 5-Minute Morning Practice", duration: "9 min" },
@@ -72,6 +76,7 @@ export const healModules: HealModule[] = [
     description:
       "Reprogram your inner dialogue with affirmations that work for YOUR brain — not generic Instagram quotes.",
     lessonCount: 5,
+    image: "https://images.unsplash.com/photo-1518173946687-a243849e534e",
     lessons: [
       { id: 1, title: "Why Most Affirmations Don't Work", duration: "8 min" },
       { id: 2, title: "Writing Affirmations for Your Brain", duration: "10 min" },
@@ -88,6 +93,7 @@ export const healModules: HealModule[] = [
     description:
       "Understand why your brain fights change and learn the micro-habits approach to interrupt your patterns for good.",
     lessonCount: 5,
+    image: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8",
     lessons: [
       { id: 1, title: "The Self-Sabotage Loop — What's Actually Happening", duration: "10 min" },
       { id: 2, title: "Identifying Your Specific Patterns", duration: "9 min" },
@@ -104,6 +110,7 @@ export const healModules: HealModule[] = [
     description:
       "Go beneath the conscious mind with guided self-hypnosis sessions for lasting transformation.",
     lessonCount: 5,
+    image: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc",
     lessons: [
       { id: 1, title: "What Hypnosis Actually Is (Debunking the Myths)", duration: "8 min" },
       { id: 2, title: "Self-Hypnosis — Your First Session", duration: "15 min" },
