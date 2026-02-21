@@ -1,6 +1,20 @@
 import type { Metadata } from "next";
+import { Playfair_Display, DM_Sans } from "next/font/google";
 import HealNav from "@/components/HealNav";
 import HealFooter from "@/components/HealFooter";
+import "./globals.css";
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-playfair",
+  display: "swap",
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
 
 const HERO_IMAGE = "https://images.unsplash.com/photo-1583470790878-4f4f3811a01f?w=1200&q=80";
 
@@ -32,12 +46,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HealFromWithinLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <div className="heal-portal">
-      <HealNav />
-      <main>{children}</main>
-      <HealFooter />
-    </div>
+    <html
+      lang="en"
+      className={`${playfair.variable} ${dmSans.variable}`}
+    >
+      <body className="heal-portal">
+        <HealNav />
+        <main>{children}</main>
+        <HealFooter />
+      </body>
+    </html>
   );
 }

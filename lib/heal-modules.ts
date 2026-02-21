@@ -30,12 +30,12 @@ export const healModules: HealModule[] = [
     lessonCount: 4,
     image: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05",
     lessons: [
-      { id:1, title:"Where Are You, Really?", duration:"15 min", videoUrl:null, notes:null, resources:[{title:"My Starting Point — Journal Worksheet",url:"/heal-from-within/resources/module-1-worksheet.pdf"}] },
+      { id:1, title:"Where Are You, Really?", duration:"15 min", videoUrl:null, notes:null, resources:[{title:"My Starting Point — Journal Worksheet",url:"/resources/module-1-worksheet.pdf"}] },
       { id:2, title:"Why You're Not Broken — You're Patterned", duration:"10 min", videoUrl:null, notes:null, resources:[] },
       { id:3, title:"Survival Mode vs. Thriving Mode", duration:"12 min", videoUrl:null, notes:null, resources:[] },
       { id:4, title:"Setting Your Healing Intention", duration:"6 min", videoUrl:null, notes:null, resources:[] },
     ],
-    downloads:[{title:"My Starting Point — Journal Worksheet",url:"/heal-from-within/resources/module-1-worksheet.pdf"}],
+    downloads:[{title:"My Starting Point — Journal Worksheet",url:"/resources/module-1-worksheet.pdf"}],
   },
   {
     id:2, emoji:"\uD83C\uDF3F", title:"Healing Through Nature",
@@ -48,7 +48,7 @@ export const healModules: HealModule[] = [
       {id:3,title:"Building a Nature Routine (Even in a City)",duration:"8 min",videoUrl:null,notes:null,resources:[]},
       {id:4,title:"Seasonal Rituals for Mental Reset",duration:"7 min",videoUrl:null,notes:null,resources:[]},
     ],
-    downloads:[{title:"7-Day Nature Challenge Checklist",url:"/heal-from-within/resources/module-2-checklist.pdf"}],
+    downloads:[{title:"7-Day Nature Challenge Checklist",url:"/resources/module-2-checklist.pdf"}],
   },
   {
     id:3, emoji:"\uD83E\uDDD8", title:"Meditation & Breathwork",
@@ -62,7 +62,7 @@ export const healModules: HealModule[] = [
       {id:4,title:"Guided Evening Wind-Down",duration:"15 min",videoUrl:null,notes:null,resources:[]},
       {id:5,title:"Building a Daily Practice That Sticks",duration:"6 min",videoUrl:null,notes:null,resources:[]},
     ],
-    downloads:[{title:"Morning & Evening Meditation Guide",url:"/heal-from-within/resources/module-3-guide.pdf"}],
+    downloads:[{title:"Morning & Evening Meditation Guide",url:"/resources/module-3-guide.pdf"}],
   },
   {
     id:4, emoji:"\uD83D\uDCAC", title:"The Power of Affirmations",
@@ -76,7 +76,7 @@ export const healModules: HealModule[] = [
       {id:4,title:"Affirmations for Specific Areas",duration:"11 min",videoUrl:null,notes:null,resources:[]},
       {id:5,title:"Integrating Affirmations into Movement",duration:"7 min",videoUrl:null,notes:null,resources:[]},
     ],
-    downloads:[{title:"Custom Affirmation Builder",url:"/heal-from-within/resources/module-4-builder.pdf"}],
+    downloads:[{title:"Custom Affirmation Builder",url:"/resources/module-4-builder.pdf"}],
   },
   {
     id:5, emoji:"\uD83E\uDDE0", title:"Breaking Self-Sabotage",
@@ -90,7 +90,7 @@ export const healModules: HealModule[] = [
       {id:4,title:"Building an Accountability System",duration:"8 min",videoUrl:null,notes:null,resources:[]},
       {id:5,title:"What to Do When You Relapse",duration:"12 min",videoUrl:null,notes:null,resources:[]},
     ],
-    downloads:[{title:"Self-Sabotage Pattern Tracker & Interrupt Plan",url:"/heal-from-within/resources/module-5-tracker.pdf"}],
+    downloads:[{title:"Self-Sabotage Pattern Tracker & Interrupt Plan",url:"/resources/module-5-tracker.pdf"}],
   },
   {
     id:6, emoji:"\uD83C\uDF00", title:"Hypnosis & Deep Reprogramming",
@@ -104,7 +104,7 @@ export const healModules: HealModule[] = [
       {id:4,title:"Guided Hypnosis: Confidence & Self-Worth",duration:"20 min",videoUrl:null,notes:null,resources:[]},
       {id:5,title:"Integrating Everything — Your Daily Heal from Within Routine",duration:"12 min",videoUrl:null,notes:null,resources:[]},
     ],
-    downloads:[{title:"Daily Heal from Within Routine Card",url:"/heal-from-within/resources/module-6-routine.pdf"}],
+    downloads:[{title:"Daily Heal from Within Routine Card",url:"/resources/module-6-routine.pdf"}],
   },
   {
     id:7, emoji:"💔", title:"Healing from Trauma",
@@ -118,7 +118,7 @@ export const healModules: HealModule[] = [
       {id:4,title:"Rewriting Your Story — Narrative Healing",duration:"11 min",videoUrl:null,notes:null,resources:[]},
       {id:5,title:"Building Safety in Your Nervous System",duration:"14 min",videoUrl:null,notes:null,resources:[]},
     ],
-    downloads:[{title:"Trauma Healing Journal Prompts",url:"/heal-from-within/resources/module-7-journal.pdf"}],
+    downloads:[{title:"Trauma Healing Journal Prompts",url:"/resources/module-7-journal.pdf"}],
   },
   {
     id:8, emoji:"🎵", title:"The Power of Music",
@@ -132,7 +132,7 @@ export const healModules: HealModule[] = [
       {id:4,title:"Music as Emotional Release",duration:"10 min",videoUrl:null,notes:null,resources:[]},
       {id:5,title:"Creating Your Daily Sound Ritual",duration:"7 min",videoUrl:null,notes:null,resources:[]},
     ],
-    downloads:[{title:"Healing Frequencies & Playlist Guide",url:"/heal-from-within/resources/module-8-playlist.pdf"}],
+    downloads:[{title:"Healing Frequencies & Playlist Guide",url:"/resources/module-8-playlist.pdf"}],
   },
   {
     id:9, emoji:"✨", title:"Manifesting Your Dreams",
@@ -146,6 +146,6 @@ export const healModules: HealModule[] = [
       {id:4,title:"Aligned Action — From Intention to Reality",duration:"11 min",videoUrl:null,notes:null,resources:[]},
       {id:5,title:"Your Graduation — The New You",duration:"8 min",videoUrl:null,notes:null,resources:[]},
     ],
-    downloads:[{title:"Dream Life Blueprint Worksheet",url:"/heal-from-within/resources/module-9-blueprint.pdf"}],
+    downloads:[{title:"Dream Life Blueprint Worksheet",url:"/resources/module-9-blueprint.pdf"}],
   },
 ];

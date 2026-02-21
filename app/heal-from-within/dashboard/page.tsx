@@ -193,7 +193,7 @@ export default function DashboardPage() {
                     <HealProgressBar value={completedCount} max={mod.lessonCount} />
                   </div>
                   <Link
-                    href={`/heal-from-within/module/${mod.id}`}
+                    href={`/module/${mod.id}`}
                     className="block text-center text-xs font-bold rounded-full no-underline transition-all hover:-translate-y-0.5"
                     style={{
                       padding: "0.625rem 1rem",

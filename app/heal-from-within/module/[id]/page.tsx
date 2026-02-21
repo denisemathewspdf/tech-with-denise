@@ -432,7 +432,7 @@ export default function ModulePage({ params }: { params: { id: string } }) {
         >
           {prevMod ? (
             <Link
-              href={`/heal-from-within/module/${prevMod.id}`}
+              href={`/module/${prevMod.id}`}
               className="no-underline flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-70"
               style={{ color: "#5C5C5C", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
             >
@@ -450,7 +450,7 @@ export default function ModulePage({ params }: { params: { id: string } }) {
 
           {nextMod ? (
             <Link
-              href={`/heal-from-within/module/${nextMod.id}`}
+              href={`/module/${nextMod.id}`}
               className="no-underline flex items-center gap-2 text-sm font-bold rounded-full px-5 py-2.5 transition-all hover:-translate-y-0.5 text-white"
               style={{ background: "#1A3C2A", fontFamily: "var(--font-dm-sans, 'DM Sans', sans-serif)" }}
             >
