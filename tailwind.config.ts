@@ -6,6 +6,8 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    // Include lib/ so config-driven Tailwind tokens (keepBuilding.config.ts etc.) are not purged
+    "./lib/**/*.{ts,tsx}",
   ],
   theme: {
     extend: {

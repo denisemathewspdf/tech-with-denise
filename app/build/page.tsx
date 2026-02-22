@@ -1,4 +1,5 @@
 import BuildWizard from "@/components/BuildWizard";
+import KeepBuilding from "@/components/KeepBuilding";
 import BackgroundShapes from "@/components/BackgroundShapes";
 import type { Metadata } from "next";
 
@@ -24,7 +25,7 @@ export default function BuildPage() {
   return (
     <>
       <BackgroundShapes />
-      <div className="relative z-10 px-4 sm:px-6 md:px-10 pt-28 pb-8 max-w-[1000px] mx-auto">
+      <div className="relative z-10 px-4 sm:px-6 md:px-10 pt-28 pb-16 max-w-[1000px] mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
           <span className="text-4xl block mb-2">🚀</span>
@@ -39,6 +40,9 @@ export default function BuildPage() {
 
         {/* Wizard */}
         <BuildWizard />
+
+        {/* Keep Building — project ideas to ship after the wizard */}
+        <KeepBuilding />
       </div>
     </>
   );
