@@ -1,5 +1,4 @@
 import BuildWizard from "@/components/BuildWizard";
-import KeepBuilding from "@/components/KeepBuilding";
 import BackgroundShapes from "@/components/BackgroundShapes";
 import type { Metadata } from "next";
 
@@ -40,9 +39,6 @@ export default function BuildPage() {
 
         {/* Wizard */}
         <BuildWizard />
-
-        {/* Keep Building — project ideas to ship after the wizard */}
-        <KeepBuilding />
       </div>
     </>
   );

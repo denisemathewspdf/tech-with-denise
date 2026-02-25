@@ -539,6 +539,506 @@ const projects: Project[] = [
       },
     ],
   },
+  {
+    id: "linkinbio",
+    label: "Link-in-Bio Page",
+    emoji: "🔗",
+    description: "Build a styled links page — like Linktree, but yours",
+    steps: [
+      {
+        instruction: "Start with the DOCTYPE — every webpage needs this:",
+        code: "<!DOCTYPE html>",
+        explanation:
+          "This line tells the browser this is an HTML file. Every single webpage on the internet starts with this exact line.",
+      },
+      {
+        instruction: "Open the html tag:",
+        code: "<html>",
+        explanation:
+          "The outer container for everything. All your content lives inside this tag.",
+      },
+      {
+        instruction: "Open the head section:",
+        code: "<head>",
+        explanation:
+          "The backstage area — this is where setup info goes. Users don't see this directly.",
+      },
+      {
+        instruction: "Set the page title — this shows in the browser tab!",
+        code: "<title>My Links</title>",
+        explanation:
+          "Whatever you put here shows up in the browser tab. Type your name or brand!",
+        template: "<title>__INPUT__</title>",
+      },
+      {
+        instruction: "Open the style tag:",
+        code: "<style>",
+        explanation:
+          "All CSS goes inside here. CSS is what makes things look good.",
+      },
+      {
+        instruction: "Style the body — pick a background color!",
+        code: "body { font-family: Arial; background: #1a1a2e; color: white; display: flex; justify-content: center; padding: 60px 20px; min-height: 100vh; margin: 0; }",
+        explanation:
+          "min-height: 100vh makes the background fill the whole screen height. display: flex + justify-content: center puts everything in the middle horizontally. Dark backgrounds look sleek for link pages!",
+        template:
+          "body{font-family:Arial;background:__COLOR__;color:white;display:flex;justify-content:center;padding:60px20px;min-height:100vh;margin:0;}",
+        inputType: "color",
+      },
+      {
+        instruction: "Style the card that holds everything:",
+        code: ".card { width: 100%; max-width: 480px; text-align: center; }",
+        explanation:
+          "max-width: 480px keeps the layout from stretching too wide on big monitors — that centered, narrow column is exactly how Linktree and Beacons are built.",
+      },
+      {
+        instruction: "Style the link buttons:",
+        code: ".link { display: block; padding: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 14px; margin-bottom: 12px; text-decoration: none; color: white; font-weight: bold; transition: all 0.2s; }",
+        explanation:
+          "display: block makes each link fill the full width instead of staying inline. text-decoration: none removes the underline. transition: all 0.2s means any style change animates smoothly — that's what makes hover effects feel polished.",
+      },
+      {
+        instruction: "Add a hover effect on the buttons:",
+        code: ".link:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }",
+        explanation:
+          "transform: translateY(-2px) lifts the button up 2px on hover — a tiny motion that makes it feel clickable and alive. rgba(255,255,255,0.15) is a semi-transparent white overlay.",
+      },
+      {
+        instruction: "Close the style tag:",
+        code: "</style>",
+        explanation: "Done with CSS! All the visual styles are locked in.",
+      },
+      {
+        instruction: "Close the head:",
+        code: "</head>",
+        explanation: "Backstage is done. Now let's build what people actually see!",
+      },
+      {
+        instruction: "Open the body:",
+        code: "<body>",
+        explanation: "Everything inside the body is visible on the page.",
+      },
+      {
+        instruction: "Open the card container:",
+        code: '<div class="card">',
+        explanation:
+          "This div uses the .card class — the centered column that holds your name, bio, and links.",
+      },
+      {
+        instruction: "Add your name as a heading — type YOUR name!",
+        code: "<h2>Your Name</h2>",
+        explanation:
+          "Your name, big and bold at the top. h2 is the right size — prominent without being overwhelming.",
+        template: "<h2>__INPUT__</h2>",
+      },
+      {
+        instruction: "Add a short bio — one line, whatever describes you!",
+        code: "<p>creator · builder · dreamer</p>",
+        explanation:
+          "A quick tagline. The · (middle dot) is a classic separator — type it with Option+8 on Mac or just use / or | instead.",
+        template: "<p>__INPUT__</p>",
+      },
+      {
+        instruction: "Add your first link — use your real URL and label!",
+        code: '<a href="https://youtube.com" class="link">▶ YouTube</a>',
+        explanation:
+          "The href is the URL. class=\"link\" gives it all our button styling. The ▶ is just a text character — no images needed. Add any emoji or symbol you want!",
+        freeInput: true,
+      },
+      {
+        instruction: "Add a second link:",
+        code: '<a href="https://instagram.com" class="link">📸 Instagram</a>',
+        explanation:
+          "Same pattern — href changes, emoji and label change. You can add as many links as you want by repeating this.",
+        freeInput: true,
+      },
+      {
+        instruction: "Add one more link:",
+        code: '<a href="mailto:you@email.com" class="link">✉ Email Me</a>',
+        explanation:
+          "href=\"mailto:\" opens the user's email app automatically when clicked — great for a contact link. Add your actual email!",
+        freeInput: true,
+      },
+      {
+        instruction: "Close the card container:",
+        code: "</div>",
+        explanation: "Closes the .card div that holds everything.",
+      },
+      {
+        instruction: "Close the body:",
+        code: "</body>",
+        explanation: "No more visible content after this.",
+      },
+      {
+        instruction: "Close the html tag — you're done!",
+        code: "</html>",
+        explanation:
+          "You built a custom link-in-bio page! 🎉 Save it as index.html and open it in your browser. Deploy it free on Netlify or Cloudflare Pages to get a real shareable URL.",
+      },
+    ],
+  },
+  {
+    id: "tip-calc",
+    label: "Tip Calculator",
+    emoji: "🧮",
+    description: "Build your first interactive JavaScript app — enter a bill, get the tip",
+    steps: [
+      {
+        instruction: "Start with the DOCTYPE:",
+        code: "<!DOCTYPE html>",
+        explanation:
+          "Every webpage starts here. This tells the browser it's reading an HTML file.",
+      },
+      {
+        instruction: "Open the html tag:",
+        code: "<html>",
+        explanation: "The outer container for the entire page.",
+      },
+      {
+        instruction: "Open the head section:",
+        code: "<head>",
+        explanation: "Setup stuff — title, styles. Users don't see this directly.",
+      },
+      {
+        instruction: "Set the page title — name your app!",
+        code: "<title>Tip Calculator</title>",
+        explanation: "Shows in the browser tab. Name it whatever you want!",
+        template: "<title>__INPUT__</title>",
+      },
+      {
+        instruction: "Open the style tag:",
+        code: "<style>",
+        explanation: "CSS goes in here — this controls how everything looks.",
+      },
+      {
+        instruction: "Style the page — pick your background color!",
+        code: "body { font-family: Arial; background: #F0F4FF; display: flex; justify-content: center; padding: 60px 20px; margin: 0; }",
+        explanation:
+          "display: flex + justify-content: center centers the calculator card on the page. That two-line combo is the most common way to center things in modern CSS.",
+        template:
+          "body{font-family:Arial;background:__COLOR__;display:flex;justify-content:center;padding:60px20px;margin:0;}",
+        inputType: "color",
+      },
+      {
+        instruction: "Style the calculator card:",
+        code: ".calc { background: white; padding: 36px; border-radius: 20px; width: 320px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }",
+        explanation:
+          "The white card that holds the calculator. box-shadow adds a soft drop shadow — that 0 4px 24px pattern is used by basically every modern UI. It makes the card float off the background.",
+      },
+      {
+        instruction: "Style the text labels:",
+        code: "label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 6px; margin-top: 20px; color: #444; }",
+        explanation:
+          "display: block makes each label sit on its own line. margin-top: 20px adds breathing room between form fields.",
+      },
+      {
+        instruction: "Style the input fields:",
+        code: "input { width: 100%; padding: 12px; border: 2px solid #E0E0E0; border-radius: 10px; font-size: 16px; box-sizing: border-box; outline: none; }",
+        explanation:
+          "box-sizing: border-box prevents padding from making inputs wider than 100%. outline: none removes the default blue glow. font-size: 16px on mobile prevents iOS from auto-zooming when you tap.",
+      },
+      {
+        instruction: "Style the calculate button — pick a color!",
+        code: "button { width: 100%; padding: 14px; background: #5B6AF0; color: white; border: none; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 24px; }",
+        explanation:
+          "width: 100% makes the button span the full card. cursor: pointer shows the hand cursor on hover. border: none removes the default browser button border.",
+        template:
+          "button{width:100%;padding:14px;background:__COLOR__;color:white;border:none;border-radius:10px;font-size:16px;font-weight:bold;cursor:pointer;margin-top:24px;}",
+        inputType: "color",
+      },
+      {
+        instruction: "Style the result display area:",
+        code: ".result { margin-top: 20px; padding: 16px; background: #F7F8FF; border-radius: 10px; text-align: center; font-size: 20px; font-weight: bold; color: #5B6AF0; min-height: 56px; }",
+        explanation:
+          "min-height: 56px reserves space before you calculate — the page won't jump when the number appears. This is called 'preventing layout shift' and it's a real UX trick.",
+      },
+      {
+        instruction: "Close the style tag:",
+        code: "</style>",
+        explanation: "CSS is done! Now let's build the HTML structure.",
+      },
+      {
+        instruction: "Close the head:",
+        code: "</head>",
+        explanation: "Backstage wrapped up — now the visible part!",
+      },
+      {
+        instruction: "Open the body:",
+        code: "<body>",
+        explanation: "Everything from here is what the user sees.",
+      },
+      {
+        instruction: "Open the calculator card:",
+        code: '<div class="calc">',
+        explanation:
+          "The white card container. Everything inside gets the card styling.",
+      },
+      {
+        instruction: "Add your app title — name it!",
+        code: "<h2>Tip Calculator 🧾</h2>",
+        explanation:
+          "The heading at the top of the card. Add whatever emoji or name you want!",
+        template: "<h2>__INPUT__</h2>",
+      },
+      {
+        instruction: "Add the bill amount label:",
+        code: "<label>Bill amount ($)</label>",
+        explanation:
+          "A label sits above its input and tells users what to type. Screen readers also use labels for accessibility.",
+        template: "<label>__INPUT__</label>",
+      },
+      {
+        instruction: "Add the bill input field:",
+        code: '<input type="number" id="bill" placeholder="0.00" />',
+        explanation:
+          "type=\"number\" only allows numbers (no letters). id=\"bill\" is how JavaScript will find this field later. placeholder is the grey hint text.",
+      },
+      {
+        instruction: "Add the tip percentage label:",
+        code: "<label>Tip %</label>",
+        explanation: "Second label for the tip percentage input.",
+        template: "<label>__INPUT__</label>",
+      },
+      {
+        instruction: "Add the tip input field:",
+        code: '<input type="number" id="tip" placeholder="20" />',
+        explanation:
+          "Same pattern — type=\"number\" for numbers only, id=\"tip\" so JavaScript can grab the value. placeholder=\"20\" suggests 20% as the default.",
+      },
+      {
+        instruction: "Add the calculate button — label it whatever you want!",
+        code: '<button onclick="calcTip()">Calculate</button>',
+        explanation:
+          "onclick=\"calcTip()\" means: when this button is clicked, run the calcTip function. We haven't written that function yet — that's what the script tag is for!",
+        template: '<button onclick="calcTip()">__INPUT__</button>',
+      },
+      {
+        instruction: "Add the result display area:",
+        code: '<div class="result" id="result"></div>',
+        explanation:
+          "This div starts empty. JavaScript will put the tip amount here when you click Calculate. id=\"result\" is how it gets found.",
+      },
+      {
+        instruction: "Close the calculator card:",
+        code: "</div>",
+        explanation: "Closes the .calc card.",
+      },
+      {
+        instruction: "Open the script tag — this is where JavaScript lives:",
+        code: "<script>",
+        explanation:
+          "JavaScript goes inside <script> tags. Unlike CSS, JavaScript makes things interactive — it responds to clicks, does math, and changes what's on the page.",
+      },
+      {
+        instruction: "Define the calcTip function:",
+        code: "function calcTip() {",
+        explanation:
+          "function is a keyword that defines a reusable block of code. calcTip is the name — it must match what we put in onclick. The { opens the function body.",
+      },
+      {
+        instruction: "Grab the bill value from the input:",
+        code: "const bill = +document.getElementById('bill').value;",
+        explanation:
+          "document.getElementById('bill') finds the input by its id. .value gets what the user typed. The + at the start converts text to a number so we can do math with it.",
+      },
+      {
+        instruction: "Calculate the tip as a decimal:",
+        code: "const tip = +document.getElementById('tip').value / 100;",
+        explanation:
+          "Get the tip percentage, convert to a number, then divide by 100 to turn it into a decimal (20% → 0.20). Now we can multiply.",
+      },
+      {
+        instruction: "Show the result on the page:",
+        code: "document.getElementById('result').textContent = 'Tip: $' + (bill * tip).toFixed(2);",
+        explanation:
+          "textContent sets the visible text inside the result div. bill * tip is the math. .toFixed(2) rounds to 2 decimal places — so $12.5000 becomes $12.50. That's your tip!",
+      },
+      {
+        instruction: "Close the function:",
+        code: "}",
+        explanation:
+          "The closing curly brace ends the function. Every { needs a matching }.",
+      },
+      {
+        instruction: "Close the script tag:",
+        code: "</script>",
+        explanation:
+          "Done with JavaScript! Just like <style> needs </style>, <script> needs </script>.",
+      },
+      {
+        instruction: "Close the body:",
+        code: "</body>",
+        explanation: "No more visible content.",
+      },
+      {
+        instruction: "Close the html tag — you're done!",
+        code: "</html>",
+        explanation:
+          "You built an interactive app! 🎉 Open it in your browser, type a bill amount and tip %, and click Calculate. JavaScript is running — you're a programmer now.",
+      },
+    ],
+  },
+  {
+    id: "bizcard",
+    label: "Digital Business Card",
+    emoji: "💼",
+    description: "Build a sleek card with your name, role, and contact links",
+    steps: [
+      {
+        instruction: "Start with the DOCTYPE:",
+        code: "<!DOCTYPE html>",
+        explanation:
+          "The first line of every webpage. Tells the browser this is HTML.",
+      },
+      {
+        instruction: "Open the html tag:",
+        code: "<html>",
+        explanation: "The outer wrapper for the whole page.",
+      },
+      {
+        instruction: "Open the head section:",
+        code: "<head>",
+        explanation: "Setup info — title and styles. Users don't see this directly.",
+      },
+      {
+        instruction: "Give your card a title — use your name!",
+        code: "<title>My Card</title>",
+        explanation: "Shows in the browser tab — make it yours!",
+        template: "<title>__INPUT__</title>",
+      },
+      {
+        instruction: "Open the style tag:",
+        code: "<style>",
+        explanation: "CSS goes here — this is what makes it look great.",
+      },
+      {
+        instruction: "Style the page — pick a background color!",
+        code: "body { font-family: Arial; background: #F5F0FF; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }",
+        explanation:
+          "display: flex + justify-content: center + align-items: center centers the card BOTH horizontally AND vertically — that three-property combo perfectly centers anything on any screen size.",
+        template:
+          "body{font-family:Arial;background:__COLOR__;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;}",
+        inputType: "color",
+      },
+      {
+        instruction: "Style the card:",
+        code: ".card { background: white; padding: 48px 40px; border-radius: 24px; width: 320px; text-align: center; box-shadow: 0 8px 40px rgba(0,0,0,0.10); }",
+        explanation:
+          "Generous padding gives the card a premium, airy feel. The larger border-radius and stronger shadow make it look elevated — like a real printed card.",
+      },
+      {
+        instruction: "Style the avatar circle — pick its color!",
+        code: ".avatar { width: 80px; height: 80px; border-radius: 50%; background: #C4B8FF; margin: 0 auto 20px; display: flex; justify-content: center; align-items: center; font-size: 32px; }",
+        explanation:
+          "border-radius: 50% turns any square into a perfect circle. display: flex + center lets us place an emoji inside it precisely. margin: 0 auto horizontally centers the circle itself.",
+        template:
+          ".avatar{width:80px;height:80px;border-radius:50%;background:__COLOR__;margin:0auto20px;display:flex;justify-content:center;align-items:center;font-size:32px;}",
+        inputType: "color",
+      },
+      {
+        instruction: "Style the name:",
+        code: ".name { font-size: 24px; font-weight: bold; color: #1a1a2e; margin: 0 0 6px; }",
+        explanation:
+          "font-weight: bold makes the name stand out. margin: 0 0 6px means top=0, sides=0, bottom=6px — keeps the name close to the role text.",
+      },
+      {
+        instruction: "Style the role text:",
+        code: ".role { color: #888; font-size: 14px; margin: 0 0 24px; }",
+        explanation:
+          "Lighter text (color: #888) creates visual hierarchy — name reads first (bold, dark), then role (lighter, smaller). This layering is how every business card and profile is designed.",
+      },
+      {
+        instruction: "Style the divider line:",
+        code: "hr { border: none; border-top: 1px solid #F0F0F0; margin: 0 0 20px; }",
+        explanation:
+          "border: none removes the default browser styling. border-top: 1px solid adds just a top border — the result is a clean, thin line that separates your info from your links.",
+      },
+      {
+        instruction: "Style the contact links:",
+        code: ".contact { display: block; color: #666; font-size: 13px; text-decoration: none; padding: 6px 0; }",
+        explanation:
+          "display: block makes each link its own line. text-decoration: none removes underlines. Clean and simple — like real business card contact info.",
+      },
+      {
+        instruction: "Close the style tag:",
+        code: "</style>",
+        explanation: "All styles set! Time to build the card structure.",
+      },
+      {
+        instruction: "Close the head:",
+        code: "</head>",
+        explanation: "Backstage is done — let's build the visible part.",
+      },
+      {
+        instruction: "Open the body:",
+        code: "<body>",
+        explanation: "Everything here is visible to the user.",
+      },
+      {
+        instruction: "Open the card:",
+        code: '<div class="card">',
+        explanation:
+          "The white card container. Everything inside gets the card styling.",
+      },
+      {
+        instruction: "Add the avatar — pick any emoji!",
+        code: '<div class="avatar">✨</div>',
+        explanation:
+          "The avatar circle with an emoji inside. Try 🌿, 💻, 🎨, 🚀 — whatever fits your vibe. Later you could swap this for a real photo using an <img> tag.",
+        template: '<div class="avatar">__INPUT__</div>',
+      },
+      {
+        instruction: "Add your name:",
+        code: '<p class="name">Your Name</p>',
+        explanation:
+          "Your name, styled with the .name class — bold, dark, prominent.",
+        template: '<p class="name">__INPUT__</p>',
+      },
+      {
+        instruction: "Add your role or title:",
+        code: '<p class="role">Designer · Developer · Creator</p>',
+        explanation:
+          "Your one-line description. The · separates words cleanly. Keep it short — one line is perfect on a business card.",
+        template: '<p class="role">__INPUT__</p>',
+      },
+      {
+        instruction: "Add the divider line:",
+        code: "<hr />",
+        explanation:
+          "A horizontal rule — a thin line that separates your identity section from your contact section. Simple and effective.",
+      },
+      {
+        instruction: "Add your email or website link:",
+        code: '<a href="mailto:you@email.com" class="contact">✉ you@email.com</a>',
+        explanation:
+          "href=\"mailto:\" opens the user's email app when clicked — they don't even have to copy the address. Update with your real email!",
+        freeInput: true,
+      },
+      {
+        instruction: "Add another contact or social link:",
+        code: '<a href="https://linkedin.com/in/you" class="contact">💼 linkedin.com/in/you</a>',
+        explanation:
+          "Same pattern — any URL works. LinkedIn, website, Instagram, GitHub — whatever you want visible on your card.",
+        freeInput: true,
+      },
+      {
+        instruction: "Close the card:",
+        code: "</div>",
+        explanation: "Closes the .card div.",
+      },
+      {
+        instruction: "Close the body:",
+        code: "</body>",
+        explanation: "No more visible content.",
+      },
+      {
+        instruction: "Close the html tag — you're done!",
+        code: "</html>",
+        explanation:
+          "You built a digital business card! 🎉 Save it as index.html and open it in your browser. It works on mobile too — try it on your phone. Deploy it free on Netlify or Cloudflare Pages and you have a real shareable URL.",
+      },
+    ],
+  },
 ];
 
 // ============ MATCHING LOGIC ============

@@ -15,7 +15,7 @@ export default function Footer() {
         <SocialLink href="http://www.linkedin.com/in/denmath" label="LinkedIn">in</SocialLink>
       </div>
       <p className="text-dark-soft dark:text-[#C4B0D8] text-sm">
-        Made with 💜 by Denise · © {new Date().getFullYear()}{" "}
+        Made with 💜 by Denise Mathews · © {new Date().getFullYear()}{" "}
         <Link href="/" className="text-lavender font-semibold no-underline">
           Tech with Denise
         </Link>

@@ -62,7 +62,11 @@ export default function ModulePage({ params }: { params: { id: string } }) {
       if (!mod) return;
       setCompleted((prev) => {
         const next = new Set(prev);
-        next.has(lessonId) ? next.delete(lessonId) : next.add(lessonId);
+        if (next.has(lessonId)) {
+          next.delete(lessonId);
+        } else {
+          next.add(lessonId);
+        }
         saveModuleProgress(mod.id, next);
         return next;
       });

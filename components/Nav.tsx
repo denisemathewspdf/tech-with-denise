@@ -10,8 +10,6 @@ export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
 
-  if (pathname.startsWith("/heal-from-within")) return null;
-
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -21,6 +19,8 @@ export default function Nav() {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  if (pathname.startsWith("/heal-from-within")) return null;
 
   const toggleTheme = () => {
     const next = !isDark;
@@ -49,6 +49,7 @@ export default function Nav() {
       <div className="hidden md:flex items-center gap-8">
         <NavLink href="/">Home</NavLink>
         <NavLink href="/guides">Guides</NavLink>
+        <NavLink href="/blog">Blog</NavLink>
         <NavLink href="/programs">Programs</NavLink>
         <NavLink href="/languages">Languages</NavLink>
         <NavLink href="/glossary">Glossary</NavLink>
@@ -106,6 +107,9 @@ export default function Nav() {
           </MobileNavLink>
           <MobileNavLink href="/guides" onClick={() => setMenuOpen(false)}>
             Guides
+          </MobileNavLink>
+          <MobileNavLink href="/blog" onClick={() => setMenuOpen(false)}>
+            Blog
           </MobileNavLink>
           <MobileNavLink href="/programs" onClick={() => setMenuOpen(false)}>
             Programs

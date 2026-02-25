@@ -30,12 +30,15 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: "Tech with Denise — Making Tech Less Scary",
-    template: "%s | Tech with Denise",
+    default: "Tech with Denise Mathews — Making Tech Less Scary",
+    template: "%s | Tech with Denise Mathews",
   },
   description:
-    "No jargon. No gatekeeping. Just real explanations for real people. Learn React, Python, AI, and more with Denise.",
+    "Denise Mathews makes tech accessible for everyone. No jargon. No gatekeeping. Just real explanations for real people. Learn React, Python, AI, and more.",
   keywords: [
+    "Denise Mathews",
+    "Denise Mathews tech",
+    "tech with Denise Mathews",
     "learn to code",
     "tech for beginners",
     "React tutorial",
@@ -46,21 +49,22 @@ export const metadata: Metadata = {
     "coding for women",
     "tech with denise",
   ],
-  authors: [{ name: "Denise" }],
-  creator: "Tech with Denise",
+  authors: [{ name: "Denise Mathews", url: "https://denisemathews.com" }],
+  creator: "Denise Mathews",
   openGraph: {
     type: "website",
     locale: "en_US",
-    siteName: "Tech with Denise",
-    title: "Tech with Denise — Making Tech Less Scary",
+    siteName: "Tech with Denise Mathews",
+    title: "Tech with Denise Mathews — Making Tech Less Scary",
     description:
-      "No jargon. No gatekeeping. Just real explanations for real people.",
+      "Denise Mathews makes tech accessible for everyone. No jargon. No gatekeeping. Just real explanations for real people.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tech with Denise — Making Tech Less Scary",
+    title: "Tech with Denise Mathews — Making Tech Less Scary",
     description:
-      "No jargon. No gatekeeping. Just real explanations for real people.",
+      "Denise Mathews makes tech accessible for everyone. No jargon. No gatekeeping. Just real explanations for real people.",
+    creator: "@Dmatx2",
   },
 };
 
@@ -75,6 +79,29 @@ export default function RootLayout({
       className={`${quicksand.variable} ${playfair.variable} ${jetbrains.variable} ${dmSans.variable}`}
     >
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Tech with Denise Mathews",
+              "url": "https://tech-with-denise.vercel.app",
+              "author": {
+                "@type": "Person",
+                "name": "Denise Mathews",
+                "url": "https://denisemathews.com",
+                "sameAs": [
+                  "https://www.linkedin.com/in/denmath",
+                  "https://x.com/Dmatx2",
+                  "https://instagram.com/denise_thehackergirl"
+                ],
+                "jobTitle": "People & Talent Operations | AI Builder",
+                "description": "Denise Mathews is a startup ops professional and AI builder making tech accessible for everyone."
+              }
+            }),
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(t===null&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})()`,

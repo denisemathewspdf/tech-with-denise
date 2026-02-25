@@ -4,9 +4,9 @@ import BackgroundShapes from "@/components/BackgroundShapes";
 import ScrollReveal from "@/components/ScrollReveal";
 
 export const metadata: Metadata = {
-  title: "About Denise",
+  title: "About Denise Mathews",
   description:
-    "Meet Denise — early stage startup people + ops, AI builder, and former internet nerd making tech accessible for everyone.",
+    "Meet Denise Mathews — early stage startup people + ops, AI builder, and former internet nerd making tech accessible for everyone.",
 };
 
 const projects = [
@@ -77,7 +77,7 @@ export default function AboutPage() {
           </div>
 
           <h1 className="font-heading text-[clamp(2.5rem,5vw,4rem)] leading-[1.15] mb-6 text-dark dark:text-white">
-            I&apos;m Denise. 👋
+            I&apos;m Denise<span className="sr-only"> Mathews</span>. 👋
             <br />
             <span className="shimmer-highlight">startup</span> people &amp; ops,
             <br />
@@ -101,7 +101,7 @@ export default function AboutPage() {
               <span className="block text-dark dark:text-white font-bold font-heading text-lg mb-3">
                 &ldquo;Tech is for everyone.&rdquo;
               </span>
-              I&apos;m Denise &mdash; an early stage startup ops person, AI builder, and former internet nerd who believes tech should be for everyone. I created Tech with Denise to be the resource I wish I had when I was starting out. No jargon, no gatekeeping, just real talk.
+              I&apos;m Denise Mathews &mdash; an early stage startup ops person, AI builder, and former internet nerd who believes tech should be for everyone. I created Tech with Denise to be the resource I wish I had when I was starting out. No jargon, no gatekeeping, just real talk.
             </p>
           </div>
         </ScrollReveal>

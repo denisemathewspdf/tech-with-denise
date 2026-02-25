@@ -2,6 +2,7 @@ import BackgroundShapes from "@/components/BackgroundShapes";
 import ScrollReveal from "@/components/ScrollReveal";
 import TopicCard from "@/components/TopicCard";
 import NewsletterSignup from "@/components/NewsletterSignup";
+import NewsletterBanner from "@/components/NewsletterBanner";
 import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import InteractiveCodeBlock from "@/components/InteractiveCodeBlock";
 
@@ -95,7 +96,7 @@ export default function HomePage() {
 
           {/* Heading */}
           <h1 className="font-heading text-[clamp(2.8rem,6vw,4.5rem)] leading-[1.15] mb-6 opacity-0 animate-fade-up [animation-delay:0.15s]">
-            Hey, I&apos;m Denise.
+            Hey, I&apos;m Denise<span className="sr-only"> Mathews</span>.
             <br />
             I make <span className="shimmer-highlight">tech</span>
             <br />
@@ -164,6 +165,13 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ============ NEWSLETTER BANNER (early) ============ */}
+      <section className="relative z-10 px-6 md:px-10 py-8 max-w-[900px] mx-auto">
+        <ScrollReveal>
+          <NewsletterBanner source="homepage-top" />
+        </ScrollReveal>
+      </section>
+
       {/* ============ ABOUT / PHOTO MOMENT ============ */}
       <section className="relative z-10 px-6 md:px-10 py-16">
         <ScrollReveal>
@@ -175,7 +183,7 @@ export default function HomePage() {
                 Who&apos;s behind all this? 👋
               </h2>
               <p className="text-dark-soft leading-relaxed mb-3">
-                I&apos;m Denise — a tech girlie who believes everyone deserves to
+                I&apos;m Denise Mathews — a tech girlie who believes everyone deserves to
                 understand how the internet works. I started this because I was
                 tired of tutorials that made me feel dumb.
               </p>
