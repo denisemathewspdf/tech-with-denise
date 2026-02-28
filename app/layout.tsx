@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Quicksand, Playfair_Display, JetBrains_Mono, DM_Sans } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import MBUBanner from "@/components/MBUBanner";
 import "./globals.css";
 
 const quicksand = Quicksand({
@@ -109,6 +110,7 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body bg-cream text-dark antialiased transition-colors duration-300">
+        <MBUBanner />
         <Nav />
         <main>{children}</main>
         <Footer />
