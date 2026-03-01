@@ -3,7 +3,6 @@ import ScrollReveal from "@/components/ScrollReveal";
 import TopicCard from "@/components/TopicCard";
 import NewsletterSignup from "@/components/NewsletterSignup";
 import NewsletterBanner from "@/components/NewsletterBanner";
-import PhotoPlaceholder from "@/components/PhotoPlaceholder";
 import InteractiveCodeBlock from "@/components/InteractiveCodeBlock";
 
 // Topic data matching the original landing page

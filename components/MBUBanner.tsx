@@ -22,177 +22,64 @@ export default function MBUBanner() {
   if (!isVisible) return null;
 
   return (
-    <>
-      <style jsx global>{`
-        body.mbu-banner-active {
-          padding-top: 80px !important;
-        }
+    <div 
+      className="fixed top-0 left-0 right-0 z-[9999] animate-[slideDown_0.5s_ease-out]"
+      style={{
+        background: 'linear-gradient(135deg, #2D5A3F 0%, #1A3A2E 100%)',
+        color: '#F5F5F0',
+        padding: '12px 20px',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.2)',
+      }}
+    >
+      <div className="max-w-[1200px] mx-auto flex items-center justify-between flex-wrap gap-3">
+        <div className="flex-1 min-w-[250px]">
+          <div className="text-base font-bold mb-1" style={{ color: '#D4A574' }}>
+            <span className="text-xl mr-1">🔓🌿</span>
+            NEW: Mind Body Unlock Course
+          </div>
+          <div className="text-sm opacity-90">
+            9-module nervous system training • Science-backed anxiety relief • $49
+          </div>
+        </div>
         
-        @media (max-width: 768px) {
-          body.mbu-banner-active {
-            padding-top: 100px !important;
+        <a
+          href="https://mindbodyunlock.pages.dev"
+          className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-bold text-sm whitespace-nowrap transition-all hover:-translate-y-0.5"
+          style={{
+            background: '#D4A574',
+            color: '#1A1F1C',
+          }}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn More →
+        </a>
+        
+        <button
+          className="w-8 h-8 flex items-center justify-center rounded-full text-2xl opacity-70 hover:opacity-100 transition-opacity ml-3"
+          style={{
+            background: 'rgba(255, 255, 255, 0.1)',
+            color: '#F5F5F0',
+          }}
+          onClick={handleClose}
+          aria-label="Close banner"
+        >
+          ×
+        </button>
+      </div>
+
+      <style>{`
+        @keyframes slideDown {
+          from {
+            transform: translateY(-100%);
+            opacity: 0;
+          }
+          to {
+            transform: translateY(0);
+            opacity: 1;
           }
         }
       `}</style>
-      <div className="mbu-banner">
-        <div className="mbu-banner-content">
-          <div className="mbu-banner-text">
-            <div className="mbu-banner-title">
-              <span className="mbu-banner-emoji">🔓🌿</span>
-              NEW: Mind Body Unlock Course
-            </div>
-            <div className="mbu-banner-subtitle">
-              9-module nervous system training • Science-backed anxiety relief • $49
-            </div>
-          </div>
-          <a
-            href="https://mindbodyunlock.pages.dev"
-            className="mbu-banner-cta"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn More →
-          </a>
-          <button
-            className="mbu-banner-close"
-            onClick={handleClose}
-            aria-label="Close banner"
-          >
-            ×
-          </button>
-        </div>
-        <style jsx>{`
-          .mbu-banner {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(135deg, #2D5A3F 0%, #1A3A2E 100%);
-            color: #F5F5F0;
-            padding: 12px 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            z-index: 9999;
-            animation: slideDown 0.5s ease-out;
-          }
-
-          @keyframes slideDown {
-            from {
-              transform: translateY(-100%);
-              opacity: 0;
-            }
-            to {
-              transform: translateY(0);
-              opacity: 1;
-            }
-          }
-
-          .mbu-banner-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-          }
-
-          .mbu-banner-text {
-            flex: 1;
-            min-width: 250px;
-          }
-
-          .mbu-banner-title {
-            font-size: 16px;
-            font-weight: 700;
-            margin: 0 0 4px 0;
-            color: #D4A574;
-          }
-
-          .mbu-banner-subtitle {
-            font-size: 14px;
-            margin: 0;
-            color: #F5F5F0;
-            opacity: 0.9;
-          }
-
-          .mbu-banner-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #D4A574;
-            color: #1A1F1C;
-            padding: 10px 24px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-          }
-
-          .mbu-banner-cta:hover {
-            background: #E5B685;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
-          }
-
-          .mbu-banner-close {
-            background: none;
-            border: none;
-            color: #F5F5F0;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 0;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background 0.2s;
-            opacity: 0.7;
-            margin-left: 12px;
-          }
-
-          .mbu-banner-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-            opacity: 1;
-          }
-
-          .mbu-banner-emoji {
-            font-size: 20px;
-            margin-right: 4px;
-          }
-
-          @media (max-width: 768px) {
-            .mbu-banner {
-              padding: 12px 16px;
-            }
-
-            .mbu-banner-content {
-              justify-content: center;
-              text-align: center;
-            }
-
-            .mbu-banner-text {
-              min-width: 100%;
-            }
-
-            .mbu-banner-title {
-              font-size: 15px;
-            }
-
-            .mbu-banner-subtitle {
-              font-size: 13px;
-            }
-
-            .mbu-banner-cta {
-              font-size: 13px;
-              padding: 9px 20px;
-            }
-          }
-        `}</style>
-      </div>
-    </>
+    </div>
   );
 }
