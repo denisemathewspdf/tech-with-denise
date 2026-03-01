@@ -35,37 +35,55 @@ export const metadata: Metadata = {
     template: "%s | Tech with Denise Mathews",
   },
   description:
-    "Denise Mathews makes tech accessible for everyone. No jargon. No gatekeeping. Just real explanations for real people. Learn React, Python, AI, and more.",
+    "Tech influencer Denise Mathews makes coding accessible for everyone. Learn to code with vibe coding tutorials. No jargon. No gatekeeping. Perfect for women in tech and beginners learning software engineering, React, Python, AI, and more.",
   keywords: [
     "Denise Mathews",
     "Denise Mathews tech",
     "tech with Denise Mathews",
+    "tech influencer",
+    "women in tech",
+    "vibe coding",
     "learn to code",
+    "software engineering",
     "tech for beginners",
+    "coding for beginners",
     "React tutorial",
     "Python basics",
     "AI agents",
-    "TypeScript",
-    "Web3",
+    "TypeScript tutorial",
+    "Web3 explained",
     "coding for women",
     "tech with denise",
+    "programming tutorials",
+    "software development",
+    "beginner coding",
   ],
   authors: [{ name: "Denise Mathews", url: "https://denisemathews.com" }],
   creator: "Denise Mathews",
   openGraph: {
     type: "website",
     locale: "en_US",
+    url: "https://tech-with-denise.vercel.app",
     siteName: "Tech with Denise Mathews",
-    title: "Tech with Denise Mathews — Making Tech Less Scary",
+    title: "Tech with Denise Mathews — Tech Influencer | Women in Tech | Vibe Coding",
     description:
-      "Denise Mathews makes tech accessible for everyone. No jargon. No gatekeeping. Just real explanations for real people.",
+      "Tech influencer Denise Mathews makes coding accessible. Learn to code with vibe coding tutorials. Perfect for women in tech learning software engineering, React, Python, AI, and more.",
+    images: [
+      {
+        url: "https://tech-with-denise.vercel.app/denise.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Denise Mathews — Tech Influencer & Educator",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tech with Denise Mathews — Making Tech Less Scary",
+    title: "Tech with Denise Mathews — Tech Influencer | Women in Tech | Vibe Coding",
     description:
-      "Denise Mathews makes tech accessible for everyone. No jargon. No gatekeeping. Just real explanations for real people.",
+      "Tech influencer making coding accessible. Learn to code with vibe coding tutorials for women in tech and beginners.",
     creator: "@Dmatx2",
+    images: ["https://tech-with-denise.vercel.app/denise.jpg"],
   },
 };
 
@@ -88,17 +106,34 @@ export default function RootLayout({
               "@type": "WebSite",
               "name": "Tech with Denise Mathews",
               "url": "https://tech-with-denise.vercel.app",
+              "description": "Tech influencer Denise Mathews makes coding accessible with vibe coding tutorials for women in tech and beginners learning software engineering.",
               "author": {
                 "@type": "Person",
                 "name": "Denise Mathews",
                 "url": "https://denisemathews.com",
+                "image": "https://tech-with-denise.vercel.app/denise.jpg",
                 "sameAs": [
                   "https://www.linkedin.com/in/denmath",
                   "https://x.com/Dmatx2",
                   "https://instagram.com/denise_thehackergirl"
                 ],
-                "jobTitle": "People & Talent Operations | AI Builder",
-                "description": "Denise Mathews is a startup ops professional and AI builder making tech accessible for everyone."
+                "jobTitle": "Tech Influencer | Software Engineer | AI Builder",
+                "description": "Tech influencer and educator making software engineering accessible for everyone, especially women in tech. Specializing in vibe coding tutorials for React, Python, AI, and more.",
+                "knowsAbout": [
+                  "Software Engineering",
+                  "React",
+                  "Python",
+                  "Artificial Intelligence",
+                  "TypeScript",
+                  "Web Development",
+                  "Coding Education",
+                  "Women in Tech"
+                ]
+              },
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://tech-with-denise.vercel.app/search?q={search_term_string}",
+                "query-input": "required name=search_term_string"
               }
             }),
           }}

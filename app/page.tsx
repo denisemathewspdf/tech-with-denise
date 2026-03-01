@@ -130,9 +130,13 @@ export default function HomePage() {
             ↓ scroll to explore
           </div>
 
-          {/* REPLACE WITH YOUR PHOTO — Hero headshot/brand photo */}
+          {/* Hero photo of Denise */}
           <div className="mt-12 flex justify-center opacity-0 animate-fade-up [animation-delay:0.75s]">
-            <PhotoPlaceholder size="hero" gradient={0} />
+            <img
+              src="/denise.jpg"
+              alt="Denise Mathews — Tech Educator & AI Builder"
+              className="rounded-full w-48 h-48 md:w-64 md:h-64 object-cover shadow-hover border-4 border-white"
+            />
           </div>
         </div>
       </section>
@@ -172,12 +176,65 @@ export default function HomePage() {
         </ScrollReveal>
       </section>
 
+      {/* ============ MIND BODY UNLOCK PROMO ============ */}
+      <section className="relative z-10 px-6 md:px-10 py-16">
+        <ScrollReveal>
+          <div className="max-w-[900px] mx-auto relative overflow-hidden rounded-3xl p-10 md:p-16 bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900">
+            {/* Decorative elements */}
+            <div className="absolute -top-12 -right-12 w-40 h-40 bg-white rounded-full opacity-5 blur-xl" />
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white rounded-full opacity-5 blur-xl" />
+            
+            <div className="relative z-10">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <img
+                  src="/denise.jpg"
+                  alt="Denise Mathews — Mind Body Unlock"
+                  className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white/20 shadow-2xl shrink-0"
+                />
+                <div className="flex-1 text-center md:text-left">
+                  <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-xs font-semibold text-white/90 uppercase tracking-widest mb-4">
+                    <span className="text-lg">🔓🌿</span>
+                    New Course
+                  </div>
+                  <h2 className="font-heading text-[clamp(1.8rem,4vw,2.5rem)] text-white mb-3">
+                    Mind Body Unlock
+                  </h2>
+                  <p className="text-white/90 text-base mb-6 max-w-[500px]">
+                    Rewire your nervous system. Break free from anxiety and self-sabotage.
+                    A 9-module science-backed training program combining neuroscience,
+                    meditation, breathwork, and nature healing.
+                  </p>
+                  <div className="flex gap-4 justify-center md:justify-start flex-wrap">
+                    <a
+                      href="https://mindbodyunlock.pages.dev"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-emerald-900 font-bold text-sm no-underline transition-all hover:-translate-y-1 hover:shadow-2xl"
+                    >
+                      Learn More →
+                    </a>
+                    <span className="inline-flex items-center px-6 py-4 text-white/80 text-sm">
+                      <span className="font-bold text-white text-lg mr-2">$49</span>
+                      · Lifetime Access
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ScrollReveal>
+      </section>
+
       {/* ============ ABOUT / PHOTO MOMENT ============ */}
       <section className="relative z-10 px-6 md:px-10 py-16">
         <ScrollReveal>
           <div className="max-w-[900px] mx-auto flex flex-col md:flex-row items-center gap-10">
-            {/* REPLACE WITH YOUR PHOTO — About/lifestyle photo */}
-            <PhotoPlaceholder size="inline" gradient={1} className="shrink-0" />
+            {/* About photo */}
+            <img
+              src="/denise.jpg"
+              alt="Denise Mathews"
+              className="shrink-0 w-48 h-48 rounded-2xl object-cover shadow-card border border-lavender-light"
+            />
             <div>
               <h2 className="font-heading text-2xl md:text-3xl mb-4">
                 Who&apos;s behind all this? 👋
@@ -299,8 +356,12 @@ export default function HomePage() {
       <section className="relative z-10 px-6 md:px-10 py-12">
         <ScrollReveal>
           <div className="flex justify-center">
-            {/* REPLACE WITH YOUR PHOTO — Lifestyle/working photo */}
-            <PhotoPlaceholder size="small" gradient={2} />
+            {/* Lifestyle photo */}
+            <img
+              src="/denise.jpg"
+              alt="Denise Mathews — Tech Educator"
+              className="w-64 h-64 rounded-2xl object-cover shadow-card border border-lavender-light"
+            />
           </div>
         </ScrollReveal>
       </section>
