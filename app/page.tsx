@@ -178,42 +178,41 @@ export default function HomePage() {
       {/* ============ MIND BODY UNLOCK PROMO ============ */}
       <section className="relative z-10 px-6 md:px-10 py-16">
         <ScrollReveal>
-          <div className="max-w-[900px] mx-auto relative overflow-hidden rounded-3xl p-10 md:p-16 bg-gradient-to-br from-emerald-700 via-emerald-800 to-emerald-900">
+          <div className="max-w-[900px] mx-auto relative overflow-hidden rounded-3xl p-10 md:p-16" style={{ background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1040 50%, #0a0e1a 100%)' }}>
             {/* Decorative elements */}
-            <div className="absolute -top-12 -right-12 w-40 h-40 bg-white rounded-full opacity-5 blur-xl" />
-            <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white rounded-full opacity-5 blur-xl" />
+            <div className="absolute -top-12 -right-12 w-40 h-40 rounded-full opacity-10 blur-xl" style={{ background: '#00ffff' }} />
+            <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full opacity-10 blur-xl" style={{ background: '#9d4edd' }} />
             
             <div className="relative z-10">
               <div className="flex flex-col md:flex-row items-center gap-8">
-                <img
-                  src="/denise.jpg"
-                  alt="Denise Mathews — Mind Body Unlock"
-                  className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white/20 shadow-2xl shrink-0"
-                />
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full flex items-center justify-center shrink-0 text-6xl" style={{ background: 'linear-gradient(135deg, rgba(0,255,255,0.15), rgba(157,78,221,0.15))', border: '2px solid rgba(0,255,255,0.2)' }}>
+                  ⚡
+                </div>
                 <div className="flex-1 text-center md:text-left">
-                  <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-xs font-semibold text-white/90 uppercase tracking-widest mb-4">
-                    <span className="text-lg">🔓🌿</span>
-                    New Course
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-widest mb-4" style={{ background: 'rgba(0,255,255,0.1)', color: '#00ffff', border: '1px solid rgba(0,255,255,0.2)' }}>
+                    <span className="text-lg">🚀</span>
+                    Just Launched
                   </div>
                   <h2 className="font-heading text-[clamp(1.8rem,4vw,2.5rem)] text-white mb-3">
-                    Mind Body Unlock
+                    Vibe Coding Starter Kit
                   </h2>
-                  <p className="text-white/90 text-base mb-6 max-w-[500px]">
-                    Rewire your nervous system. Break free from anxiety and self-sabotage.
-                    A 9-module science-backed training program combining neuroscience,
-                    meditation, breathwork, and nature healing.
+                  <p className="text-base mb-6 max-w-[500px]" style={{ color: 'rgba(255,255,255,0.85)' }}>
+                    Build real apps with AI — no CS degree required. 50 battle-tested prompts,
+                    security checklists, full project walkthroughs, and a certificate of completion
+                    you can share on LinkedIn.
                   </p>
                   <div className="flex gap-4 justify-center md:justify-start flex-wrap">
                     <a
-                      href="https://mindbodyunlock.pages.dev"
+                      href="https://vibe-coding-kit.pages.dev"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-white text-emerald-900 font-bold text-sm no-underline transition-all hover:-translate-y-1 hover:shadow-2xl"
+                      className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-sm no-underline transition-all hover:-translate-y-1 hover:shadow-2xl"
+                      style={{ background: 'linear-gradient(135deg, #00ffff 0%, #9d4edd 100%)', color: '#0a0e1a' }}
                     >
-                      Learn More →
+                      Get the Kit →
                     </a>
-                    <span className="inline-flex items-center px-6 py-4 text-white/80 text-sm">
-                      <span className="font-bold text-white text-lg mr-2">$49</span>
+                    <span className="inline-flex items-center px-6 py-4 text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                      <span className="font-bold text-white text-lg mr-2">$29</span>
                       · Lifetime Access
                     </span>
                   </div>

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import { Quicksand, Playfair_Display, JetBrains_Mono, DM_Sans } from "next/font/google";
+import { Quicksand, Playfair_Display, JetBrains_Mono, DM_Sans, Press_Start_2P, Orbitron } from "next/font/google";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import MBUBanner from "@/components/MBUBanner";
+import EasterEggProvider from "@/components/EasterEgg";
 import "./globals.css";
 
 const quicksand = Quicksand({
@@ -26,6 +27,19 @@ const jetbrains = JetBrains_Mono({
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const pressStart2P = Press_Start_2P({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-press-start",
+  display: "swap",
+});
+
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
   display: "swap",
 });
 
@@ -95,7 +109,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${quicksand.variable} ${playfair.variable} ${jetbrains.variable} ${dmSans.variable}`}
+      className={`${quicksand.variable} ${playfair.variable} ${jetbrains.variable} ${dmSans.variable} ${pressStart2P.variable} ${orbitron.variable}`}
     >
       <head>
         <script
@@ -145,10 +159,12 @@ export default function RootLayout({
         />
       </head>
       <body className="font-body bg-cream text-dark antialiased transition-colors duration-300">
-        <MBUBanner />
-        <Nav />
-        <main>{children}</main>
-        <Footer />
+        <EasterEggProvider>
+          <MBUBanner />
+          <Nav />
+          <main>{children}</main>
+          <Footer />
+        </EasterEggProvider>
       </body>
     </html>
   );

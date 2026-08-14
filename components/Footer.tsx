@@ -14,6 +14,26 @@ export default function Footer() {
         <SocialLink href="https://instagram.com/denise_thehackergirl" label="Instagram">◎</SocialLink>
         <SocialLink href="http://www.linkedin.com/in/denmath" label="LinkedIn">in</SocialLink>
       </div>
+      <div className="flex justify-center gap-4 mb-4">
+        <a
+          href="https://vibe-coding-kit.pages.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-semibold no-underline transition-colors"
+          style={{ color: '#00ffff' }}
+        >
+          ⚡ Vibe Coding Kit
+        </a>
+        <span className="text-dark-soft/30 dark:text-white/20">·</span>
+        <a
+          href="https://mindbodyunlock.pages.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 no-underline transition-colors"
+        >
+          🌿 Mind Body Unlock
+        </a>
+      </div>
       <p className="text-dark-soft dark:text-[#C4B0D8] text-sm">
         Made with 💜 by Denise Mathews · © {new Date().getFullYear()}{" "}
         <Link href="/" className="text-lavender font-semibold no-underline">

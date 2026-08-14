@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { HiddenTrigger, useEasterEgg } from "./EasterEgg";
 
 export default function Nav() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isDark, setIsDark] = useState(false);
+  const easterEgg = useEasterEgg();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -43,6 +45,7 @@ export default function Nav() {
         className="font-heading text-xl font-bold text-dark dark:text-white flex items-center gap-2 no-underline"
       >
         <span className="text-lg">✦</span> tech with denise
+        <HiddenTrigger onClick={easterEgg.open} />
       </Link>
 
       {/* Desktop links */}
