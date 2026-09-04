@@ -38,7 +38,7 @@ I started with JavaScript, and when I tried Python for the first time I literall
 
 Every programmer's first program. Here's yours:
 
-<CodeBlock
+<PyCodeBlock
   code="# This is your first Python script!
 print('Hello, world!')
 
@@ -46,15 +46,14 @@ print('Hello, world!')
 print('My name is Denise')
 print('I am learning Python')
 print('And it is not scary at all')"
-  language="python"
-  explanation="print() is how you tell Python to show text on the screen. Whatever you put inside the parentheses and quotes, it displays. That's it. You just wrote your first program. The lines starting with # are comments — Python ignores them. They're just notes for humans reading the code."
+  explanation="print() is how you tell Python to show text on the screen. Whatever you put inside the parentheses and quotes, it displays. That's it. You just wrote your first program. The lines starting with # are comments — Python ignores them. They're just notes for humans reading the code. Try editing the text and hitting Run it — that's the whole loop you'll use forever."
 />
 
 ## Variables: Labeling Your Stuff
 
 A <Term id="variable">variable</Term> is just a name you give to a piece of data. Think of it as a labeled jar:
 
-<CodeBlock
+<PyCodeBlock
   code="# Creating variables (labeled jars)
 name = 'Denise'
 age = 28
@@ -65,8 +64,7 @@ loves_coffee = True
 print('Hi, my name is ' + name)
 print('I am ' + str(age) + ' years old')
 print('My favorite color is ' + favorite_color)"
-  language="python"
-  explanation="The = sign doesn't mean 'equals' here — it means 'put this value into this jar.' So name = 'Denise' means 'create a jar called name and put Denise in it.' Then when you use the variable name later, Python goes and looks inside the jar. str(age) converts the number 28 to text so we can glue it together with the other words."
+  explanation="The = sign doesn't mean 'equals' here — it means 'put this value into this jar.' So name = 'Denise' means 'create a jar called name and put Denise in it.' Then when you use the variable name later, Python goes and looks inside the jar. str(age) converts the number 28 to text so we can glue it together with the other words. Try changing name to yours and hitting Run it."
 />
 
 <Callout variant="tip">
@@ -77,7 +75,7 @@ Python variable names use **snake_case** (words separated by underscores). So it
 
 Your code can make choices:
 
-<CodeBlock
+<PyCodeBlock
   code="temperature = 75
 
 if temperature > 80:
@@ -89,8 +87,7 @@ else:
 
 # This would print: 'Perfect weather! Go outside.'
 # Because 75 is greater than 60 but not greater than 80"
-  language="python"
-  explanation="This is how you teach your code to make decisions. if checks the first condition. elif (short for 'else if') checks another condition. else is the fallback — if nothing else matched, do this. The indentation (those spaces before print) is how Python knows what belongs inside each block. It matters!"
+  explanation="This is how you teach your code to make decisions. if checks the first condition. elif (short for 'else if') checks another condition. else is the fallback — if nothing else matched, do this. The indentation (those spaces before print) is how Python knows what belongs inside each block. It matters! Try changing temperature and running it again to see the other branches fire."
 />
 
 <Callout variant="warning">
@@ -101,7 +98,7 @@ Indentation matters in Python! Unlike most languages, Python uses spaces (usuall
 
 A list is exactly what it sounds like — a list of items:
 
-<CodeBlock
+<PyCodeBlock
   code="# A list of your favorite things
 favorites = ['coffee', 'Python', 'rainy days', 'lo-fi music']
 
@@ -118,15 +115,14 @@ print(len(favorites))  # 5
 # Loop through every item
 for thing in favorites:
     print('I love ' + thing)"
-  language="python"
-  explanation="Lists use square brackets and commas. The first item is at position 0 (I know, it's weird — but every programming language does this). .append() adds a new item to the end. len() tells you how many items are in the list. And the for loop goes through each item one by one. So it would print 'I love coffee', 'I love Python', etc."
+  explanation="Lists use square brackets and commas. The first item is at position 0 (I know, it's weird — but every programming language does this). .append() adds a new item to the end. len() tells you how many items are in the list. And the for loop goes through each item one by one. So it would print 'I love coffee', 'I love Python', etc. Try adding your own favorite to the list."
 />
 
 ## Your First Useful Script
 
 Let's build something actually useful — a simple tip calculator:
 
-<CodeBlock
+<PyCodeBlock
   code="# Tip Calculator
 bill = 45.50
 tip_percent = 20
@@ -142,15 +138,14 @@ print('Total: $' + str(round(total, 2)))
 # Bill: $45.5
 # Tip (20%): $9.1
 # Total: $54.6"
-  language="python"
-  explanation="This calculates a tip! We multiply the bill by the tip percentage (converted to a decimal by dividing by 100). round(tip_amount, 2) rounds to 2 decimal places so you get clean dollar amounts. You could expand this to ask the user for input, split between friends, etc. But even this simple version is a real, working program."
+  explanation="This calculates a tip! We multiply the bill by the tip percentage (converted to a decimal by dividing by 100). round(tip_amount, 2) rounds to 2 decimal places so you get clean dollar amounts. You could expand this to ask the user for input, split between friends, etc. But even this simple version is a real, working program. Try changing the bill or tip_percent and running it."
 />
 
 ## Getting User Input
 
 Make your scripts interactive:
 
-<CodeBlock
+<PyCodeBlock
   code="# Ask the user questions
 name = input('What is your name? ')
 food = input('What is your favorite food? ')
@@ -160,8 +155,7 @@ print('I also love ' + food + '!')
 
 # When you run this, it will pause and wait
 # for the user to type something"
-  language="python"
-  explanation="input() pauses the program and waits for someone to type something. Whatever they type gets stored in the variable. So if someone types 'Denise' when asked their name, the variable 'name' now contains 'Denise'. This is how you make your scripts feel interactive and personal."
+  explanation="input() pauses the program and waits for someone to type something. Whatever they type gets stored in the variable. So if someone types 'Denise' when asked their name, the variable 'name' now contains 'Denise'. This is how you make your scripts feel interactive and personal. Hit Run it below — this one will actually pop up a little prompt for you to type into."
 />
 
 ## How to Run Python
