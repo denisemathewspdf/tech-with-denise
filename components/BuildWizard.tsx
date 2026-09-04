@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { runPython } from "@/lib/pyinterpreter";
 
 // ============ TYPES ============
 
@@ -17,6 +18,10 @@ type CodeStep = {
   inputType?: "color";
   // freeInput: when true, accept ANY non-empty input (no structure check at all)
   freeInput?: boolean;
+  // When set alongside `template`, the extracted __INPUT__ content must match
+  // this pattern (e.g. requiring a number for a Python variable assignment).
+  contentPattern?: RegExp;
+  contentError?: string;
 };
 
 type Project = {
@@ -25,6 +30,10 @@ type Project = {
   emoji: string;
   description: string;
   steps: CodeStep[];
+  // "python" switches matching to case-sensitive/quote-agnostic (Python is
+  // case-sensitive; HTML/CSS steps stay case-insensitive as before) and
+  // unlocks the "Run it" button on the finished screen.
+  language?: "html" | "python";
 };
 
 // ============ HELPERS ============
@@ -73,6 +82,11 @@ function isValidCSSColor(value: string): boolean {
 
 // Normalize whitespace for comparison (collapse all whitespace, lowercase)
 const normalize = (s: string) => s.replace(/\s+/g, "").toLowerCase();
+
+// Python normalizer: case-SENSITIVE (True != true, name != Name), quote-style
+// agnostic ('hi' == "hi"), and ignores incidental spacing (print( 'hi' )
+// reads identically to print('hi') to Python, so it should here too).
+const normalizePy = (s: string) => s.trim().replace(/"/g, "'").replace(/\s+/g, "");
 
 // ============ PROJECT TEMPLATES ============
 // Steps with __INPUT__ in the template accept any user content for that part.
@@ -1039,6 +1053,137 @@ const projects: Project[] = [
       },
     ],
   },
+  {
+    id: "py-first-script",
+    label: "First Python Script",
+    emoji: "🐍",
+    description: "Write real Python, line by line — print, variables, f-strings",
+    language: "python",
+    steps: [
+      {
+        instruction: "Every good script starts with a note. Type a comment — comments start with #:",
+        code: "# This is your first Python script!",
+        template: "#__INPUT__",
+        explanation:
+          "The # tells Python to ignore everything after it on that line. Comments don't run — they're just notes for humans reading your code.",
+      },
+      {
+        instruction: "Print a greeting using the print() function — type it exactly:",
+        code: "print('Hello, world!')",
+        explanation:
+          "print() is how you show text on the screen. Whatever's inside the parentheses and quotes gets displayed exactly as written. Every programmer's first program looks like this.",
+      },
+      {
+        instruction: "Now print your own message — any text you want, inside print('...'):",
+        code: "print('Python is friendlier than I expected')",
+        template: "print('__INPUT__')",
+        explanation:
+          "Same pattern, your own words. print() will show whatever you put between the quotes.",
+      },
+      {
+        instruction: "Create a variable to hold your name — give it a label with =:",
+        code: "name = 'Denise'",
+        template: "name = '__INPUT__'",
+        explanation:
+          "The = sign isn't \"equals\" here — it means \"store this value.\" name is now a labeled jar holding whatever text you put in quotes.",
+      },
+      {
+        instruction: "Create a variable for your age — a number this time, no quotes:",
+        code: "age = 28",
+        template: "age = __INPUT__",
+        contentPattern: /^\d+$/,
+        contentError: "Type a whole number with no quotes — like age = 28",
+        explanation:
+          "Numbers don't get quotes in Python — quotes are only for text (strings). age now holds a number you can do math with.",
+      },
+      {
+        instruction: "Print a sentence that uses your name variable — an f-string drops a variable right into text:",
+        code: "print(f'Hi, my name is {name}')",
+        explanation:
+          "The f right before the opening quote makes it an f-string. Anything inside {curly braces} gets replaced with that variable's value. This is the cleanest way to mix text and variables in Python.",
+      },
+      {
+        instruction: "Now do the same with age — print it in a sentence:",
+        code: "print(f'I am {age} years old')",
+        explanation:
+          "Same trick — {age} gets swapped for whatever number you stored. No need to convert it to text first; f-strings handle that for you.",
+      },
+      {
+        instruction: "One more variable — your favorite color:",
+        code: "favorite_color = 'lavender'",
+        template: "favorite_color = '__INPUT__'",
+        explanation:
+          "Notice the variable name uses snake_case (words separated by underscores) — that's the Python convention. favoriteColor would work too, but it's not how Python developers write it.",
+      },
+      {
+        instruction: "Print your favorite color using an f-string:",
+        code: "print(f'My favorite color is {favorite_color}')",
+        explanation:
+          "You just wrote a real Python script — comments, print(), variables, and f-strings. Hit Run it below to actually execute the whole thing.",
+      },
+    ],
+  },
+  {
+    id: "py-tip-calc",
+    label: "Python Tip Calculator",
+    emoji: "🧮",
+    description: "Build a real, working tip calculator — variables, math, and print",
+    language: "python",
+    steps: [
+      {
+        instruction: "Start with a comment naming your script:",
+        code: "# Tip Calculator",
+        template: "#__INPUT__",
+        explanation: "A quick note at the top of a script is a common habit — it tells anyone (including future you) what the file does.",
+      },
+      {
+        instruction: "Create a variable for the bill amount — type a number, decimals are fine:",
+        code: "bill = 45.50",
+        template: "bill = __INPUT__",
+        contentPattern: /^\d+(\.\d+)?$/,
+        contentError: "Type a number with no quotes — like bill = 45.50",
+        explanation:
+          "bill now holds a number (a float, since it has a decimal point). Python automatically knows it's a number because there are no quotes around it.",
+      },
+      {
+        instruction: "Create a variable for the tip percentage — a whole number:",
+        code: "tip_percent = 20",
+        template: "tip_percent = __INPUT__",
+        contentPattern: /^\d+$/,
+        contentError: "Type a whole number with no quotes — like tip_percent = 20",
+        explanation: "20 means 20% — we'll turn it into a decimal (0.20) in the next line so we can multiply with it.",
+      },
+      {
+        instruction: "Calculate the tip amount — type this exactly:",
+        code: "tip_amount = bill * (tip_percent / 100)",
+        explanation:
+          "tip_percent / 100 converts 20 into 0.2 (a decimal). Multiplying that by bill gives you the actual dollar amount of the tip. The parentheses just make the order of operations clear.",
+      },
+      {
+        instruction: "Calculate the total — bill plus tip:",
+        code: "total = bill + tip_amount",
+        explanation: "Straightforward addition — the bill plus however much tip you calculated.",
+      },
+      {
+        instruction: "Print the bill using an f-string:",
+        code: "print(f'Bill: ${bill}')",
+        explanation:
+          "The $ here is just a plain text character, not a variable — it's outside the {curly braces}. Only what's inside {bill} gets swapped out.",
+      },
+      {
+        instruction: "Print the tip, rounded to 2 decimal places:",
+        code: "print(f'Tip: ${round(tip_amount, 2)}')",
+        explanation:
+          "round(tip_amount, 2) rounds to 2 decimal places so you get a clean dollar amount instead of something like 9.100000000000001. You can call functions like round() right inside an f-string's {}.",
+      },
+      {
+        instruction: "Print the total, also rounded:",
+        code: "print(f'Total: ${round(total, 2)}')",
+        explanation:
+          "You just built a real, working calculator — variables, math, and formatted output. Hit Run it below to see it calculate for real.",
+      },
+    ],
+  },
 ];
 
 // ============ MATCHING LOGIC ============
@@ -1051,11 +1196,13 @@ const projects: Project[] = [
  * Returns { match: boolean, userCode: string } where userCode is the final code to store
  */
 function matchStep(
+  project: Project,
   step: CodeStep,
   typed: string
 ): { match: boolean; userCode: string; error?: string } {
   const trimmed = typed.trim();
   if (!trimmed) return { match: false, userCode: trimmed, error: "Type something first!" };
+  const isPython = project.language === "python";
 
   // --- Flexible input with template ---
   if (step.template) {
@@ -1071,7 +1218,7 @@ function matchStep(
 
     // For text templates like <title>__INPUT__</title>
     if (tmpl.includes("__INPUT__")) {
-      return matchTextTemplate(step, trimmed);
+      return matchTextTemplate(step, trimmed, isPython);
     }
   }
 
@@ -1081,6 +1228,12 @@ function matchStep(
   }
 
   // --- Exact match (structural/syntax code) ---
+  if (isPython) {
+    if (normalizePy(trimmed) === normalizePy(step.code)) {
+      return { match: true, userCode: trimmed };
+    }
+    return { match: false, userCode: trimmed, error: "Not quite — Python is case-sensitive and picky about spelling. Check it against the hint!" };
+  }
   if (normalize(trimmed) === normalize(step.code)) {
     return { match: true, userCode: trimmed };
   }
@@ -1091,7 +1244,8 @@ function matchStep(
 /** Match a template with __INPUT__ placeholder — accept any non-empty content */
 function matchTextTemplate(
   step: CodeStep,
-  typed: string
+  typed: string,
+  isPython: boolean
 ): { match: boolean; userCode: string; error?: string } {
   const tmpl = step.template!;
   const parts = tmpl.split("__INPUT__");
@@ -1099,28 +1253,37 @@ function matchTextTemplate(
     // Fallback to exact match if template is weird
     return { match: normalize(typed) === normalize(step.code), userCode: typed };
   }
+  const [prefix, suffix] = parts;
 
-  const prefix = parts[0];
-  const suffix = parts[1];
-  const normalTyped = normalize(typed);
-  const normalPrefix = normalize(prefix);
-  const normalSuffix = normalize(suffix);
+  // Build a regex straight from the template so the structural check and the
+  // content extraction use exactly the same boundaries — collapse repeated
+  // whitespace (people space code out differently) but keep case for Python,
+  // since Python actually cares about it.
+  const collapse = (s: string) => s.replace(/\s+/g, "");
+  const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const regex = new RegExp("^" + esc(collapse(prefix)) + "(.+?)" + esc(collapse(suffix)) + "$", isPython ? "" : "i");
 
-  // Check that the typed code starts with prefix and ends with suffix
-  if (normalTyped.startsWith(normalPrefix) && normalTyped.endsWith(normalSuffix)) {
-    // Extract user's content
-    const content = normalTyped.slice(normalPrefix.length, normalTyped.length - normalSuffix.length);
-    if (content.length > 0) {
-      return { match: true, userCode: typed };
+  const match = collapse(typed).match(regex);
+  if (match) {
+    const content = match[1].trim();
+    if (content.length === 0) {
+      return { match: false, userCode: typed, error: "Add some content there!" };
     }
-    return { match: false, userCode: typed, error: "Add some content between the tags!" };
+    if (step.contentPattern && !step.contentPattern.test(content)) {
+      return {
+        match: false,
+        userCode: typed,
+        error: step.contentError || "That doesn't look right — check the format and try again.",
+      };
+    }
+    return { match: true, userCode: typed };
   }
 
-  // Maybe they just typed the content without the tags? Give a helpful hint
+  // Maybe they just typed the content without the surrounding syntax? Give a helpful hint
   return {
     match: false,
     userCode: typed,
-    error: `Make sure to include the tags! Example: ${step.code}`,
+    error: `Make sure to include the full pattern! Example: ${step.code}`,
   };
 }
 
@@ -1189,6 +1352,9 @@ export default function BuildWizard() {
   const [errorMessage, setErrorMessage] = useState("");
   // Color picker value for color steps
   const [pickerColor, setPickerColor] = useState("#FFF9FB");
+  // Python "Run it" output, shown on the finished screen
+  const [pyRunOutput, setPyRunOutput] = useState<string | null>(null);
+  const [pyRunError, setPyRunError] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const explanationEndRef = useRef<HTMLDivElement>(null);
   const codeEndRef = useRef<HTMLDivElement>(null);
@@ -1227,12 +1393,14 @@ export default function BuildWizard() {
     setJustCompleted(false);
     setErrorMessage("");
     setPickerColor("#FFF9FB");
+    setPyRunOutput(null);
+    setPyRunError(false);
   }
 
   function checkCode() {
-    if (!currentStep || justCompleted) return;
+    if (!currentStep || !selectedProject || justCompleted) return;
 
-    const result = matchStep(currentStep, userCode);
+    const result = matchStep(selectedProject, currentStep, userCode);
 
     if (result.match) {
       // Correct! Store the user's actual code (not the default)
@@ -1304,10 +1472,23 @@ export default function BuildWizard() {
     setJustCompleted(false);
     setErrorMessage("");
     setPickerColor("#FFF9FB");
+    setPyRunOutput(null);
+    setPyRunError(false);
   }
 
   function copyFullCode() {
     navigator.clipboard.writeText(completedLines.join("\n"));
+  }
+
+  function runFinishedScript() {
+    const result = runPython(completedLines.join("\n"));
+    if (result.error) {
+      setPyRunOutput(result.error);
+      setPyRunError(true);
+    } else {
+      setPyRunOutput(result.output.replace(/\n$/, "") || "(no output)");
+      setPyRunError(false);
+    }
   }
 
   // ============ PROJECT PICKER ============
@@ -1320,8 +1501,11 @@ export default function BuildWizard() {
             <button
               key={p.id}
               onClick={() => selectProject(p)}
-              className="bg-white rounded-2xl p-6 text-center border-2 border-lavender-light hover:border-lavender hover:-translate-y-1 hover:shadow-card transition-all"
+              className="bg-white rounded-2xl p-6 text-center border-2 border-lavender-light hover:border-lavender hover:-translate-y-1 hover:shadow-card transition-all relative"
             >
+              <span className="absolute top-3 right-3 text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-lavender-light text-dark-soft">
+                {p.language === "python" ? "Python" : "HTML/CSS"}
+              </span>
               <span className="text-4xl block mb-3">{p.emoji}</span>
               <h3 className="font-heading text-base font-bold mb-1">{p.label}</h3>
               <p className="text-dark-soft text-xs">{p.description}</p>
@@ -1367,7 +1551,9 @@ export default function BuildWizard() {
               <span className="w-3 h-3 rounded-full bg-gold" />
               <span className="w-3 h-3 rounded-full bg-mint" />
             </div>
-            <span className="text-white/40 text-xs font-mono">index.html</span>
+            <span className="text-white/40 text-xs font-mono">
+              {selectedProject.language === "python" ? "script.py" : "index.html"}
+            </span>
             {completedLines.length > 0 && (
               <button
                 onClick={copyFullCode}
@@ -1525,10 +1711,19 @@ export default function BuildWizard() {
                 You did it!
               </h3>
               <p className="text-dark-soft text-sm mb-4">
-                You just wrote a complete webpage from scratch — with YOUR content!
-                Save the code as index.html and open it in your browser to see your creation.
+                {selectedProject.language === "python"
+                  ? "You just wrote a complete Python script from scratch — with YOUR content! Hit Run it to actually execute it, or save it as a .py file."
+                  : "You just wrote a complete webpage from scratch — with YOUR content! Save the code as index.html and open it in your browser to see your creation."}
               </p>
               <div className="flex gap-2 justify-center flex-wrap">
+                {selectedProject.language === "python" && (
+                  <button
+                    onClick={runFinishedScript}
+                    className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-peach to-lavender text-white font-bold text-sm hover:-translate-y-0.5 hover:shadow-hover transition-all"
+                  >
+                    Run it ▶
+                  </button>
+                )}
                 <button
                   onClick={copyFullCode}
                   className="px-5 py-2.5 rounded-xl bg-dark text-white font-bold text-sm hover:-translate-y-0.5 hover:shadow-card transition-all"
@@ -1542,6 +1737,19 @@ export default function BuildWizard() {
                   Try Another Project
                 </button>
               </div>
+
+              {pyRunOutput !== null && (
+                <div className="mt-5 rounded-xl overflow-hidden border border-lavender-light text-left">
+                  <div className="bg-[#2D2139] px-4 py-1.5">
+                    <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest font-body">
+                      Output
+                    </span>
+                  </div>
+                  <div className="bg-[#2D2139] px-4 py-3 font-mono text-sm whitespace-pre-wrap">
+                    <span className={pyRunError ? "text-rose" : "text-mint"}>{pyRunOutput}</span>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
