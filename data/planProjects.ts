@@ -8,7 +8,7 @@
  * (see lib/plan.ts for the exact shape of each).
  */
 
-import type { PlanProject, PlanStep, KanbanColumn } from "@/lib/plan";
+import { PRODUCT_PHASES, type PlanProject, type PlanStep, type KanbanColumn } from "@/lib/plan";
 
 // ---- tiny helpers to keep the data readable --------------------------------
 
@@ -2032,12 +2032,989 @@ const fundraiserSteps: PlanStep[] = [
 ];
 
 // ============================================================================
+// PRODUCT MANAGEMENT TRACK
+// Same step-by-step format, different phases: Discover, Define, Build, Launch.
+// ============================================================================
+
+const FP = {
+  role: 'A product manager owns the "what" and the "why" (what to build and why it matters); designers and engineers own much of the "how."',
+  problem: "This is a problem statement: who has the problem, what they struggle with, and why it matters. Solutions come later.",
+  user: 'This is your target user (or user persona). Start narrow: it\'s easier to delight a specific group than "everyone."',
+  interview:
+    "This is user research, and this style is a customer discovery interview: ask about real past behavior, not hypotheticals.",
+  metric: "This is a success metric (or KPI). Downloads and page views are \"vanity metrics\" because they look good without proving anyone got value.",
+  mvp: "This is a Minimum Viable Product, or MVP: the smallest version that lets real users do the core thing and teaches you something.",
+  story: 'This is a user story: "As a [user], I want [action], so that [benefit]."',
+  rice: "This is RICE scoring: Reach × Impact × Confidence ÷ Effort, a simple way to compare ideas with math instead of gut feelings.",
+  roadmap: 'This is a roadmap in the "Now / Next / Later" format: it shows direction without promising exact dates.',
+  owners: "This is the product trio: product, design, and engineering, each owning a different kind of decision.",
+  assumptions: "These are riskiest-assumption tests: cheap experiments that check your biggest guesses before you build the whole thing.",
+  board: "This is a sprint board: a kanban board for one short work cycle (a \"sprint\") on a product team.",
+  launch: "This is a launch plan: beta test, fix, release, announce, then measure.",
+  data: "Taps and clicks are outputs; the real result you want (people coming back) is the outcome. Always diagnose before you build.",
+  request: "This is backlog prioritization: every request goes on the list and gets scored against your goals before it's built.",
+  retro: 'This is a product retrospective, and the "try next" column is how a team keeps iterating.',
+};
+
+// ---------------------------------------------------------------------------
+// 🪴 Build a Plant-Care Reminder App (0 → 1 product)
+// ---------------------------------------------------------------------------
+
+const plantSteps: PlanStep[] = [
+  {
+    id: "pl-1", phase: "Discover", title: "What does a product manager do?",
+    explanation:
+      "A product manager (PM) isn't the person who builds the thing. They figure out WHAT to build and WHY, so the people building it aren't guessing.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which best describes a product manager's main job?",
+      options: [
+        "Writing all the code",
+        "Deciding what to build and why, so it solves a real problem for users",
+        "Only managing the schedule",
+        "Designing the logo",
+      ],
+      correct: 1,
+    },
+    footnote: FP.role,
+  },
+  {
+    id: "pl-2", phase: "Discover", title: "Find the real problem",
+    explanation:
+      '"We should build a plant app" is a solution. A good product starts with a problem. Say who is struggling, with what, and why it matters.',
+    role: "problem",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the strongest problem statement?",
+      options: [
+        "People need a plant app",
+        "Build an app with notifications and a leaf-scanning camera",
+        "First-time plant owners forget to water their plants and don't know what each one needs, so their plants die",
+        "Plants are really popular right now",
+      ],
+      correct: 2,
+    },
+    footnote: FP.problem,
+  },
+  {
+    id: "pl-3", phase: "Discover", title: "Who is it for?",
+    explanation:
+      "If your product is for everyone, it's really for no one. Pick a specific person you can picture and talk to.",
+    role: "user",
+    exercise: {
+      type: "multiple-choice",
+      question: "Who is the best target user for version 1?",
+      options: [
+        "Everyone who owns a plant",
+        "Botanists and greenhouse owners",
+        "First-time plant owners with a handful of houseplants who keep forgetting to water them",
+        "People who might someday buy a plant",
+      ],
+      correct: 2,
+    },
+    footnote: FP.user,
+  },
+  {
+    id: "pl-4", phase: "Discover", title: "Talk to real people",
+    explanation:
+      "People are terrible at predicting what they'd do, but great at telling you what they've already done. Ask about the past, not the future.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which interview question will teach you the most?",
+      options: [
+        "Would you use an app that reminds you to water your plants?",
+        "Don't you think reminders would be great?",
+        "Tell me about the last time one of your plants died. What happened?",
+        "How much would you pay for a plant app?",
+      ],
+      correct: 2,
+    },
+    footnote: FP.interview,
+  },
+  {
+    id: "pl-5", phase: "Define", title: "What does success look like?",
+    explanation:
+      "Pick one number that tells you real people got real value. Big numbers that don't prove anything (like downloads) feel good but teach you nothing.",
+    role: "metric",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best success metric for the first three months?",
+      options: [
+        "Total app downloads",
+        "Number of 5-star reviews",
+        "At least 40% of new users still log a watering after 4 weeks",
+        "Lines of code written",
+      ],
+      correct: 2,
+    },
+    footnote: FP.metric,
+  },
+  {
+    id: "pl-6", phase: "Define", title: "Pick the MVP",
+    explanation:
+      "The MVP is the smallest version that proves the idea works. Everything else waits. Your problem statement from earlier is the tiebreaker.",
+    role: "mvp",
+    exercise: {
+      type: "buckets",
+      rule:
+        "How to decide: your user is a first-time plant owner who forgets to water. If a feature is needed for them to add a plant, get reminded, and mark it watered, it's in the MVP. Anything that needs cameras, other people, shopping, or hardware goes to Later.",
+      hint: "Ask: does this help ONE user add a plant, get reminded, and mark it watered, or does it add a new system?",
+      buckets: [
+        { id: "in", label: "In the MVP" },
+        { id: "out", label: "Later" },
+      ],
+      cards: bucketCards({
+        in: [
+          ["Add a plant", "A reminder app needs plants to remind about."],
+          ["Watering reminder notification", "It's the core of the problem: forgetting to water."],
+          ["Mark as watered", "It closes the loop and gives you the retention data."],
+          ["Simple list of my plants", "Users need to see what they have."],
+        ],
+        out: [
+          ["Disease-scanning camera", "Needs complex tech and solves a different problem."],
+          ["Social feed to share plants", "Needs other users and moderation; not part of the core problem."],
+          ["Shop to buy plants", "A whole new business with inventory."],
+          ["Humidity and light sensor support", "Needs hardware, which is a big bet."],
+        ],
+      }),
+    },
+    footnote: FP.mvp,
+  },
+  {
+    id: "pl-7", phase: "Define", title: "Write a user story",
+    explanation:
+      "A user story describes a feature from the user's point of view, so the team remembers WHO it's for and WHY it matters.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is a well-written user story?",
+      options: [
+        "Build a notification system",
+        "As a first-time plant owner, I want a reminder on the days my plant needs water, so that I stop letting it dry out.",
+        "Users want reminders",
+        "The app should be fast",
+      ],
+      correct: 1,
+    },
+    footnote: FP.story,
+  },
+  {
+    id: "pl-8", phase: "Define", title: "Score your ideas",
+    explanation:
+      "When everything feels important, use math. RICE multiplies Reach (how many people), Impact (how much), and Confidence (how sure you are), then divides by Effort.",
+    exercise: {
+      type: "number",
+      question:
+        "Idea: weekly reminder emails. Reach is 500 users per quarter, Impact is 2, Confidence is 80% (use 0.8), and Effort is 4 person-weeks. What's the RICE score?",
+      answer: 200,
+      hint: "Multiply Reach × Impact × Confidence first (500 × 2 × 0.8), then divide by Effort.",
+      unit: "points",
+    },
+    footnote: FP.rice,
+  },
+  {
+    id: "pl-9", phase: "Build", title: "Make a roadmap",
+    explanation:
+      "A roadmap shows what you'll do Now, Next, and Later without promising exact dates. Things that depend on others have to wait for them.",
+    role: "roadmap",
+    exercise: {
+      type: "timeline",
+      prompt: "Place each feature in Now, Next, or Later. Nothing can come before the feature it depends on.",
+      columns: [
+        { id: "now", label: "Now" },
+        { id: "next", label: "Next" },
+        { id: "later", label: "Later" },
+      ],
+      tasks: tasks([
+        ["add", "Add a plant"],
+        ["remind", "Watering reminders"],
+        ["mark", "Mark as watered"],
+        ["streaks", "Watering streaks"],
+        ["tips", "Plant care tips library"],
+        ["share", "Share your plants with friends"],
+      ]),
+      dependencies: [
+        ["add", "remind"],
+        ["add", "mark"],
+        ["mark", "streaks"],
+        ["streaks", "share"],
+      ],
+      answer: { add: "now", remind: "now", mark: "now", streaks: "next", tips: "next", share: "later" },
+    },
+    footnote: FP.roadmap,
+  },
+  {
+    id: "pl-10", phase: "Build", title: "Who owns what?",
+    explanation:
+      "A product team has a few key roles, and each one makes different decisions. Knowing who decides what avoids a lot of arguments.",
+    role: "raci",
+    exercise: {
+      type: "match",
+      prompt: "Match each decision to who owns it.",
+      leftLabel: "The decision",
+      rightLabel: "Who",
+      pairs: pairs([
+        ["Which problem to solve and why", "Product manager"],
+        ["How the screens look and feel", "Designer"],
+        ["How the feature is built and kept working", "Engineer"],
+        ["What's confusing or missing", "Users (through feedback)"],
+      ]),
+    },
+    footnote: FP.owners,
+  },
+  {
+    id: "pl-11", phase: "Build", title: "Test your riskiest guess",
+    explanation:
+      "Every idea hides guesses. Find the one that would sink you if it's wrong, then test it cheaply, before you build anything.",
+    role: "assumptions",
+    exercise: {
+      type: "match",
+      prompt: "Match each guess to a cheap way to test it.",
+      leftLabel: "The assumption",
+      rightLabel: "The cheap test",
+      pairs: pairs([
+        ["People forget because they have no schedule", "Interview 5 plant owners about their last forgotten watering"],
+        ["Users will act on a reminder", "Text 10 friends a watering reminder for two weeks and see who replies"],
+        ["People will pay for extras", "Add a fake Upgrade button and count the taps"],
+        ["Adding a plant is easy", "Watch 5 people try a clickable prototype"],
+      ]),
+    },
+    footnote: FP.assumptions,
+  },
+  {
+    id: "pl-12", phase: "Build", title: "Update the sprint board",
+    explanation: "A sprint is a short cycle of work (often two to four weeks). A board shows where everything stands.",
+    exercise: {
+      type: "kanban",
+      scenario:
+        "It's the end of week 2 in a 4-week sprint. Add-a-plant has shipped, the reminder is being built, and nothing else has started.",
+      cards: kanban([
+        ["Add a plant", "done"],
+        ["Watering reminders", "doing"],
+        ["Mark as watered", "todo"],
+        ["Watering streaks", "todo"],
+        ["Plant care tips library", "todo"],
+      ]),
+    },
+    footnote: FP.board,
+  },
+  {
+    id: "pl-13", phase: "Launch", title: "Plan the launch",
+    explanation:
+      "A launch isn't one moment. You measure first, test with a few people, fix what breaks, and only then tell the world.",
+    role: "launch",
+    exercise: {
+      type: "order",
+      prompt: "Drag the cards into the order they need to happen.",
+      items: [
+        "Set up basic analytics",
+        "Test with 10 beta users",
+        "Fix the top issues they find",
+        "Release to the app store",
+        "Announce the launch",
+        "Measure 4-week retention",
+      ],
+    },
+    footnote: FP.launch,
+  },
+  {
+    id: "pl-14", phase: "Launch", title: "Read the data",
+    explanation:
+      "Numbers tell you WHAT is happening, not WHY. A good PM looks for the story behind the number before building anything.",
+    exercise: {
+      type: "multiple-choice",
+      question:
+        "Lots of people download the app, but only 8% are still using it after four weeks. What do you do first?",
+      options: [
+        "Add more features",
+        "Spend money on ads to get more downloads",
+        "Talk to people who stopped and look at where they drop off",
+        "Celebrate the download numbers",
+      ],
+      correct: 2,
+    },
+    footnote: FP.data,
+  },
+  {
+    id: "pl-15", phase: "Launch", title: "Handle the big request",
+    explanation:
+      'Your boss says, "Add a social feed!" Requests will always come, from bosses, customers, and your own head. Your job is to understand them, not just build them.',
+    exercise: {
+      type: "multiple-choice",
+      question: "What do you do?",
+      options: [
+        "Say yes right away",
+        "Say no",
+        "Ask what problem it would solve, then score it against your goal and other ideas",
+        "Build it quietly on the side",
+      ],
+      correct: 2,
+    },
+    footnote: FP.request,
+  },
+  {
+    id: "pl-16", phase: "Launch", title: "Learn and iterate",
+    explanation: "Shipping isn't the end. Look back, then decide what to try next.",
+    exercise: {
+      type: "buckets",
+      buckets: [
+        { id: "keep", label: "Keep doing" },
+        { id: "change", label: "Change" },
+        { id: "try", label: "Try next" },
+      ],
+      cards: bucketCards({
+        keep: ["Interviewing users before building", "Testing guesses with cheap experiments"],
+        change: ["Waiting until launch to set up analytics", "Skipping a beta test"],
+        try: ["Interview users who stopped using the app", "Test a daily summary instead of single reminders"],
+      }),
+    },
+    footnote: FP.retro,
+  },
+  {
+    id: "pl-17", phase: "Launch", title: "Your product brief",
+    explanation: "You planned a whole product from a blank page. Here's everything you decided, on one page.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// 🍳 Improve a Recipe App (existing product, data-driven)
+// ---------------------------------------------------------------------------
+
+const recipeSteps: PlanStep[] = [
+  {
+    id: "rc-1", phase: "Discover", title: "What does a product manager do?",
+    explanation:
+      "On an app that already exists, a PM's job isn't to add things. It's to choose which problem is worth solving next, and prove it with data and user feedback.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Your recipe app has 50,000 users. What's the product manager's main job?",
+      options: [
+        "Writing every line of code",
+        "Deciding which problems to solve next and why, using data and user feedback",
+        "Answering support emails all day",
+        "Picking the app's colors",
+      ],
+      correct: 1,
+    },
+    footnote: FP.role,
+  },
+  {
+    id: "rc-2", phase: "Discover", title: "Find the real problem",
+    explanation:
+      "The data shows a symptom. Your job is to turn it into a clear problem: who struggles, with what, and why it matters.",
+    role: "problem",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the strongest problem statement?",
+      options: [
+        "The app needs a redesign",
+        "Add a recipe recommendation engine",
+        "New users sign up, but 70% never save a recipe, so they never see the app's value and leave",
+        "Users want more recipes",
+      ],
+      correct: 2,
+    },
+    footnote: FP.problem,
+  },
+  {
+    id: "rc-3", phase: "Discover", title: "Who is it for?",
+    explanation:
+      "Not every user has the same problem. Focus on the group where fixing it would matter most.",
+    role: "user",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which group should you focus on first?",
+      options: [
+        "All 50,000 users",
+        "New users in their first week who haven't saved a recipe yet",
+        "Power users with 200 saved recipes",
+        "People who might download the app someday",
+      ],
+      correct: 1,
+    },
+    footnote: FP.user,
+  },
+  {
+    id: "rc-4", phase: "Discover", title: "Talk to real people",
+    explanation:
+      "Numbers tell you WHAT happened. Conversations tell you WHY. Ask about real moments, not opinions.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which question best helps you understand why new users leave?",
+      options: [
+        "Do you like our app?",
+        "Wouldn't a bigger recipe library help?",
+        "Walk me through the last time you looked for a recipe to cook tonight. What did you do?",
+        "Would you pay for a premium version?",
+      ],
+      correct: 2,
+    },
+    footnote: FP.interview,
+  },
+  {
+    id: "rc-5", phase: "Define", title: "What does success look like?",
+    explanation:
+      "Pick one number that proves you fixed the real problem, and set a target, so you'll know when you've won.",
+    role: "metric",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best success metric?",
+      options: [
+        "Number of recipes in the library",
+        "Raise the share of new users who save a recipe in their first session from 30% to 45%",
+        "Total page views",
+        "App store rating",
+      ],
+      correct: 1,
+    },
+    footnote: FP.metric,
+  },
+  {
+    id: "rc-6", phase: "Define", title: "Pick the smallest change",
+    explanation:
+      "On an existing product, your \"MVP\" is the smallest change that could move the metric. Your problem statement is the tiebreaker.",
+    role: "mvp",
+    exercise: {
+      type: "buckets",
+      rule:
+        "How to decide: the problem is that new users don't save a recipe in their first session. Changes to the first-session experience that make saving easier or clearer are in. Big new systems and features for other kinds of users go to Later.",
+      hint: "Ask: does it help a NEW user save a recipe in their first session, or is it a big new feature for someone else?",
+      buckets: [
+        { id: "in", label: "In the first change" },
+        { id: "out", label: "Later" },
+      ],
+      cards: bucketCards({
+        in: [
+          ["Show 3 popular recipes on the first screen", "Gives new users something worth saving immediately."],
+          ["One-tap Save button on every recipe", "Removes friction from the exact action we want."],
+          ["A short welcome tip that explains Save", "Makes sure new users know saving exists."],
+          ["Ask \"What do you like to cook?\" with 3 choices", "Shows relevant recipes so there's something worth saving."],
+        ],
+        out: [
+          ["Meal-plan calendar", "A big new feature, and useless until people save recipes."],
+          ["Grocery delivery integration", "Needs partners and doesn't help first-session saving."],
+          ["Social following", "Needs other users, and it's a different problem."],
+          ["Nutrition tracking", "Aimed at a different kind of user."],
+        ],
+      }),
+    },
+    footnote: FP.mvp,
+  },
+  {
+    id: "rc-7", phase: "Define", title: "Write a user story",
+    explanation:
+      "A user story keeps the real person in view: who they are, what they want, and why.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is a well-written user story?",
+      options: [
+        "Add a save button",
+        "As a new user who just signed up, I want to save a recipe with one tap, so that I can find it again when I cook.",
+        "Users should have recipes saved",
+        "Make saving better",
+      ],
+      correct: 1,
+    },
+    footnote: FP.story,
+  },
+  {
+    id: "rc-8", phase: "Define", title: "Score your ideas",
+    explanation:
+      "RICE multiplies Reach, Impact, and Confidence, then divides by Effort. A higher score usually means do it sooner.",
+    exercise: {
+      type: "number",
+      question:
+        "Idea: one-tap Save. Reach is 10,000 new users per quarter, Impact is 2, Confidence is 90% (use 0.9), and Effort is 3 person-weeks. What's the RICE score?",
+      answer: 6000,
+      hint: "Multiply Reach × Impact × Confidence first (10,000 × 2 × 0.9), then divide by Effort.",
+      unit: "points",
+    },
+    footnote: FP.rice,
+  },
+  {
+    id: "rc-9", phase: "Build", title: "Make a roadmap",
+    explanation:
+      "Now, Next, Later: what you're doing first, what comes after you've learned something, and ideas for later. Dependencies have to wait their turn.",
+    role: "roadmap",
+    exercise: {
+      type: "timeline",
+      prompt: "Place each item in Now, Next, or Later. Nothing can come before the item it depends on.",
+      columns: [
+        { id: "now", label: "Now" },
+        { id: "next", label: "Next" },
+        { id: "later", label: "Later" },
+      ],
+      tasks: tasks([
+        ["popular", "Show popular recipes on the first screen"],
+        ["save", "One-tap Save button"],
+        ["tip", "Welcome tip about Save"],
+        ["email", "Save reminder email on day 2"],
+        ["collections", "Collections for saved recipes"],
+        ["meal", "Meal-plan calendar"],
+      ]),
+      dependencies: [
+        ["save", "tip"],
+        ["save", "collections"],
+        ["collections", "meal"],
+      ],
+      answer: { popular: "now", save: "now", tip: "now", email: "next", collections: "next", meal: "later" },
+    },
+    footnote: FP.roadmap,
+  },
+  {
+    id: "rc-10", phase: "Build", title: "Who owns what?",
+    explanation: "Product teams split decisions across a few roles, so everyone knows who decides what.",
+    role: "raci",
+    exercise: {
+      type: "match",
+      prompt: "Match each decision to who owns it.",
+      leftLabel: "The decision",
+      rightLabel: "Who",
+      pairs: pairs([
+        ["Which problem to solve and why", "Product manager"],
+        ["How the save flow looks and feels", "Designer"],
+        ["Build and ship the Save button", "Engineer"],
+        ["Where new users drop off", "Data analyst"],
+      ]),
+    },
+    footnote: FP.owners,
+  },
+  {
+    id: "rc-11", phase: "Build", title: "Test your riskiest guess",
+    explanation:
+      "On a live product you can test with real users. Pick the smallest experiment that would prove a guess right or wrong.",
+    role: "assumptions",
+    exercise: {
+      type: "match",
+      prompt: "Match each guess to a cheap way to test it.",
+      leftLabel: "The assumption",
+      rightLabel: "The cheap test",
+      pairs: pairs([
+        ["New users don't know they can save", "Watch 5 new users try the app and see if they look for Save"],
+        ["A one-tap Save will increase saves", "A/B test the new button against the old one with half of new users"],
+        ["A welcome tip will be noticed", "Track how many users tap or dismiss the tip"],
+        ["Saved recipes bring users back", "Check how many who saved return within a week"],
+      ]),
+    },
+    footnote: FP.assumptions,
+  },
+  {
+    id: "rc-12", phase: "Build", title: "Update the sprint board",
+    explanation: "A sprint board shows the state of the work at a glance.",
+    exercise: {
+      type: "kanban",
+      scenario:
+        "It's week 2 of a 3-week sprint. The popular-recipes screen has shipped, the Save button is in progress, and the welcome tip hasn't started.",
+      cards: kanban([
+        ["Show popular recipes on the first screen", "done"],
+        ["One-tap Save button", "doing"],
+        ["Welcome tip about Save", "todo"],
+        ["Set up the A/B test", "todo"],
+        ["Build the analytics dashboard", "todo"],
+      ]),
+    },
+    footnote: FP.board,
+  },
+  {
+    id: "rc-13", phase: "Launch", title: "Roll it out safely",
+    explanation:
+      "On a live product, you don't flip a switch for everyone. You release to a small group, compare, and then expand.",
+    role: "launch",
+    exercise: {
+      type: "order",
+      prompt: "Drag the cards into the order they need to happen.",
+      items: [
+        "Build the new Save button",
+        "Test it internally",
+        "Roll out to 10% of new users",
+        "Compare results to the old version",
+        "Roll out to everyone",
+        "Share what you learned with the team",
+      ],
+    },
+    footnote: FP.launch,
+  },
+  {
+    id: "rc-14", phase: "Launch", title: "Read the data",
+    explanation:
+      "More taps is nice. But did the thing you cared about change? Look at the outcome, not just the activity.",
+    exercise: {
+      type: "multiple-choice",
+      question:
+        "The new button gets more taps, but first-week retention didn't change. What do you do?",
+      options: [
+        "Declare victory",
+        "Roll everything back and give up",
+        "Dig into what people do after saving and talk to a few users; you may have fixed one step but not the whole problem",
+        "Ignore the data",
+      ],
+      correct: 2,
+    },
+    footnote: FP.data,
+  },
+  {
+    id: "rc-15", phase: "Launch", title: "Handle the big request",
+    explanation:
+      "A big customer emails: \"We need dark mode ASAP or we'll leave.\" Loud requests feel urgent. Your job is to find out how important they really are.",
+    exercise: {
+      type: "multiple-choice",
+      question: "What do you do?",
+      options: [
+        "Drop everything and build it",
+        "Tell them no",
+        "Ask what they need and why, find out how many other users feel the same, and score it against your goals",
+        "Promise it for next month",
+      ],
+      correct: 2,
+    },
+    footnote: FP.request,
+  },
+  {
+    id: "rc-16", phase: "Launch", title: "Learn and iterate",
+    explanation: "Look back, then decide what to try next. That loop never ends, and that's the job.",
+    exercise: {
+      type: "buckets",
+      buckets: [
+        { id: "keep", label: "Keep doing" },
+        { id: "change", label: "Change" },
+        { id: "try", label: "Try next" },
+      ],
+      cards: bucketCards({
+        keep: ["Rolling out to 10% of users first", "Pairing data with user interviews"],
+        change: ["Judging success by taps instead of retention", "Setting up the A/B test late"],
+        try: ["Test a personalized first screen", "Email users who saved nothing after day 2"],
+      }),
+    },
+    footnote: FP.retro,
+  },
+  {
+    id: "rc-17", phase: "Launch", title: "Your product brief",
+    explanation: "You planned a whole product improvement from a blank page. Here's everything you decided, on one page.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// ☕ Launch a Coffee Subscription Box (physical product, go-to-market)
+// ---------------------------------------------------------------------------
+
+const coffeeSteps: PlanStep[] = [
+  {
+    id: "cf-1", phase: "Discover", title: "What does a product manager do?",
+    explanation:
+      "Even for a physical product, the PM's job is the same: figure out what to make, for whom, and why they'd want it.",
+    exercise: {
+      type: "multiple-choice",
+      question: "You're launching a coffee subscription box. What's the product manager's main job?",
+      options: [
+        "Roasting the beans",
+        "Deciding what the product is, who it's for, and why they'd subscribe",
+        "Packing every box by hand",
+        "Writing the shipping labels",
+      ],
+      correct: 1,
+    },
+    footnote: FP.role,
+  },
+  {
+    id: "cf-2", phase: "Discover", title: "Find the real problem",
+    explanation:
+      '"Start a coffee box" is a solution. Start with the problem: who is struggling, with what, and why it matters.',
+    role: "problem",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the strongest problem statement?",
+      options: [
+        "People should drink more coffee",
+        "Start a subscription box with five roasters",
+        "Busy home coffee drinkers keep running out and settle for stale supermarket beans, so their morning coffee is disappointing",
+        "Coffee is expensive",
+      ],
+      correct: 2,
+    },
+    footnote: FP.problem,
+  },
+  {
+    id: "cf-3", phase: "Discover", title: "Who is it for?",
+    explanation: "Pick a specific kind of customer you can find, talk to, and serve well.",
+    role: "user",
+    exercise: {
+      type: "multiple-choice",
+      question: "Who should you target first?",
+      options: [
+        "Everyone who drinks coffee",
+        "Home coffee drinkers who already buy whole beans and grind them at home",
+        "Café owners",
+        "People who don't like coffee",
+      ],
+      correct: 1,
+    },
+    footnote: FP.user,
+  },
+  {
+    id: "cf-4", phase: "Discover", title: "Talk to real people",
+    explanation:
+      "Don't ask people if they'd buy something; they'll say yes to be polite. Ask what they already do.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which question will teach you the most?",
+      options: [
+        "Would you subscribe to a coffee box?",
+        "Don't you hate running out of coffee?",
+        "Tell me about the last time you ran out of coffee. What did you do?",
+        "What's your dream coffee box?",
+      ],
+      correct: 2,
+    },
+    footnote: FP.interview,
+  },
+  {
+    id: "cf-5", phase: "Define", title: "What does success look like?",
+    explanation:
+      "Choose a number that proves customers value the box, not one that just looks impressive.",
+    role: "metric",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best success metric for the first three months?",
+      options: [
+        "Number of Instagram followers",
+        "At least 100 paying subscribers, with 70% still subscribed after two months",
+        "Website visits",
+        "Pounds of coffee roasted",
+      ],
+      correct: 1,
+    },
+    footnote: FP.metric,
+  },
+  {
+    id: "cf-6", phase: "Define", title: "Pick the MVP",
+    explanation:
+      "Your first version should be so small it feels almost embarrassing, as long as real customers can pay, receive coffee, and tell you if they'd reorder.",
+    role: "mvp",
+    exercise: {
+      type: "buckets",
+      rule:
+        "How to decide: the MVP lets real customers pay, get coffee, and tell you if they'd reorder. Anything you can do by hand for the first 20 customers is in. Things that need automation, customization, a new audience, or a big investment go to Later.",
+      hint: "Ask: can you do this by hand for the first customers, or does it need automation or a big investment?",
+      buckets: [
+        { id: "in", label: "In the MVP" },
+        { id: "out", label: "Later" },
+      ],
+      cards: bucketCards({
+        in: [
+          ["One roast, shipped monthly", "One choice keeps sourcing and packing simple."],
+          ["A landing page with a sign-up form", "It's the cheapest way to take orders."],
+          ["Packing and shipping by hand", "You can do it yourself for the first customers."],
+          ["A follow-up email after shipping", "It's how you learn if they liked it."],
+        ],
+        out: [
+          ["A custom mobile app", "A big build before you know anyone wants the coffee."],
+          ["A choose-your-roast quiz", "Needs several roasts and more tech."],
+          ["Gift subscriptions", "A new audience with new needs."],
+          ["Your own roasting facility", "A huge investment before you've proven demand."],
+        ],
+      }),
+    },
+    footnote: FP.mvp,
+  },
+  {
+    id: "cf-7", phase: "Define", title: "Write a user story",
+    explanation: "A user story keeps the customer in view: who they are, what they want, and why.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is a well-written user story?",
+      options: [
+        "Set up recurring shipping",
+        "As a home coffee drinker, I want fresh beans delivered each month, so that I never run out or buy stale coffee.",
+        "Customers want coffee",
+        "The box should be nice",
+      ],
+      correct: 1,
+    },
+    footnote: FP.story,
+  },
+  {
+    id: "cf-8", phase: "Define", title: "Score your ideas",
+    explanation:
+      "RICE multiplies Reach, Impact, and Confidence, then divides by Effort. A higher score usually means do it sooner.",
+    exercise: {
+      type: "number",
+      question:
+        "Idea: gift subscriptions. Reach is 200 customers per quarter, Impact is 1, Confidence is 50% (use 0.5), and Effort is 2 person-weeks. What's the RICE score?",
+      answer: 50,
+      hint: "Multiply Reach × Impact × Confidence first (200 × 1 × 0.5), then divide by Effort.",
+      unit: "points",
+    },
+    footnote: FP.rice,
+  },
+  {
+    id: "cf-9", phase: "Build", title: "Make a roadmap",
+    explanation:
+      "Now, Next, Later: what you do first, what comes after you've learned something, and ideas for later. Dependencies have to wait their turn.",
+    role: "roadmap",
+    exercise: {
+      type: "timeline",
+      prompt: "Place each item in Now, Next, or Later. Nothing can come before the item it depends on.",
+      columns: [
+        { id: "now", label: "Now" },
+        { id: "next", label: "Next" },
+        { id: "later", label: "Later" },
+      ],
+      tasks: tasks([
+        ["landing", "Landing page and sign-up form"],
+        ["orders", "Take the first 20 orders"],
+        ["ship", "Ship the first boxes"],
+        ["survey", "Send a follow-up survey"],
+        ["choose", "Let customers choose their roast"],
+        ["gift", "Offer gift subscriptions"],
+      ]),
+      dependencies: [
+        ["landing", "orders"],
+        ["orders", "ship"],
+        ["ship", "survey"],
+        ["survey", "choose"],
+        ["choose", "gift"],
+      ],
+      answer: { landing: "now", orders: "now", ship: "now", survey: "next", choose: "next", gift: "later" },
+    },
+    footnote: FP.roadmap,
+  },
+  {
+    id: "cf-10", phase: "Build", title: "Who owns what?",
+    explanation: "Even a tiny team needs clear decision owners, especially when partners are involved.",
+    role: "raci",
+    exercise: {
+      type: "match",
+      prompt: "Match each decision to who owns it.",
+      leftLabel: "The decision",
+      rightLabel: "Who",
+      pairs: pairs([
+        ["What's in the first box and the price", "You (product manager)"],
+        ["Roast fresh beans on schedule", "The roaster you partner with"],
+        ["Design the box and insert card", "A freelance designer"],
+        ["What they'd change", "Your first customers"],
+      ]),
+    },
+    footnote: FP.owners,
+  },
+  {
+    id: "cf-11", phase: "Build", title: "Test your riskiest guess",
+    explanation:
+      "Before you buy a pallet of beans, test the guesses that could sink you. Cheap experiments come first.",
+    role: "assumptions",
+    exercise: {
+      type: "match",
+      prompt: "Match each guess to a cheap way to test it.",
+      leftLabel: "The assumption",
+      rightLabel: "The cheap test",
+      pairs: pairs([
+        ["People will pay $24 a month", "Put up a landing page with a pre-order button and count sign-ups"],
+        ["Beans arrive fresh in the mail", "Mail test boxes to 5 friends and ask how they tasted"],
+        ["People want to pick a roast", "Ask your first 20 customers which roast they'd choose"],
+        ["Customers will keep subscribing", "Watch how many cancel after the second box"],
+      ]),
+    },
+    footnote: FP.assumptions,
+  },
+  {
+    id: "cf-12", phase: "Build", title: "Update the board",
+    explanation: "A simple board shows where the work stands at a glance.",
+    exercise: {
+      type: "kanban",
+      scenario: "It's week 3. The landing page is live, you've taken 12 orders, and you haven't packed anything yet.",
+      cards: kanban([
+        ["Build the landing page", "done"],
+        ["Take the first 20 orders", "doing"],
+        ["Pack and ship the first boxes", "todo"],
+        ["Send the follow-up survey", "todo"],
+        ["Order more packaging", "todo"],
+      ]),
+    },
+    footnote: FP.board,
+  },
+  {
+    id: "cf-13", phase: "Launch", title: "Plan the launch",
+    explanation:
+      "Start small, learn, then open the doors. A soft launch to a few customers is cheaper than a loud launch that flops.",
+    role: "launch",
+    exercise: {
+      type: "order",
+      prompt: "Drag the cards into the order they need to happen.",
+      items: [
+        "Take pre-orders on a landing page",
+        "Roast and pack the first boxes",
+        "Ship to the first customers",
+        "Send a follow-up survey",
+        "Improve the box based on feedback",
+        "Open sign-ups to everyone",
+      ],
+    },
+    footnote: FP.launch,
+  },
+  {
+    id: "cf-14", phase: "Launch", title: "Read the data",
+    explanation:
+      "Numbers tell you WHAT, not WHY. Find the step where people drop off, then find out why.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Lots of people visit the landing page, but only 1% sign up. What do you do first?",
+      options: [
+        "Buy more ads",
+        "Lower the price to $5",
+        "Talk to visitors who didn't sign up, then test changes to the headline, price, and photos",
+        "Add five more roasts",
+      ],
+      correct: 2,
+    },
+    footnote: FP.data,
+  },
+  {
+    id: "cf-15", phase: "Launch", title: "Handle the big request",
+    explanation:
+      'A friend says, "You should also sell mugs and build a mobile app!" Great ideas show up constantly. Your job is to score them, not just say yes.',
+    exercise: {
+      type: "multiple-choice",
+      question: "What do you do?",
+      options: [
+        "Start designing mugs tonight",
+        "Ignore your friend",
+        "Add the ideas to your list, then score them against your goal and other ideas before building anything",
+        "Delay the launch until everything is ready",
+      ],
+      correct: 2,
+    },
+    footnote: FP.request,
+  },
+  {
+    id: "cf-16", phase: "Launch", title: "Learn and iterate",
+    explanation: "Look back, then decide what to try next. That loop never ends, and that's the job.",
+    exercise: {
+      type: "buckets",
+      buckets: [
+        { id: "keep", label: "Keep doing" },
+        { id: "change", label: "Change" },
+        { id: "try", label: "Try next" },
+      ],
+      cards: bucketCards({
+        keep: ["Taking pre-orders before buying inventory", "Packing the first boxes by hand to learn"],
+        change: ["Waiting until after shipping to ask for feedback", "Guessing the price instead of testing it"],
+        try: ["Test two roasts with the next 20 customers", "Offer a quarterly plan to reduce cancellations"],
+      }),
+    },
+    footnote: FP.retro,
+  },
+  {
+    id: "cf-17", phase: "Launch", title: "Your product brief",
+    explanation: "You planned a whole product launch from a blank page. Here's everything you decided, on one page.",
+  },
+];
+
+// ============================================================================
 // The list the page uses. Add new projects here.
 // ============================================================================
 
 export const planProjects: PlanProject[] = [
   {
     id: "coloring-book",
+    track: "project",
     emoji: "🖍️",
     label: "Launch a Coloring Book",
     description:
@@ -2049,6 +3026,7 @@ export const planProjects: PlanProject[] = [
   },
   {
     id: "surprise-party",
+    track: "project",
     emoji: "🎂",
     label: "Throw a Surprise Birthday Party",
     description:
@@ -2060,6 +3038,7 @@ export const planProjects: PlanProject[] = [
   },
   {
     id: "first-app",
+    track: "project",
     emoji: "📱",
     label: "Build and Launch Your First App",
     description:
@@ -2072,6 +3051,7 @@ export const planProjects: PlanProject[] = [
   },
   {
     id: "new-apartment",
+    track: "project",
     emoji: "📦",
     label: "Move to a New Apartment",
     description:
@@ -2083,6 +3063,7 @@ export const planProjects: PlanProject[] = [
   },
   {
     id: "neighborhood-fundraiser",
+    track: "project",
     emoji: "🌻",
     label: "Run a Neighborhood Fundraiser",
     description:
@@ -2091,5 +3072,47 @@ export const planProjects: PlanProject[] = [
     summaryTitle: "My Project Plan: Run a Neighborhood Fundraiser",
     badge: "Certified Project Planner ✨",
     steps: fundraiserSteps,
+  },
+  {
+    id: "plant-app",
+    track: "product",
+    phases: PRODUCT_PHASES,
+    termLabel: "Real-world product term",
+    emoji: "🪴",
+    label: "Build a Plant-Care Reminder App",
+    description:
+      "Go from a blurry idea to a product plan: find the problem, pick the MVP, and decide how you'll know it worked.",
+    level: "Beginner",
+    summaryTitle: "My Product Brief: A Plant-Care Reminder App",
+    badge: "Certified Product Thinker ✨",
+    steps: plantSteps,
+  },
+  {
+    id: "recipe-app",
+    track: "product",
+    phases: PRODUCT_PHASES,
+    termLabel: "Real-world product term",
+    emoji: "🍳",
+    label: "Improve a Recipe App",
+    description:
+      "Fix a real drop-off problem in an app that already exists, using data, user feedback, and A/B tests.",
+    level: "Data-driven",
+    summaryTitle: "My Product Brief: Improve a Recipe App",
+    badge: "Certified Product Thinker ✨",
+    steps: recipeSteps,
+  },
+  {
+    id: "coffee-box",
+    track: "product",
+    phases: PRODUCT_PHASES,
+    termLabel: "Real-world product term",
+    emoji: "☕",
+    label: "Launch a Coffee Subscription Box",
+    description:
+      "Plan a physical product launch: test demand cheaply, ship an MVP by hand, and learn before you scale.",
+    level: "Beginner",
+    summaryTitle: "My Product Brief: A Coffee Subscription Box",
+    badge: "Certified Product Thinker ✨",
+    steps: coffeeSteps,
   },
 ];

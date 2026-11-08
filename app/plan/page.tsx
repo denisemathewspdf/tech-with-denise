@@ -5,11 +5,11 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Plan a Project",
   description:
-    "Plan a real project step by step and learn a project management concept at every step. No experience needed.",
+    "Plan a real project or product step by step and learn a project or product management concept at every step. No experience needed.",
   openGraph: {
     title: "Plan a Project 🗺️",
     description:
-      "Plan a real project step by step and learn a project management concept at every step. No experience needed.",
+      "Plan a real project or product step by step and learn a project or product management concept at every step. No experience needed.",
     images: [
       {
         url: "/og?title=Plan+a+Project&emoji=%F0%9F%97%BA%EF%B8%8F&topic=Project+Management",
@@ -30,8 +30,9 @@ export default function PlanPage() {
           <span className="text-4xl block mb-2">🗺️</span>
           <h1 className="font-heading text-3xl md:text-4xl font-bold mb-2">Plan a project</h1>
           <p className="text-dark-soft text-sm max-w-lg mx-auto">
-            Pick a project and plan it one step at a time. At every step you&apos;ll learn a real
-            project management idea, explained like you&apos;re five. No jargon, no boring slides.
+            Pick a project or a product and plan it one step at a time. At every step you&apos;ll
+            learn a real project or product management idea, explained like you&apos;re five. No
+            jargon, no boring slides.
           </p>
         </div>
 

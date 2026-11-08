@@ -6,6 +6,7 @@ import {
   CHEERS,
   ENCOURAGEMENTS,
   PHASES,
+  TRACK_LABELS,
   checkExercise,
   clearProgress,
   hasAnswer,
@@ -20,6 +21,7 @@ import {
   type Placement,
   type PlanProject,
   type StepStatus,
+  type Track,
 } from "@/lib/plan";
 import MultipleChoice from "./exercises/MultipleChoice";
 import SortBuckets from "./exercises/SortBuckets";
@@ -39,6 +41,7 @@ export default function PlanWizard() {
   const [stepIndex, setStepIndex] = useState(0);
   const [statuses, setStatuses] = useState<Record<string, StepStatus>>({});
   const [saved, setSaved] = useState<Record<string, number>>({}); // picker: project id -> saved step index
+  const [trackFilter, setTrackFilter] = useState<"all" | Track>("all");
 
   const [value, setValue] = useState<ExerciseValue>(-1);
   // Which step the current `value` belongs to. Prevents one render where an exercise
@@ -206,10 +209,33 @@ export default function PlanWizard() {
 
   // ============ PROJECT PICKER ============
   if (!project || !step) {
+    const visible = planProjects.filter((p) => trackFilter === "all" || p.track === trackFilter);
+    const tabs: { id: "all" | Track; label: string }[] = [
+      { id: "all", label: "All" },
+      { id: "project", label: TRACK_LABELS.project },
+      { id: "product", label: TRACK_LABELS.product },
+    ];
     return (
       <div>
+        <div role="group" aria-label="Filter by track" className="flex flex-wrap justify-center gap-2 mb-5">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              aria-pressed={trackFilter === t.id}
+              onClick={() => setTrackFilter(t.id)}
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition-all min-h-[40px] ${
+                trackFilter === t.id
+                  ? "bg-dark text-white"
+                  : "bg-white text-dark-soft border border-lavender-light hover:border-lavender hover:-translate-y-0.5"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {planProjects.map((p) => {
+          {visible.map((p) => {
             const savedIdx = saved[p.id];
             return (
               <button
@@ -224,6 +250,9 @@ export default function PlanWizard() {
                 <span className="text-4xl block mb-3">{p.emoji}</span>
                 <h3 className="font-heading text-base font-bold mb-1">{p.label}</h3>
                 <p className="text-dark-soft text-xs">{p.description}</p>
+                <p className="mt-2 text-[10px] font-bold uppercase tracking-widest text-lavender">
+                  {TRACK_LABELS[p.track]}
+                </p>
                 {savedIdx !== undefined && savedIdx > 0 && (
                   <p className="mt-3 text-[11px] font-bold text-lavender">
                     ↻ Continue · step {Math.min(savedIdx + 1, p.steps.length)} of {p.steps.length}
@@ -238,7 +267,8 @@ export default function PlanWizard() {
   }
 
   // ============ STEP VIEW ============
-  const phaseIdx = PHASES.indexOf(step.phase);
+  const phases = project.phases ?? PHASES;
+  const phaseIdx = phases.indexOf(step.phase);
   const locked = solved;
   const canCheck = ex ? hasAnswer(ex, value) : false;
 
@@ -274,12 +304,12 @@ export default function PlanWizard() {
       </div>
 
       {/* Phase tracker */}
-      <div className="mb-4" aria-label={`Phase ${phaseIdx + 1} of 4: ${step.phase}`}>
+      <div className="mb-4" aria-label={`Phase ${phaseIdx + 1} of ${phases.length}: ${step.phase}`}>
         <p className="text-[11px] font-bold uppercase tracking-[3px] text-lavender mb-2">
-          Phase {phaseIdx + 1} of 4 · {step.phase}
+          Phase {phaseIdx + 1} of {phases.length} · {step.phase}
         </p>
         <ol className="flex gap-1.5 list-none p-0 m-0">
-          {PHASES.map((ph, i) => (
+          {phases.map((ph, i) => (
             <li
               key={ph}
               aria-current={i === phaseIdx ? "step" : undefined}
@@ -482,7 +512,7 @@ export default function PlanWizard() {
                 <div className="animate-fade-up">
                   {step.footnote && (
                     <p className="text-sm bg-lavender-light border border-lavender/30 rounded-xl px-4 py-3 mb-3 text-dark">
-                      <span className="font-bold">Real-world PM term: </span>
+                      <span className="font-bold">{project.termLabel ?? "Real-world PM term"}: </span>
                       {step.footnote}
                     </p>
                   )}

@@ -4,8 +4,16 @@
  * to change when you add a new project.
  */
 
-export type PhaseName = "Define" | "Plan" | "Execute" | "Close";
+/** Phase names are just strings so each project can have its own (project mgmt vs product mgmt). */
+export type PhaseName = string;
 export const PHASES: PhaseName[] = ["Define", "Plan", "Execute", "Close"];
+export const PRODUCT_PHASES: PhaseName[] = ["Discover", "Define", "Build", "Launch"];
+
+export type Track = "project" | "product";
+export const TRACK_LABELS: Record<Track, string> = {
+  project: "Project Management",
+  product: "Product Management",
+};
 
 export type KanbanColumn = "todo" | "doing" | "done";
 
@@ -81,13 +89,21 @@ export type Exercise =
 /** Which earlier answer feeds which section of the final summary card. */
 export type SummaryRole =
   | "goal"
-  | "scope"
+  | "scope" // buckets with 2 columns: in / out
   | "wbs"
   | "timeline"
   | "raci"
   | "risks"
   | "stakeholders" // power/interest grid (buckets)
-  | "engagement"; // how to communicate with each stakeholder (match)
+  | "engagement" // how to communicate with each stakeholder (match)
+  // product management
+  | "problem" // multiple-choice: the correct option is the problem statement
+  | "user" // multiple-choice: the correct option is the target user
+  | "metric" // multiple-choice: the correct option is the success metric
+  | "mvp" // buckets with 2 columns: MVP / later
+  | "roadmap" // timeline: Now / Next / Later
+  | "assumptions" // match: assumption -> cheap test
+  | "launch"; // order: launch checklist
 
 export type PlanStep = {
   id: string;
@@ -103,6 +119,12 @@ export type PlanStep = {
 
 export type PlanProject = {
   id: string;
+  /** which learning track this project belongs to */
+  track: Track;
+  /** four phase names; defaults to Define / Plan / Execute / Close */
+  phases?: PhaseName[];
+  /** label for the footnote box, e.g. "Real-world PM term" */
+  termLabel?: string;
   emoji: string;
   label: string;
   description: string;
@@ -400,62 +422,98 @@ export function saveLastProject(projectId: string | null) {
 // Summary card data — pulled from the earlier steps
 // ---------------------------------------------------------------------------
 
-export type SummaryData = {
-  goal?: string;
-  scopeIn: string[];
-  scopeOut: string[];
-  work: { label: string; items: string[] }[];
-  timeline: { label: string; items: string[] }[];
-  owners: { left: string; right: string }[];
-  risks: { left: string; right: string }[];
-  /** only present for projects with stakeholder-management steps */
-  stakeholders: { label: string; items: string[] }[];
-  engagement: { left: string; right: string }[];
+export type SummarySection =
+  | { kind: "text"; title: string; text: string }
+  | { kind: "list"; title: string; items: string[] }
+  | { kind: "groups"; title: string; groups: { label: string; items: string[] }[] }
+  | { kind: "pairs"; title: string; pairs: { left: string; right: string }[] };
+
+/** Titles differ a little between the two tracks. */
+const TITLES: Record<Track, Record<SummaryRole, string>> = {
+  project: {
+    goal: "🎯 Goal",
+    scope: "✅ In scope",
+    wbs: "🧩 Work breakdown",
+    timeline: "📅 Timeline",
+    raci: "👯 Who does what",
+    risks: "⚠️ Risks and fixes",
+    stakeholders: "🧑‍🤝‍🧑 Stakeholders (power / interest)",
+    engagement: "📣 How I'll keep them in the loop",
+    problem: "",
+    user: "",
+    metric: "",
+    mvp: "",
+    roadmap: "",
+    assumptions: "",
+    launch: "",
+  },
+  product: {
+    goal: "🎯 Goal",
+    scope: "✅ In scope",
+    wbs: "🧩 Work breakdown",
+    timeline: "📅 Timeline",
+    raci: "👯 Who owns what",
+    risks: "⚠️ Risks and fixes",
+    stakeholders: "🧑‍🤝‍🧑 Stakeholders",
+    engagement: "📣 Communication",
+    problem: "🧩 The problem",
+    user: "🙋 Who it's for",
+    metric: "📈 How we'll know it worked",
+    mvp: "✅ In the MVP",
+    roadmap: "🗺️ Roadmap",
+    assumptions: "🧪 Riskiest assumptions and cheap tests",
+    launch: "🚀 Launch checklist",
+  },
 };
 
-export function buildSummary(project: PlanProject): SummaryData {
-  const data: SummaryData = {
-    scopeIn: [],
-    scopeOut: [],
-    work: [],
-    timeline: [],
-    owners: [],
-    risks: [],
-    stakeholders: [],
-    engagement: [],
-  };
+export function buildSummary(project: PlanProject): SummarySection[] {
+  const T = TITLES[project.track];
+  const out: SummarySection[] = [];
+
   for (const step of project.steps) {
     const ex = step.exercise;
     if (!ex || !step.role) continue;
-    if (step.role === "goal" && ex.type === "multiple-choice") {
-      data.goal = ex.options[ex.correct];
-    } else if (step.role === "scope" && ex.type === "buckets") {
-      data.scopeIn = ex.cards.filter((c) => c.bucket === ex.buckets[0].id).map((c) => c.label);
-      data.scopeOut = ex.cards.filter((c) => c.bucket === ex.buckets[1].id).map((c) => c.label);
-    } else if (step.role === "wbs" && ex.type === "buckets") {
-      data.work = ex.buckets.map((b) => ({
-        label: b.label,
-        items: ex.cards.filter((c) => c.bucket === b.id).map((c) => c.label),
-      }));
-    } else if (step.role === "timeline" && ex.type === "timeline") {
-      data.timeline = ex.columns
-        .map((col) => ({
-          label: col.label,
-          items: ex.tasks.filter((t) => ex.answer[t.id] === col.id).map((t) => t.label),
-        }))
-        .filter((c) => c.items.length > 0);
-    } else if (step.role === "raci" && ex.type === "match") {
-      data.owners = ex.pairs;
-    } else if (step.role === "risks" && ex.type === "match") {
-      data.risks = ex.pairs;
-    } else if (step.role === "stakeholders" && ex.type === "buckets") {
-      data.stakeholders = ex.buckets.map((b) => ({
-        label: b.label,
-        items: ex.cards.filter((c) => c.bucket === b.id).map((c) => c.label),
-      }));
-    } else if (step.role === "engagement" && ex.type === "match") {
-      data.engagement = ex.pairs;
+    const role = step.role;
+
+    if ((role === "goal" || role === "problem" || role === "user" || role === "metric") && ex.type === "multiple-choice") {
+      out.push({ kind: "text", title: T[role], text: ex.options[ex.correct] });
+    } else if ((role === "scope" || role === "mvp") && ex.type === "buckets") {
+      const inLabel = T[role];
+      out.push({
+        kind: "list",
+        title: inLabel,
+        items: ex.cards.filter((c) => c.bucket === ex.buckets[0].id).map((c) => c.label),
+      });
+      out.push({
+        kind: "list",
+        title: role === "mvp" ? "🅿️ Later (not in the MVP)" : "🅿️ Parking lot (not this time)",
+        items: ex.cards.filter((c) => c.bucket === ex.buckets[1].id).map((c) => c.label),
+      });
+    } else if ((role === "wbs" || role === "stakeholders") && ex.type === "buckets") {
+      out.push({
+        kind: "groups",
+        title: T[role],
+        groups: ex.buckets.map((b) => ({
+          label: b.label,
+          items: ex.cards.filter((c) => c.bucket === b.id).map((c) => c.label),
+        })),
+      });
+    } else if ((role === "timeline" || role === "roadmap") && ex.type === "timeline") {
+      out.push({
+        kind: "groups",
+        title: T[role],
+        groups: ex.columns
+          .map((col) => ({
+            label: col.label,
+            items: ex.tasks.filter((t) => ex.answer[t.id] === col.id).map((t) => t.label),
+          }))
+          .filter((g) => g.items.length > 0),
+      });
+    } else if ((role === "raci" || role === "risks" || role === "engagement" || role === "assumptions") && ex.type === "match") {
+      out.push({ kind: "pairs", title: T[role], pairs: ex.pairs });
+    } else if (role === "launch" && ex.type === "order") {
+      out.push({ kind: "list", title: T[role], items: ex.items });
     }
   }
-  return data;
+  return out;
 }
