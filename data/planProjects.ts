@@ -47,6 +47,10 @@ const F = {
   rag: "Green, yellow, and red status is called RAG status.",
   creep: "Unplanned additions are called scope creep, and a formal request to add one is a change request.",
   retro: 'This is called a retrospective, or "retro."',
+  grid: 'This is a power/interest grid, a classic way to decide how much attention each stakeholder needs.',
+  engagement: "This is a stakeholder engagement plan: how and how often you'll communicate with each person.",
+  resistance: "Working with someone who pushes back is called managing resistance, and it starts with listening.",
+  conflict: "Balancing stakeholders who want different things is called managing conflicting requirements, and your goal and scope are the tiebreaker.",
 };
 
 // ============================================================================
@@ -1503,6 +1507,453 @@ const moveSteps: PlanStep[] = [
 ];
 
 // ============================================================================
+// 🌻 PROJECT 5 — Run a Neighborhood Fundraiser (team project, stakeholder-heavy)
+// ============================================================================
+
+const fundraiserSteps: PlanStep[] = [
+  // ---------------- DEFINE ----------------
+  {
+    id: "fr-1",
+    phase: "Define",
+    title: "Is it a project?",
+    explanation:
+      "A project has a start, a finish, and makes something new. Running the neighborhood group chat is ongoing. A one-day fair to fund a garden is a project.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which one of these is a project?",
+      options: [
+        "Moderating the neighborhood group chat",
+        "Collecting monthly garden dues",
+        "Running a fundraiser fair for the community garden on May 17",
+        "Watering the garden every morning",
+      ],
+      correct: 2,
+    },
+    footnote: F.operations,
+  },
+  {
+    id: "fr-2",
+    phase: "Define",
+    title: "Write a goal you can actually hit",
+    explanation:
+      '"Help the garden" is a nice feeling. A good goal says what, how much, and by when, so everyone involved is aiming at the same thing.',
+    role: "goal",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which goal is the strongest?",
+      options: [
+        "Help out the community garden",
+        "Get the neighborhood more involved",
+        "Raise $2,000 for the community garden at a neighborhood fair on Saturday, May 17",
+        "Throw a big fun event this spring",
+      ],
+      correct: 2,
+    },
+    footnote: F.smart,
+  },
+  {
+    id: "fr-3",
+    phase: "Define",
+    title: "Decide what's in and what's out",
+    explanation:
+      "When lots of people are involved, everyone has a favorite add-on. Decide what this fair includes now, and park the rest.",
+    role: "scope",
+    exercise: {
+      type: "buckets",
+      buckets: [
+        { id: "in", label: "In scope" },
+        { id: "out", label: "Not this time" },
+      ],
+      cards: bucketCards({
+        in: ["Bake sale tables", "A raffle", "Volunteer sign-ups", "Flyers and social posts"],
+        out: ["A live band stage", "Food trucks", "An online auction", "Custom T-shirts"],
+      }),
+    },
+    footnote: F.scope,
+  },
+  {
+    id: "fr-4",
+    phase: "Define",
+    title: "Who cares about this project?",
+    explanation:
+      "With a team project, the people around it matter as much as the tasks. Anyone who helps, decides, or is affected is a stakeholder.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Who is a stakeholder in this fundraiser?",
+      options: [
+        "The volunteers who run the tables",
+        "The city office that issues the street permit",
+        "The neighbors who live on the closed-off street",
+        "All of the above",
+      ],
+      correct: 3,
+    },
+    footnote: F.stakeholders,
+  },
+  {
+    id: "fr-5",
+    phase: "Define",
+    title: "Who needs the most attention?",
+    explanation:
+      "You can't give everyone the same amount of time. Sort stakeholders by how much power they have over the project and how much they care about it. High power plus high interest means keep them close.",
+    role: "stakeholders",
+    exercise: {
+      type: "buckets",
+      buckets: [
+        { id: "close", label: "Manage closely (high power, high interest)" },
+        { id: "satisfied", label: "Keep satisfied (high power, lower interest)" },
+        { id: "informed", label: "Keep informed (lower power, high interest)" },
+        { id: "monitor", label: "Monitor (lower power, lower interest)" },
+      ],
+      cards: bucketCards({
+        close: ["The garden committee chair", "The bakery sponsoring the prizes"],
+        satisfied: ["The city permit office", "The neighborhood association board"],
+        informed: ["The volunteers", "The people who'll come to the fair"],
+        monitor: ["The local newspaper", "Relatives following along on social media"],
+      }),
+    },
+    footnote: F.grid,
+  },
+
+  // ---------------- PLAN ----------------
+  {
+    id: "fr-6",
+    phase: "Plan",
+    title: "Plan how you'll talk to each person",
+    explanation:
+      "Different stakeholders need different things: some want a quick heads-up, some want a seat at the table. Match each person to the communication that fits them.",
+    role: "engagement",
+    exercise: {
+      type: "match",
+      prompt: "Match each stakeholder to the best way to keep them in the loop.",
+      leftLabel: "The stakeholder",
+      rightLabel: "How to engage",
+      pairs: pairs([
+        ["The garden committee chair", "A short weekly check-in call"],
+        ["The city permit office", "Submit paperwork early and confirm in writing"],
+        ["The volunteers", "A group chat plus a reminder the week before"],
+        ["Neighbors on the closed street", "A flyer with the date, hours, and a contact number"],
+      ]),
+    },
+    footnote: F.engagement,
+  },
+  {
+    id: "fr-7",
+    phase: "Plan",
+    title: "Break it into chunks",
+    explanation:
+      '"Run a fair" is overwhelming. "Print 200 flyers" is not. Break the big thing into groups of small things.',
+    role: "wbs",
+    exercise: {
+      type: "buckets",
+      buckets: [
+        { id: "prepare", label: "Prepare" },
+        { id: "promote", label: "Promote" },
+        { id: "run", label: "Run the day" },
+        { id: "wrap", label: "Wrap up" },
+      ],
+      cards: bucketCards({
+        prepare: ["Get the street permit", "Recruit volunteers"],
+        promote: ["Print and post flyers", "Post on social media"],
+        run: ["Set up the tables", "Run the raffle"],
+        wrap: ["Count the money", "Thank the volunteers"],
+      }),
+    },
+    footnote: F.wbs,
+  },
+  {
+    id: "fr-8",
+    phase: "Plan",
+    title: "Put it in order",
+    explanation:
+      "Some things have to happen before others. You can't print flyers with a date until the permit confirms it.",
+    exercise: {
+      type: "order",
+      prompt: "Drag the cards into the order they need to happen.",
+      items: [
+        "Pick a date",
+        "Get the street permit",
+        "Recruit volunteers",
+        "Print and post flyers",
+        "Set up the tables",
+        "Run the fair",
+        "Count the money",
+        "Thank the volunteers",
+      ],
+    },
+    footnote: F.sequencing,
+  },
+  {
+    id: "fr-9",
+    phase: "Plan",
+    title: "Spot the dependency",
+    explanation:
+      "When one task can't start until another finishes, that's a dependency. With other people involved, you also depend on THEM, like an office that has to approve your permit.",
+    exercise: {
+      type: "multiple-choice",
+      question: 'Which task can\'t start until "Get the street permit" is done?',
+      options: [
+        "Pick a date",
+        "Design the raffle tickets",
+        "Print and post flyers",
+        "Bake the sample cupcakes",
+      ],
+      correct: 2,
+    },
+    footnote: F.dependency,
+  },
+  {
+    id: "fr-10",
+    phase: "Plan",
+    title: "How long will this take?",
+    explanation:
+      "Estimates turn a vague plan into a real one. Recruiting people takes real time, so count it.",
+    exercise: {
+      type: "number",
+      question:
+        "You want 24 volunteers. Each one takes about 15 minutes of calls and texts to recruit, and you have 3 hours a week for outreach. How many weeks will recruiting take?",
+      answer: 2,
+      hint: "Total minutes first: 24 × 15. Turn that into hours, then divide by your hours per week.",
+      unit: "weeks",
+    },
+    footnote: F.estimation,
+  },
+  {
+    id: "fr-11",
+    phase: "Plan",
+    title: "Build the timeline",
+    explanation:
+      "Now put your tasks on a calendar, making sure nothing starts before the thing it depends on.",
+    role: "timeline",
+    exercise: {
+      type: "timeline",
+      prompt: "Place each task in a week column. Nothing can start before the task it depends on.",
+      columns: [
+        { id: "w1", label: "Week 1" },
+        { id: "w2-3", label: "Weeks 2-3" },
+        { id: "w4-6", label: "Weeks 4-6" },
+        { id: "w7", label: "Week 7" },
+        { id: "w8", label: "Week 8" },
+        { id: "day", label: "Fair day" },
+      ],
+      tasks: tasks([
+        ["date", "Pick a date"],
+        ["permit", "Get the street permit"],
+        ["volunteers", "Recruit volunteers"],
+        ["flyers", "Print and post flyers"],
+        ["setup", "Set up the tables"],
+        ["run", "Run the fair"],
+      ]),
+      dependencies: [
+        ["date", "permit"],
+        ["permit", "volunteers"],
+        ["volunteers", "flyers"],
+        ["flyers", "setup"],
+        ["setup", "run"],
+      ],
+      answer: {
+        date: "w1",
+        permit: "w2-3",
+        volunteers: "w4-6",
+        flyers: "w7",
+        setup: "day",
+        run: "day",
+      },
+    },
+    footnote: F.gantt,
+  },
+  {
+    id: "fr-12",
+    phase: "Plan",
+    title: "Add a cushion",
+    explanation:
+      "Something always takes longer than you think, and other people's timelines are the least in your control. Smart planners build in extra time on purpose.",
+    exercise: {
+      type: "multiple-choice",
+      question: "The permit office says approvals take up to three weeks. What's the smartest move?",
+      options: [
+        "Plan for exactly three weeks and hope",
+        "Submit the application earlier and plan for a month, just in case",
+        "Skip the permit and hold the fair anyway",
+        "Ask volunteers to wait until the permit arrives to hear about the fair",
+      ],
+      correct: 1,
+    },
+    footnote: F.buffer,
+  },
+  {
+    id: "fr-13",
+    phase: "Plan",
+    title: "Who does what?",
+    explanation:
+      "With lots of people involved, unclear ownership gets messy fast. Give every job a clear owner.",
+    role: "raci",
+    exercise: {
+      type: "match",
+      prompt: "Match each job to the right role.",
+      leftLabel: "The job",
+      rightLabel: "Who",
+      pairs: pairs([
+        ["Recruit and schedule volunteers", "You (Responsible)"],
+        ["Final say on the budget", "Garden committee chair (Accountable)"],
+        ["Advise on street closure rules", "The city permit office (Consulted)"],
+        ["Hear about the date and hours", "Neighbors on the street (Informed)"],
+      ]),
+    },
+    footnote: F.raci,
+  },
+  {
+    id: "fr-14",
+    phase: "Plan",
+    title: "Plan for what could go wrong",
+    explanation:
+      "You don't have to be pessimistic, just prepared. Match each risk to the fix.",
+    role: "risks",
+    exercise: {
+      type: "match",
+      prompt: "Match each risk to its fix.",
+      leftLabel: "The risk",
+      rightLabel: "The fix",
+      pairs: pairs([
+        ["Rain on fair day", "Have a covered backup spot reserved"],
+        ["The permit is late", "Submit early and check in weekly"],
+        ["Too few volunteers show up", "Recruit a few extras and send reminders"],
+        ["The sponsor pulls out", "Line up a backup sponsor early"],
+      ]),
+    },
+    footnote: F.risks,
+  },
+
+  // ---------------- EXECUTE ----------------
+  {
+    id: "fr-15",
+    phase: "Execute",
+    title: "Update the board",
+    explanation: "A kanban board shows where everything stands at a glance, which is great when lots of people are helping.",
+    exercise: {
+      type: "kanban",
+      scenario:
+        "It's week 5. The date is set and the permit is approved, you've signed up half your volunteers, and you haven't printed flyers.",
+      cards: kanban([
+        ["Pick a date", "done"],
+        ["Get the street permit", "done"],
+        ["Recruit volunteers", "doing"],
+        ["Print and post flyers", "todo"],
+        ["Set up the tables", "todo"],
+      ]),
+    },
+    footnote: F.kanban,
+  },
+  {
+    id: "fr-16",
+    phase: "Execute",
+    title: "Write the status update",
+    explanation:
+      "Stakeholders hate surprises. A good update says where you are, what's in the way, and what you're doing about it, in about three sentences.",
+    exercise: {
+      type: "multiple-choice",
+      question:
+        "The permit is one week late. Which update to the committee chair and neighbors' association is best?",
+      options: [
+        '"All good! 🙂"',
+        `"The permit office is slow and it's not my fault."`,
+        '"🟡 Yellow: The permit is one week late. I\'m calling the office twice this week and have a backup date held, so we\'re still on track for May 17."',
+        "No update; you'll tell them if it falls through",
+      ],
+      correct: 2,
+    },
+    footnote: F.rag,
+  },
+  {
+    id: "fr-17",
+    phase: "Execute",
+    title: "Handle the unhappy stakeholder",
+    explanation:
+      "Sometimes a stakeholder pushes back. A neighbor tells you the fair will be too loud and block their driveway. Resistance usually means they have a real concern nobody has heard yet.",
+    exercise: {
+      type: "multiple-choice",
+      question: "What's the best first move?",
+      options: [
+        "Tell them the permit is approved, so it's happening",
+        "Avoid them until the fair is over",
+        "Listen to their concern, then look for a fix (like a clear driveway and quiet hours) and tell them what you'll change",
+        "Ask the committee chair to talk to them instead",
+      ],
+      correct: 2,
+    },
+    footnote: F.resistance,
+  },
+  {
+    id: "fr-18",
+    phase: "Execute",
+    title: "When stakeholders disagree",
+    explanation:
+      "The garden chair wants a bigger raffle. The volunteers want shorter shifts. You can't please everyone, so you need a tiebreaker that isn't \"whoever is loudest.\"",
+    exercise: {
+      type: "multiple-choice",
+      question: "How do you handle conflicting requests?",
+      options: [
+        "Do whatever the loudest person asks",
+        "Say yes to everyone and hope it works out",
+        "Compare each request to the goal and scope, decide, and explain the trade-off to everyone",
+        "Let each person decide for themselves",
+      ],
+      correct: 2,
+    },
+    footnote: F.conflict,
+  },
+  {
+    id: "fr-19",
+    phase: "Execute",
+    title: "Handle the shiny new idea",
+    explanation:
+      'A volunteer says, "We should add a dunk tank!" Fun idea. Also how a one-day fair becomes a three-month saga.',
+    exercise: {
+      type: "multiple-choice",
+      question: "What do you do?",
+      options: [
+        "Add it right away; more fun is better",
+        "Write it in the parking lot for next year and keep the plan",
+        "Ignore the volunteer completely",
+        "Move the fair back a month to make room",
+      ],
+      correct: 1,
+    },
+    footnote: F.creep,
+  },
+
+  // ---------------- CLOSE ----------------
+  {
+    id: "fr-20",
+    phase: "Close",
+    title: "Look back before you move on",
+    explanation:
+      "You raised the money! 🎉 Before the next project, take ten minutes to learn from this one, including what your stakeholders told you.",
+    exercise: {
+      type: "buckets",
+      buckets: [
+        { id: "well", label: "Went well" },
+        { id: "better", label: "Could be better" },
+        { id: "next", label: "Next time I'll..." },
+      ],
+      cards: bucketCards({
+        well: ["Weekly check-ins kept the chair happy", "The flyer made neighbors feel included"],
+        better: ["Volunteer reminders went out too late", "I only called the permit office when there was a problem"],
+        next: ["Send volunteer reminders a week ahead", "Check in with the permit office every week"],
+      }),
+    },
+    footnote: F.retro,
+  },
+  {
+    id: "fr-21",
+    phase: "Close",
+    title: "Your project plan",
+    explanation:
+      "You planned a whole community event, including how to work with every person involved. Here's everything you decided, on one page.",
+  },
+];
+
+// ============================================================================
 // The list the page uses. Add new projects here.
 // ============================================================================
 
@@ -1551,5 +2002,16 @@ export const planProjects: PlanProject[] = [
     summaryTitle: "My Project Plan: Move to a New Apartment",
     badge: "Certified Project Planner ✨",
     steps: moveSteps,
+  },
+  {
+    id: "neighborhood-fundraiser",
+    emoji: "🌻",
+    label: "Run a Neighborhood Fundraiser",
+    description:
+      "A team project with lots of people involved. Learn stakeholder management: who matters most, how to keep them in the loop, and what to do when they push back.",
+    level: "Team project",
+    summaryTitle: "My Project Plan: Run a Neighborhood Fundraiser",
+    badge: "Certified Project Planner ✨",
+    steps: fundraiserSteps,
   },
 ];

@@ -60,6 +60,30 @@ export default function SummaryCard({ project }: { project: PlanProject }) {
             </Section>
           </div>
 
+          {data.stakeholders.length > 0 && (
+            <Section title="🧑‍🤝‍🧑 Stakeholders (power / interest)">
+              <div className="grid sm:grid-cols-2 gap-x-4 gap-y-2">
+                {data.stakeholders.map((g) => (
+                  <p key={g.label} className="text-sm text-dark">
+                    <span className="font-bold">{g.label}:</span> {g.items.join(", ")}
+                  </p>
+                ))}
+              </div>
+            </Section>
+          )}
+
+          {data.engagement.length > 0 && (
+            <Section title="📣 How I'll keep them in the loop">
+              <ul className="text-sm text-dark list-none p-0 m-0 space-y-1">
+                {data.engagement.map((e) => (
+                  <li key={e.left}>
+                    {e.left} → <span className="font-semibold">{e.right}</span>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
+
           <Section title="🧩 Work breakdown">
             <div className="grid sm:grid-cols-2 gap-x-4 gap-y-2">
               {data.work.map((w) => (

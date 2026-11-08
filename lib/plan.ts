@@ -74,7 +74,15 @@ export type Exercise =
   | KanbanExercise;
 
 /** Which earlier answer feeds which section of the final summary card. */
-export type SummaryRole = "goal" | "scope" | "wbs" | "timeline" | "raci" | "risks";
+export type SummaryRole =
+  | "goal"
+  | "scope"
+  | "wbs"
+  | "timeline"
+  | "raci"
+  | "risks"
+  | "stakeholders" // power/interest grid (buckets)
+  | "engagement"; // how to communicate with each stakeholder (match)
 
 export type PlanStep = {
   id: string;
@@ -395,10 +403,22 @@ export type SummaryData = {
   timeline: { label: string; items: string[] }[];
   owners: { left: string; right: string }[];
   risks: { left: string; right: string }[];
+  /** only present for projects with stakeholder-management steps */
+  stakeholders: { label: string; items: string[] }[];
+  engagement: { left: string; right: string }[];
 };
 
 export function buildSummary(project: PlanProject): SummaryData {
-  const data: SummaryData = { scopeIn: [], scopeOut: [], work: [], timeline: [], owners: [], risks: [] };
+  const data: SummaryData = {
+    scopeIn: [],
+    scopeOut: [],
+    work: [],
+    timeline: [],
+    owners: [],
+    risks: [],
+    stakeholders: [],
+    engagement: [],
+  };
   for (const step of project.steps) {
     const ex = step.exercise;
     if (!ex || !step.role) continue;
@@ -423,6 +443,13 @@ export function buildSummary(project: PlanProject): SummaryData {
       data.owners = ex.pairs;
     } else if (step.role === "risks" && ex.type === "match") {
       data.risks = ex.pairs;
+    } else if (step.role === "stakeholders" && ex.type === "buckets") {
+      data.stakeholders = ex.buckets.map((b) => ({
+        label: b.label,
+        items: ex.cards.filter((c) => c.bucket === b.id).map((c) => c.label),
+      }));
+    } else if (step.role === "engagement" && ex.type === "match") {
+      data.engagement = ex.pairs;
     }
   }
   return data;
