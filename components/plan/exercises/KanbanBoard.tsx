@@ -22,7 +22,7 @@ const COLUMNS = [
 export default function KanbanBoard({ exercise, stepId, value, onChange, disabled, wrongIds }: Props) {
   return (
     <div>
-      <p className="text-sm bg-butter/60 border border-gold/30 rounded-xl p-3 mb-3 text-dark">
+      <p className="text-sm bg-butter border border-gold/30 rounded-xl p-3 mb-3 text-dark">
         <span className="font-bold">📣 The scenario: </span>
         {exercise.scenario}
       </p>

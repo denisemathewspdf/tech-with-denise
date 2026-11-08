@@ -363,6 +363,7 @@ export default function PlanWizard() {
                     }}
                     disabled={locked}
                     wrongIds={wrongIds}
+                    solved={solved}
                   />
                 )}
                 {ex?.type === "order" && (
@@ -442,7 +443,7 @@ export default function PlanWizard() {
                         ? "bg-mint-light text-dark font-bold"
                         : feedback.tone === "wrong"
                           ? "bg-peach-light text-dark"
-                          : "bg-butter/60 text-dark"
+                          : "bg-butter text-dark"
                     }`}
                   >
                     {feedback.text}
@@ -480,7 +481,7 @@ export default function PlanWizard() {
               ) : (
                 <div className="animate-fade-up">
                   {step.footnote && (
-                    <p className="text-sm bg-lavender-light/60 border border-lavender/30 rounded-xl px-4 py-3 mb-3 text-dark">
+                    <p className="text-sm bg-lavender-light border border-lavender/30 rounded-xl px-4 py-3 mb-3 text-dark">
                       <span className="font-bold">Real-world PM term: </span>
                       {step.footnote}
                     </p>

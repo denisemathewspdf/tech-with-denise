@@ -13,10 +13,13 @@ import type { PlanProject, PlanStep, KanbanColumn } from "@/lib/plan";
 // ---- tiny helpers to keep the data readable --------------------------------
 
 /** Build bucket cards from { bucketId: ["card", "card"] } with unique ids. */
-function bucketCards(map: Record<string, string[]>) {
-  const out: { id: string; label: string; bucket: string }[] = [];
-  Object.entries(map).forEach(([bucket, labels]) =>
-    labels.forEach((label, i) => out.push({ id: `${bucket}-${i}`, label, bucket }))
+function bucketCards(map: Record<string, (string | [string, string])[]>) {
+  const out: { id: string; label: string; bucket: string; why?: string }[] = [];
+  Object.entries(map).forEach(([bucket, entries]) =>
+    entries.forEach((entry, i) => {
+      const [label, why] = Array.isArray(entry) ? entry : [entry, undefined];
+      out.push({ id: `${bucket}-${i}`, label, bucket, why });
+    })
   );
   return out;
 }
@@ -103,22 +106,30 @@ const coloringBookSteps: PlanStep[] = [
     phase: "Define",
     title: "Decide what's in and what's out",
     explanation:
-      "The fastest way to never finish is to keep adding things. Decide now what this version includes and park everything else for later.",
+      "The fastest way to never finish is to keep adding things. Decide now what this version includes and park everything else for later. Your goal from the last step is the tiebreaker.",
     role: "scope",
     exercise: {
       type: "buckets",
+      rule:
+        'How to decide: your goal is one 30-page botanical book, listed on Amazon KDP, announced once. If it\'s a core piece of making, listing, or announcing THAT book, it\'s in scope. If it\'s a different format, sales channel, product, or audience, it goes in the parking lot.',
+      hint: "Ask: is it a core piece of THIS book on KDP, or a brand-new version, channel, product, or audience?",
       buckets: [
         { id: "in", label: "In scope" },
         { id: "out", label: "Not this time" },
       ],
       cards: bucketCards({
         in: [
-          "30 botanical illustrations",
-          "Cover design",
-          "Amazon KDP listing",
-          "Launch post on Instagram",
+          ["30 botanical illustrations", "It's the book itself: the goal says 30 pages."],
+          ["Cover design", "A book can't be listed without a cover."],
+          ["Amazon KDP listing", "The goal says published on KDP."],
+          ["Launch post on Instagram", "One announcement tells people the book exists; it's a small, single task."],
         ],
-        out: ["Hardcover edition", "Etsy shop", "Coloring book app", "Spanish translation"],
+        out: [
+          ["Hardcover edition", "A different format, with its own setup and costs."],
+          ["Etsy shop", "A new sales channel to build and run."],
+          ["Coloring book app", "A whole new product."],
+          ["Spanish translation", "A new audience and a whole second version to produce."],
+        ],
       }),
     },
     footnote: F.scope,
@@ -474,17 +485,30 @@ const partySteps: PlanStep[] = [
     phase: "Define",
     title: "Decide what's in and what's out",
     explanation:
-      "Party plans love to snowball into a wedding. Decide what this party includes and put the rest in the parking lot.",
+      "Party plans love to snowball into a wedding. Decide what this party includes and put the rest in the parking lot. Your goal from the last step is the tiebreaker.",
     role: "scope",
     exercise: {
       type: "buckets",
+      rule:
+        "How to decide: your goal is a surprise party at your place for 15 guests. Things every party needs to work are in scope. Upgrades that add a new vendor, a new cost, or a whole new chunk of work go in the parking lot.",
+      hint: "Ask: does every party need this, or is it an upgrade that needs a new vendor or lots of extra work?",
       buckets: [
         { id: "in", label: "In scope" },
         { id: "out", label: "Not this time" },
       ],
       cards: bucketCards({
-        in: ["Guest list and invites", "A cake", "Snacks and drinks", "Decorations and a playlist"],
-        out: ["Hiring a live band", "Renting a fancy venue", "A photo booth", "Custom party favors"],
+        in: [
+          ["Guest list and invites", "No guests, no party."],
+          ["A cake", "A birthday needs one, and it's a single order."],
+          ["Snacks and drinks", "Guests need something to eat and drink."],
+          ["Decorations and a playlist", "Cheap, DIY basics that make it feel like a party."],
+        ],
+        out: [
+          ["Hiring a live band", "A new vendor and a big cost; a playlist covers the music."],
+          ["Renting a fancy venue", "The goal says at your place."],
+          ["A photo booth", "An extra vendor or setup that isn't needed for a party."],
+          ["Custom party favors", "A nice-to-have that adds design and ordering work."],
+        ],
       }),
     },
     footnote: F.scope,
@@ -832,17 +856,30 @@ const appSteps: PlanStep[] = [
     phase: "Define",
     title: "Decide what's in and what's out",
     explanation:
-      "Every app wants to become the next big thing before it's even finished. Decide what version 1 includes and park the rest.",
+      "Every app wants to become the next big thing before it's even finished. Decide what version 1 includes and park the rest. Your goal from the last step is the tiebreaker.",
     role: "scope",
     exercise: {
       type: "buckets",
+      rule:
+        "How to decide: your goal is a habit tracker web app with 3 core features. Anything a visitor needs to add, check off, and track a habit on their phone is in scope. Features that need a backend, a new platform, or extra polish go in the parking lot.",
+      hint: "Ask: is it one of the core habit-tracking actions, or does it need accounts, a new platform, or extra polish?",
       buckets: [
         { id: "in", label: "In scope" },
         { id: "out", label: "Not this time" },
       ],
       cards: bucketCards({
-        in: ["Add a habit", "Check off a habit", "Streak counter", "Mobile-friendly layout"],
-        out: ["User accounts and login", "Push notifications", "An iPhone app", "Dark mode"],
+        in: [
+          ["Add a habit", "A core feature: you can't track what you can't add."],
+          ["Check off a habit", "A core feature: it's the whole point of the app."],
+          ["Streak counter", "A core feature, and it can be done with the data already on the page."],
+          ["Mobile-friendly layout", "People will check habits on their phones, so it's needed to hit the goal."],
+        ],
+        out: [
+          ["User accounts and login", "Needs a backend and security work; version 1 can save data in the browser."],
+          ["Push notifications", "Needs extra services and permissions."],
+          ["An iPhone app", "A different platform; the goal is a web app."],
+          ["Dark mode", "Polish that doesn't change what the app does."],
+        ],
       }),
     },
     footnote: F.scope,
@@ -1195,17 +1232,30 @@ const moveSteps: PlanStep[] = [
     phase: "Define",
     title: "Decide what's in and what's out",
     explanation:
-      "Moving projects love to grow: \"while we're at it, let's repaint!\" Decide what this move includes and park the rest.",
+      "Moving projects love to grow: \"while we're at it, let's repaint!\" Decide what this move includes and park the rest. Your goal from the last step is the tiebreaker.",
     role: "scope",
     exercise: {
       type: "buckets",
+      rule:
+        "How to decide: your goal is to get everything moved into the new place and the old keys returned. Anything that has to happen to move out, move in, and hand back the old place is in scope. Home-improvement and shopping projects go in the parking lot.",
+      hint: "Ask: is it needed to move out, move in, and return the keys, or is it a home improvement or shopping project?",
       buckets: [
         { id: "in", label: "In scope" },
         { id: "out", label: "Not this time" },
       ],
       cards: bucketCards({
-        in: ["Pack all belongings", "Hire movers", "Transfer utilities and internet", "Clean the old apartment"],
-        out: ["Repaint the new apartment", "Buy all new furniture", "Build a custom closet", "Throw a housewarming"],
+        in: [
+          ["Pack all belongings", "You can't move what isn't packed."],
+          ["Hire movers", "It's how your stuff gets to the new place."],
+          ["Transfer utilities and internet", "You need power and internet on day one."],
+          ["Clean the old apartment", "You need it clean to return the keys and get your deposit back."],
+        ],
+        out: [
+          ["Repaint the new apartment", "A renovation project, and not needed to move in."],
+          ["Buy all new furniture", "A big shopping project; you can move in with what you have."],
+          ["Build a custom closet", "A build project that can wait until you're settled."],
+          ["Throw a housewarming", "A separate event; it's not part of the move."],
+        ],
       }),
     },
     footnote: F.scope,
@@ -1556,17 +1606,30 @@ const fundraiserSteps: PlanStep[] = [
     phase: "Define",
     title: "Decide what's in and what's out",
     explanation:
-      "When lots of people are involved, everyone has a favorite add-on. Decide what this fair includes now, and park the rest.",
+      "When lots of people are involved, everyone has a favorite add-on. Decide what this fair includes now, and park the rest. Your goal from the last step is the tiebreaker.",
     role: "scope",
     exercise: {
       type: "buckets",
+      rule:
+        "How to decide: your goal is to raise $2,000 at a one-day fair. Things that directly raise money, bring people in, or staff the day with volunteers are in scope. Big add-ons that need a new vendor, a lot of new coordination, or can't be done by one volunteer team go in the parking lot.",
+      hint: "Ask: does it directly raise money or staff the day, or is it a big add-on that needs a new vendor or lots of new coordination?",
       buckets: [
         { id: "in", label: "In scope" },
         { id: "out", label: "Not this time" },
       ],
       cards: bucketCards({
-        in: ["Bake sale tables", "A raffle", "Volunteer sign-ups", "Flyers and social posts"],
-        out: ["A live band stage", "Food trucks", "An online auction", "Custom T-shirts"],
+        in: [
+          ["Bake sale tables", "A direct way to raise money, run by volunteers."],
+          ["A raffle", "A simple, direct way to raise money."],
+          ["Volunteer sign-ups", "You need people to run the day."],
+          ["Flyers and social posts", "No one comes (or donates) if no one hears about it."],
+        ],
+        out: [
+          ["A live band stage", "Needs performers, equipment, and extra permits."],
+          ["Food trucks", "Needs outside vendors and more permits."],
+          ["An online auction", "A whole second fundraising system to build and run."],
+          ["Custom T-shirts", "Costs money up front before it earns any."],
+        ],
       }),
     },
     footnote: F.scope,
@@ -1599,6 +1662,9 @@ const fundraiserSteps: PlanStep[] = [
     role: "stakeholders",
     exercise: {
       type: "buckets",
+      rule:
+        "How to decide: POWER means they can approve, fund, block, or change the project. INTEREST means the outcome really affects them or they care a lot. Both high: manage closely. High power only: keep satisfied. High interest only: keep informed. Neither: monitor.",
+      hint: "Ask two questions: can they block or fund the project (power)? Does the outcome really matter to them (interest)?",
       buckets: [
         { id: "close", label: "Manage closely (high power, high interest)" },
         { id: "satisfied", label: "Keep satisfied (high power, lower interest)" },
@@ -1606,10 +1672,22 @@ const fundraiserSteps: PlanStep[] = [
         { id: "monitor", label: "Monitor (lower power, lower interest)" },
       ],
       cards: bucketCards({
-        close: ["The garden committee chair", "The bakery sponsoring the prizes"],
-        satisfied: ["The city permit office", "The neighborhood association board"],
-        informed: ["The volunteers", "The people who'll come to the fair"],
-        monitor: ["The local newspaper", "Relatives following along on social media"],
+        close: [
+          ["The garden committee chair", "Decides how the money is used (power) and lives for this garden (interest)."],
+          ["The bakery sponsoring the prizes", "Funds the prizes (power) and wants good publicity (interest)."],
+        ],
+        satisfied: [
+          ["The city permit office", "Can block the fair by denying the permit (power), but doesn't care how the day goes (lower interest)."],
+          ["The neighborhood association board", "Can object or withdraw support (power), but isn't running or attending the day (lower interest)."],
+        ],
+        informed: [
+          ["The volunteers", "Their time makes the day happen and they care (interest), but they don't set the plan (lower power)."],
+          ["The people who'll come to the fair", "They care about the event (interest), but can't change the plan (lower power)."],
+        ],
+        monitor: [
+          ["The local newspaper", "Might cover it, but can't change it and isn't invested (lower power, lower interest)."],
+          ["Relatives following along on social media", "Friendly onlookers, with no say in the plan (lower power, lower interest)."],
+        ],
       }),
     },
     footnote: F.grid,

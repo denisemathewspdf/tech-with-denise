@@ -149,7 +149,7 @@ function Zone({
       aria-label={title}
       className={`rounded-2xl p-3 min-h-[88px] border-2 border-dashed transition-colors ${
         isOver
-          ? "border-lavender bg-lavender-light/70"
+          ? "border-lavender bg-lavender-light"
           : subtle
             ? "border-lavender-light bg-cream"
             : "border-lavender-light bg-white"

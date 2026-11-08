@@ -19,8 +19,13 @@ export type MultipleChoiceExercise = {
 export type BucketsExercise = {
   type: "buckets";
   prompt?: string;
+  /** "How to decide" rule shown above the cards, so there's only one defensible answer */
+  rule?: string;
+  /** Extra nudge appended to the wrong-answer feedback */
+  hint?: string;
   buckets: { id: string; label: string }[];
-  cards: { id: string; label: string; bucket: string }[];
+  /** `why` is shown after the step is solved: the reason this card goes in this column */
+  cards: { id: string; label: string; bucket: string; why?: string }[];
 };
 
 export type OrderExercise = {
@@ -282,7 +287,7 @@ export function checkExercise(ex: Exercise, value: ExerciseValue): CheckResult {
       return {
         correct: false,
         wrongIds: wrong,
-        message: `${ex.cards.length - wrong.length} of ${ex.cards.length} cards are in the right column. The highlighted ones need another look.`,
+        message: `${ex.cards.length - wrong.length} of ${ex.cards.length} cards are in the right column. The highlighted ones need another look.${ex.hint ? " " + ex.hint : ""}`,
       };
     }
     case "kanban": {
