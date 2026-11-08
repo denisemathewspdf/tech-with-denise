@@ -73,6 +73,13 @@ export default function Nav() {
         >
           Start Building ✨
         </Link>
+
+        <Link
+          href="/plan"
+          className="border-2 border-lavender text-dark dark:text-white px-5 py-2 rounded-full font-semibold text-sm transition-all hover:-translate-y-0.5 hover:bg-lavender-light dark:hover:bg-white/10 no-underline"
+        >
+          Plan a Project 🗺️
+        </Link>
       </div>
 
       {/* Mobile: theme toggle + hamburger */}
@@ -132,6 +139,13 @@ export default function Nav() {
             className="bg-gradient-to-r from-peach via-pink to-lavender text-white px-6 py-3 rounded-full font-semibold text-sm text-center no-underline"
           >
             Start Building ✨
+          </Link>
+          <Link
+            href="/plan"
+            onClick={() => setMenuOpen(false)}
+            className="border-2 border-lavender text-dark dark:text-white px-6 py-3 rounded-full font-semibold text-sm text-center no-underline"
+          >
+            Plan a Project 🗺️
           </Link>
         </div>
       )}

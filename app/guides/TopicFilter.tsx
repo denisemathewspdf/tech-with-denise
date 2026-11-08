@@ -18,7 +18,7 @@ export default function TopicFilter({ topics, active }: TopicFilterProps) {
     if (topic === "All") {
       router.push("/guides");
     } else {
-      router.push(`/guides?topic=${topic}`);
+      router.push(`/guides?topic=${encodeURIComponent(topic)}`);
     }
   };
 

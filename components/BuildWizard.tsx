@@ -1738,6 +1738,13 @@ export default function BuildWizard() {
                 </button>
               </div>
 
+              <a
+                href="/plan"
+                className="mt-5 block rounded-xl bg-white/70 border border-lavender/40 px-4 py-3 text-sm font-semibold text-dark no-underline hover:-translate-y-0.5 hover:shadow-soft transition-all"
+              >
+                🗺️ You built it. Now learn how to plan the next one →
+              </a>
+
               {pyRunOutput !== null && (
                 <div className="mt-5 rounded-xl overflow-hidden border border-lavender-light text-left">
                   <div className="bg-[#2D2139] px-4 py-1.5">
