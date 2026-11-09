@@ -30,6 +30,7 @@ import MatchPairs from "./exercises/MatchPairs";
 import NumberAnswer from "./exercises/NumberAnswer";
 import MiniTimeline from "./exercises/MiniTimeline";
 import KanbanBoard from "./exercises/KanbanBoard";
+import SprintPlanning from "./exercises/SprintPlanning";
 import SummaryCard from "./SummaryCard";
 
 type Feedback = { tone: "info" | "wrong" | "right"; text: string } | null;
@@ -214,6 +215,7 @@ export default function PlanWizard() {
       { id: "all", label: "All" },
       { id: "project", label: TRACK_LABELS.project },
       { id: "product", label: TRACK_LABELS.product },
+      { id: "agile", label: TRACK_LABELS.agile },
     ];
     return (
       <div>
@@ -449,6 +451,19 @@ export default function PlanWizard() {
                     />
                   </div>
                 )}
+                {ex?.type === "sprint" && (
+                  <SprintPlanning
+                    exercise={ex}
+                    stepId={step.id}
+                    value={value as Placement}
+                    onChange={(v) => {
+                      setValue(v);
+                      setWrongIds([]);
+                    }}
+                    disabled={locked}
+                    wrongIds={wrongIds}
+                  />
+                )}
                 {ex?.type === "kanban" && (
                   <KanbanBoard
                     exercise={ex}
@@ -535,7 +550,7 @@ export default function PlanWizard() {
           {doneSteps.length === 0 && (
             <div className="bg-white rounded-2xl p-4 shadow-soft border border-lavender-light">
               <p className="text-sm text-dark-soft">
-                Every step you finish adds a new project-management word to this list. ✨
+                Every step you finish adds a new real-world term to this list. ✨
               </p>
             </div>
           )}

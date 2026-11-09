@@ -8,11 +8,13 @@
 export type PhaseName = string;
 export const PHASES: PhaseName[] = ["Define", "Plan", "Execute", "Close"];
 export const PRODUCT_PHASES: PhaseName[] = ["Discover", "Define", "Build", "Launch"];
+export const AGILE_PHASES: PhaseName[] = ["Set up", "Plan the sprint", "Run the sprint", "Review & improve"];
 
-export type Track = "project" | "product";
+export type Track = "project" | "product" | "agile";
 export const TRACK_LABELS: Record<Track, string> = {
   project: "Project Management",
   product: "Product Management",
+  agile: "Agile & Scrum",
 };
 
 export type KanbanColumn = "todo" | "doing" | "done";
@@ -77,7 +79,20 @@ export type KanbanExercise = {
   cards: { id: string; label: string; column: KanbanColumn }[];
 };
 
+/**
+ * Sprint planning. Stories are listed in PRIORITY order (top = most important).
+ * The correct sprint is the longest run from the top whose points fit the capacity.
+ */
+export type SprintExercise = {
+  type: "sprint";
+  prompt?: string;
+  rule?: string;
+  capacity: number;
+  stories: { id: string; label: string; points: number }[];
+};
+
 export type Exercise =
+  | SprintExercise
   | MultipleChoiceExercise
   | BucketsExercise
   | OrderExercise
@@ -103,7 +118,12 @@ export type SummaryRole =
   | "mvp" // buckets with 2 columns: MVP / later
   | "roadmap" // timeline: Now / Next / Later
   | "assumptions" // match: assumption -> cheap test
-  | "launch"; // order: launch checklist
+  | "launch" // order: launch checklist
+  // agile / scrum
+  | "sprintgoal" // multiple-choice: the correct option is the sprint goal
+  | "dod" // multiple-choice: the correct option is the Definition of Done
+  | "sprint" // sprint planning: the stories that fit
+  | "retro"; // buckets: start / stop / continue
 
 export type PlanStep = {
   id: string;
@@ -216,6 +236,11 @@ export function initialValue(ex: Exercise, seed: string): ExerciseValue {
       ex.tasks.forEach((t) => (v[t.id] = null));
       return v;
     }
+    case "sprint": {
+      const v: Placement = {};
+      ex.stories.forEach((st) => (v[st.id] = null));
+      return v;
+    }
     case "kanban": {
       // The board starts with everything in "To Do" — your job is to update it.
       const v: Placement = {};
@@ -245,12 +270,30 @@ export function solutionValue(ex: Exercise): ExerciseValue {
     }
     case "timeline":
       return { ...ex.answer };
+    case "sprint": {
+      const keep = new Set(sprintAnswerIds(ex));
+      const v: Placement = {};
+      ex.stories.forEach((st) => (v[st.id] = keep.has(st.id) ? "sprint" : null));
+      return v;
+    }
     case "kanban": {
       const v: Placement = {};
       ex.cards.forEach((c) => (v[c.id] = c.column));
       return v;
     }
   }
+}
+
+/** The right sprint: take stories from the top of the backlog until the next one won't fit. */
+export function sprintAnswerIds(ex: SprintExercise): string[] {
+  const ids: string[] = [];
+  let total = 0;
+  for (const st of ex.stories) {
+    if (total + st.points > ex.capacity) break;
+    total += st.points;
+    ids.push(st.id);
+  }
+  return ids;
 }
 
 /** Is there enough of an answer to press Check? */
@@ -312,6 +355,32 @@ export function checkExercise(ex: Exercise, value: ExerciseValue): CheckResult {
         message: `${ex.cards.length - wrong.length} of ${ex.cards.length} cards are in the right column. The highlighted ones need another look.${ex.hint ? " " + ex.hint : ""}`,
       };
     }
+    case "sprint": {
+      const v = value as Placement;
+      const chosen = ex.stories.filter((st) => v[st.id] === "sprint");
+      if (chosen.length === 0) {
+        return { correct: false, message: "Pull some stories into the sprint first, then check.", incomplete: true };
+      }
+      const total = chosen.reduce((n, st) => n + st.points, 0);
+      const answer = new Set(sprintAnswerIds(ex));
+      const chosenIds = new Set(chosen.map((st) => st.id));
+      if (chosen.length === answer.size && chosen.every((st) => answer.has(st.id))) return { correct: true };
+      const wrongIds = ex.stories
+        .filter((st) => answer.has(st.id) !== chosenIds.has(st.id))
+        .map((st) => st.id);
+      if (total > ex.capacity) {
+        return {
+          correct: false,
+          wrongIds,
+          message: `That's ${total} points, but the team's capacity is ${ex.capacity}. A sprint that's over capacity usually doesn't finish.`,
+        };
+      }
+      return {
+        correct: false,
+        wrongIds,
+        message: `Take stories from the top of the backlog, in priority order, and stop when the next one won't fit. Don't skip ahead to squeeze in smaller ones.`,
+      };
+    }
     case "kanban": {
       const v = value as Placement;
       const wrong = ex.cards.filter((c) => v[c.id] !== c.column).map((c) => c.id);
@@ -350,7 +419,7 @@ export function checkExercise(ex: Exercise, value: ExerciseValue): CheckResult {
 
 export const ENCOURAGEMENTS = [
   "Ooh, so close! Give it another go. 💪",
-  "Not quite yet, but you're thinking like a project manager. Try again! ✨",
+  "Not quite yet, but you're on the right track. Try again! ✨",
   "Good effort! Peek at the highlighted bits and have another try. 🌱",
   "Almost! Real PMs get things wrong and adjust all the time. Try again! 💜",
 ];
@@ -446,6 +515,10 @@ const TITLES: Record<Track, Record<SummaryRole, string>> = {
     roadmap: "",
     assumptions: "",
     launch: "",
+    sprintgoal: "",
+    dod: "",
+    sprint: "",
+    retro: "",
   },
   product: {
     goal: "🎯 Goal",
@@ -463,6 +536,31 @@ const TITLES: Record<Track, Record<SummaryRole, string>> = {
     roadmap: "🗺️ Roadmap",
     assumptions: "🧪 Riskiest assumptions and cheap tests",
     launch: "🚀 Launch checklist",
+    sprintgoal: "",
+    dod: "",
+    sprint: "",
+    retro: "",
+  },
+  agile: {
+    goal: "",
+    scope: "",
+    wbs: "",
+    timeline: "",
+    raci: "👯 Team roles",
+    risks: "",
+    stakeholders: "",
+    engagement: "",
+    problem: "",
+    user: "",
+    metric: "",
+    mvp: "",
+    roadmap: "",
+    assumptions: "",
+    launch: "",
+    sprintgoal: "🎯 Sprint goal",
+    dod: "✅ Definition of Done",
+    sprint: "📋 Sprint backlog",
+    retro: "🔁 Retro: start / stop / continue",
   },
 };
 
@@ -475,7 +573,10 @@ export function buildSummary(project: PlanProject): SummarySection[] {
     if (!ex || !step.role) continue;
     const role = step.role;
 
-    if ((role === "goal" || role === "problem" || role === "user" || role === "metric") && ex.type === "multiple-choice") {
+    if (
+      (role === "goal" || role === "problem" || role === "user" || role === "metric" || role === "sprintgoal" || role === "dod") &&
+      ex.type === "multiple-choice"
+    ) {
       out.push({ kind: "text", title: T[role], text: ex.options[ex.correct] });
     } else if ((role === "scope" || role === "mvp") && ex.type === "buckets") {
       const inLabel = T[role];
@@ -489,7 +590,16 @@ export function buildSummary(project: PlanProject): SummarySection[] {
         title: role === "mvp" ? "🅿️ Later (not in the MVP)" : "🅿️ Parking lot (not this time)",
         items: ex.cards.filter((c) => c.bucket === ex.buckets[1].id).map((c) => c.label),
       });
-    } else if ((role === "wbs" || role === "stakeholders") && ex.type === "buckets") {
+    } else if (role === "sprint" && ex.type === "sprint") {
+      const keep = new Set(sprintAnswerIds(ex));
+      const chosen = ex.stories.filter((st) => keep.has(st.id));
+      const total = chosen.reduce((n, st) => n + st.points, 0);
+      out.push({
+        kind: "list",
+        title: `${T[role]} (${total} of ${ex.capacity} points)`,
+        items: chosen.map((st) => `${st.label} (${st.points} pts)`),
+      });
+    } else if ((role === "wbs" || role === "stakeholders" || role === "retro") && ex.type === "buckets") {
       out.push({
         kind: "groups",
         title: T[role],

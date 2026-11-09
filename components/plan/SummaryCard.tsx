@@ -10,7 +10,8 @@ import { buildSummary, type PlanProject, type SummarySection } from "@/lib/plan"
  */
 export default function SummaryCard({ project }: { project: PlanProject }) {
   const sections = buildSummary(project);
-  const isProduct = project.track === "product";
+  const track = project.track;
+  const noun = track === "product" ? "Product" : track === "agile" ? "Sprint" : "Project";
 
   useEffect(() => {
     const clean = () => document.body.classList.remove("printing-plan");
@@ -32,12 +33,14 @@ export default function SummaryCard({ project }: { project: PlanProject }) {
           🎉
         </span>
         <h3 className="font-heading text-2xl font-bold mb-1">
-          {isProduct ? "You planned a whole product!" : "You planned a whole project!"}
+          {track === "product" ? "You planned a whole product!" : track === "agile" ? "You planned a whole sprint!" : "You planned a whole project!"}
         </h3>
         <p className="text-dark-soft text-sm">
-          {isProduct
+          {track === "product"
             ? "That's the same loop real product managers use: find the problem, define the smallest useful answer, build it, launch it, and learn."
-            : "That's the same loop real project managers use: define it, plan it, do it, close it."}
+            : track === "agile"
+              ? "That's the same loop real Scrum teams use every sprint: plan, build, review, improve, and repeat."
+              : "That's the same loop real project managers use: define it, plan it, do it, close it."}
         </p>
       </div>
 
@@ -48,7 +51,7 @@ export default function SummaryCard({ project }: { project: PlanProject }) {
         <div className="h-[6px] bg-gradient-to-r from-peach via-lavender to-mint" />
         <div className="p-5 sm:p-7">
           <p className="text-[10px] font-bold uppercase tracking-[3px] text-lavender mb-1">
-            Tech with Denise · Plan a {isProduct ? "Product" : "Project"}
+            Tech with Denise · Plan a {noun}
           </p>
           <h3 className="font-heading text-xl sm:text-2xl font-bold mb-4">{project.summaryTitle}</h3>
 

@@ -35,6 +35,8 @@ type Props = {
   gridClass?: string;
   /** seed for the (stable) shuffled order of the pile */
   seed: string;
+  /** keep the items in the order given instead of shuffling (e.g. a priority-ordered backlog) */
+  ordered?: boolean;
 };
 
 const POOL = "__pool__";
@@ -62,6 +64,7 @@ export default function DragColumns({
   poolLabel = "Cards to place",
   gridClass = "grid-cols-1 sm:grid-cols-2",
   seed,
+  ordered = false,
 }: Props) {
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -70,7 +73,7 @@ export default function DragColumns({
   );
 
   // Shuffle once so the pile order doesn't give the answer away.
-  const shuffled = useMemo(() => seededShuffle(items, seed), [items, seed]);
+  const shuffled = useMemo(() => (ordered ? items : seededShuffle(items, seed)), [items, seed, ordered]);
 
   function place(id: string, col: string | null) {
     if (disabled) return;

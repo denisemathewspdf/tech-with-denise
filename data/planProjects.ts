@@ -8,7 +8,7 @@
  * (see lib/plan.ts for the exact shape of each).
  */
 
-import { PRODUCT_PHASES, type PlanProject, type PlanStep, type KanbanColumn } from "@/lib/plan";
+import { AGILE_PHASES, PRODUCT_PHASES, type PlanProject, type PlanStep, type KanbanColumn } from "@/lib/plan";
 
 // ---- tiny helpers to keep the data readable --------------------------------
 
@@ -3008,6 +3008,953 @@ const coffeeSteps: PlanStep[] = [
 ];
 
 // ============================================================================
+// AGILE & SCRUM TRACK
+// Run a sprint with a small team: Set up, Plan the sprint, Run the sprint, Review & improve.
+// ============================================================================
+
+const FA = {
+  agile:
+    'This is agile: deliver small working pieces, get feedback, and adjust the plan, instead of planning everything up front (the older "waterfall" way).',
+  roles: "These are the Scrum roles: Product Owner, Scrum Master, and Developers, plus stakeholders who give feedback.",
+  story: "This is a user story with acceptance criteria: who it's for, what they want, why, and how you'll know it works.",
+  backlog:
+    "This is the product backlog: one ordered list of everything the product might need, made of stories, bugs, technical tasks, and spikes (time-boxed research).",
+  points: "These are story points: a relative measure of size and effort (not hours) that the team agrees on together.",
+  dod: "This is a Definition of Done: a shared checklist for when work really counts as finished.",
+  sprintgoal: "This is a sprint goal: one sentence on what the sprint is meant to achieve.",
+  velocity: "This is velocity: the average story points a team finishes per sprint, used to decide how much to take on.",
+  planning:
+    "This is sprint planning: the team pulls the top-priority stories into the sprint backlog, up to its capacity.",
+  events:
+    "These are the Scrum events: sprint planning, the daily scrum, the sprint review, and the sprint retrospective.",
+  standup: "This is the daily scrum (or standup): a 15-minute sync on progress, plan, and blockers.",
+  board:
+    "This is a sprint board (or scrum board): a kanban board that shows each story's status during one sprint.",
+  blocker:
+    "This is handling a blocker (or impediment): anything stopping progress, and clearing them is a core job of the Scrum Master.",
+  midsprint:
+    "This is protecting the sprint: new requests go on the backlog and wait for the next sprint planning, unless the sprint goal itself is at risk.",
+  cycle: "This is the sprint cycle: a repeating loop, usually 1 to 4 weeks long.",
+  retro: 'This is a retrospective, and Start / Stop / Continue is one popular way to run it.',
+};
+
+/** The four Scrum events, matched to their jobs. Same for every project. */
+const eventsMatch = () =>
+  pairs([
+    ["Sprint planning", "Choose what the team will build this sprint"],
+    ["Daily scrum", "A 15-minute check-in on progress and blockers"],
+    ["Sprint review", "Show the working product and get feedback"],
+    ["Retrospective", "Talk about how to work better next time"],
+  ]);
+
+/** Standard cycle order. Same for every project. */
+const cycleOrder = [
+  "Sprint planning",
+  "Daily scrum, every day",
+  "Sprint review",
+  "Sprint retrospective",
+  "Next sprint planning",
+];
+
+const retroBuckets = [
+  { id: "start", label: "Start" },
+  { id: "stop", label: "Stop" },
+  { id: "continue", label: "Continue" },
+];
+const retroRule =
+  "How to decide: START is a new habit worth trying. STOP is something that hurt the team. CONTINUE is something that's already working.";
+
+const typeBuckets = [
+  { id: "story", label: "User story" },
+  { id: "bug", label: "Bug" },
+  { id: "task", label: "Technical task" },
+  { id: "spike", label: "Spike" },
+];
+const typeRule =
+  "How to decide: a USER STORY is something a user can see or do. A BUG is something that's broken. A TECHNICAL TASK is behind-the-scenes setup that users never see. A SPIKE is a time-boxed research question, not a deliverable.";
+
+// ---------------------------------------------------------------------------
+// 🍕 Ship a Pizza Ordering App
+// ---------------------------------------------------------------------------
+
+const pizzaSteps: PlanStep[] = [
+  {
+    id: "pz-1", phase: "Set up", title: "What does agile mean?",
+    explanation:
+      "Imagine you're a team of four building an online ordering app for a pizza shop. Agile means working in small pieces, showing them off, and changing the plan based on what you learn.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which approach is agile?",
+      options: [
+        "Plan every feature for six months, build it all, then show the owner at the end",
+        "Build the smallest useful piece in two weeks, show the owner, then adjust the plan from their feedback",
+        "Each developer builds whatever they like",
+        "Skip planning and start coding",
+      ],
+      correct: 1,
+    },
+    footnote: FA.agile,
+  },
+  {
+    id: "pz-2", phase: "Set up", title: "Who's on a Scrum team?",
+    explanation:
+      "A Scrum team is small and has just a few roles. Each one has a clear job, so nobody is guessing who decides what.",
+    role: "raci",
+    exercise: {
+      type: "match",
+      prompt: "Match each job to the Scrum role.",
+      leftLabel: "The job",
+      rightLabel: "The role",
+      pairs: pairs([
+        ["Decides what's most important to build", "Product Owner"],
+        ["Helps the team follow Scrum and clears blockers", "Scrum Master"],
+        ["Builds, tests, and delivers the work", "Developers"],
+        ["Gives feedback at the sprint review", "Stakeholders (the shop owner)"],
+      ]),
+    },
+    footnote: FA.roles,
+  },
+  {
+    id: "pz-3", phase: "Set up", title: "Write a user story",
+    explanation:
+      'Work in Scrum starts as user stories: "As a [who], I want [what], so that [why]." Add a "done when" line so everyone agrees what success looks like.',
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best user story?",
+      options: [
+        "Build the ordering API",
+        "As a hungry customer, I want to choose my pizza toppings, so that I get the pizza I like. Done when: I can pick toppings and see the price update.",
+        "Customers like toppings",
+        "Make ordering good",
+      ],
+      correct: 1,
+    },
+    footnote: FA.story,
+  },
+  {
+    id: "pz-4", phase: "Set up", title: "Sort the backlog",
+    explanation:
+      "The product backlog is the team's master to-do list. It holds more than stories, so it helps to know what kind of item each one is.",
+    exercise: {
+      type: "buckets",
+      rule: typeRule,
+      hint: "Ask: can a user see or do it (story), is it broken (bug), is it hidden setup (task), or is it a question to research (spike)?",
+      buckets: typeBuckets,
+      cards: bucketCards({
+        story: [
+          ["As a customer, I want to track my order", "A user can see and use it."],
+          ["As the owner, I want to see today's orders", "A user can see and use it."],
+        ],
+        bug: [
+          ["The total shows $0 when a coupon is applied", "Something that should work is broken."],
+          ["The Order button is hidden on small phones", "Something that should work is broken."],
+        ],
+        task: [
+          ["Set up the database", "Behind-the-scenes setup users never see."],
+          ["Set up automatic deployment", "Behind-the-scenes setup users never see."],
+        ],
+        spike: [
+          ["Research which payment service to use", "It's a question to answer, not a feature to ship."],
+          ["Find out if we can print tickets in the kitchen", "It's a question to answer, not a feature to ship."],
+        ],
+      }),
+    },
+    footnote: FA.backlog,
+  },
+  {
+    id: "pz-5", phase: "Set up", title: "Size it with story points",
+    explanation:
+      "Scrum teams estimate in story points, not hours. Points are RELATIVE: something twice the work gets twice the points.",
+    exercise: {
+      type: "number",
+      question:
+        "\"Choose toppings\" is 3 points. \"Pay by card\" is about twice as much work. How many points should \"Pay by card\" be?",
+      answer: 6,
+      hint: "Relative sizing: twice the work means twice the points.",
+      unit: "points",
+    },
+    footnote: FA.points,
+  },
+  {
+    id: "pz-6", phase: "Plan the sprint", title: "What does \"done\" mean?",
+    explanation:
+      "\"Done\" can't mean \"I think it's done.\" Teams agree on a Definition of Done so every finished story is really finished.",
+    role: "dod",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which story is truly Done?",
+      options: [
+        "The code is written",
+        "It works on my laptop",
+        "The code is written, tested, reviewed by a teammate, and working on the staging site",
+        "The designer said it looks fine",
+      ],
+      correct: 2,
+    },
+    footnote: FA.dod,
+  },
+  {
+    id: "pz-7", phase: "Plan the sprint", title: "Set a sprint goal",
+    explanation:
+      "Every sprint (a short, fixed work cycle) needs one goal that ties the stories together, so the team knows what it's aiming for.",
+    role: "sprintgoal",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best goal for Sprint 1?",
+      options: [
+        "Do 14 stories",
+        "Customers can choose a pizza and place a test order",
+        "Work hard and finish stuff",
+        "Fix everything",
+      ],
+      correct: 1,
+    },
+    footnote: FA.sprintgoal,
+  },
+  {
+    id: "pz-8", phase: "Plan the sprint", title: "How much can we take on?",
+    explanation:
+      "Velocity is how many points the team usually finishes in a sprint. Use the average of recent sprints to decide how much to plan.",
+    exercise: {
+      type: "number",
+      question: "In the last three sprints, the team finished 18, 22, and 20 points. What's the average velocity?",
+      answer: 20,
+      hint: "Add the three sprints together, then divide by 3.",
+      unit: "points",
+    },
+    footnote: FA.velocity,
+  },
+  {
+    id: "pz-9", phase: "Plan the sprint", title: "Plan the sprint",
+    explanation:
+      "Sprint planning: the Product Owner has put the backlog in priority order. The team pulls stories from the top until the sprint is full.",
+    role: "sprint",
+    exercise: {
+      type: "sprint",
+      rule:
+        "How to decide: take stories from the TOP of the backlog, in order, and stop when the next one won't fit under the team's capacity. Priority matters more than squeezing in small stories.",
+      capacity: 20,
+      stories: [
+        { id: "menu", label: "Browse the menu", points: 5 },
+        { id: "toppings", label: "Choose toppings", points: 3 },
+        { id: "pay", label: "Pay by card", points: 6 },
+        { id: "email", label: "Order confirmation email", points: 5 },
+        { id: "track", label: "Track my order", points: 2 },
+        { id: "owner", label: "Owner sees today's orders", points: 3 },
+      ],
+    },
+    footnote: FA.planning,
+  },
+  {
+    id: "pz-10", phase: "Run the sprint", title: "Know the Scrum meetings",
+    explanation:
+      "Scrum has four regular meetings. Each has one clear job, which keeps meetings short and useful.",
+    exercise: {
+      type: "match",
+      prompt: "Match each Scrum event to its job.",
+      leftLabel: "The event",
+      rightLabel: "Its job",
+      pairs: eventsMatch(),
+    },
+    footnote: FA.events,
+  },
+  {
+    id: "pz-11", phase: "Run the sprint", title: "Give a good standup update",
+    explanation:
+      "The daily scrum is 15 minutes. Each person shares what they did, what they'll do, and anything in their way.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best standup update?",
+      options: [
+        "I'm working on stuff",
+        "Yesterday I finished the menu page. Today I'll start on toppings. I'm blocked on the photos from the shop.",
+        "Everything's fine",
+        "Let me tell you the 40-minute story of a bug I fixed",
+      ],
+      correct: 1,
+    },
+    footnote: FA.standup,
+  },
+  {
+    id: "pz-12", phase: "Run the sprint", title: "Update the sprint board",
+    explanation: "The sprint board shows where every story stands, so nobody has to ask.",
+    exercise: {
+      type: "kanban",
+      scenario:
+        "It's day 5 of a 10-day sprint. The menu page is done, toppings are in progress, and card payment hasn't started.",
+      cards: kanban([
+        ["Browse the menu", "done"],
+        ["Choose toppings", "doing"],
+        ["Pay by card", "todo"],
+        ["Order confirmation email", "todo"],
+      ]),
+    },
+    footnote: FA.board,
+  },
+  {
+    id: "pz-13", phase: "Run the sprint", title: "Handle a blocker",
+    explanation:
+      "A blocker is anything stopping progress. The worst thing you can do with one is hide it.",
+    exercise: {
+      type: "multiple-choice",
+      question:
+        "A developer needs the shop's payment account details, but the owner hasn't replied in two days. What's the best move?",
+      options: [
+        "Wait quietly",
+        "Raise it at standup and have the Scrum Master or Product Owner chase the owner today",
+        "Guess the details",
+        "Switch to a different project",
+      ],
+      correct: 1,
+    },
+    footnote: FA.blocker,
+  },
+  {
+    id: "pz-14", phase: "Run the sprint", title: "Protect the sprint",
+    explanation:
+      "Mid-sprint, someone will always have a great new idea. The sprint is a promise to the team, so new ideas wait their turn.",
+    exercise: {
+      type: "multiple-choice",
+      question: "On day 4, the shop owner asks, \"Can we add a loyalty points system?\" What do you do?",
+      options: [
+        "Add it to this sprint",
+        "Say no forever",
+        "Add it to the product backlog, discuss its priority at the next sprint planning, and keep the sprint goal",
+        "Cancel the sprint",
+      ],
+      correct: 2,
+    },
+    footnote: FA.midsprint,
+  },
+  {
+    id: "pz-15", phase: "Review & improve", title: "The sprint cycle",
+    explanation: "A sprint is a loop. At the end, you review, improve, and start again.",
+    exercise: {
+      type: "order",
+      prompt: "Drag the events into the order they happen in a sprint cycle.",
+      items: cycleOrder,
+    },
+    footnote: FA.cycle,
+  },
+  {
+    id: "pz-16", phase: "Review & improve", title: "Run a retrospective",
+    explanation: "The retro is where the team gets better. Be honest and kind, and aim for a few specific changes.",
+    role: "retro",
+    exercise: {
+      type: "buckets",
+      rule: retroRule,
+      hint: "Ask: is it a new habit (start), something that hurt (stop), or something already working (continue)?",
+      buckets: retroBuckets,
+      cards: bucketCards({
+        start: [
+          ["Pair up on the trickiest stories", "A new habit that could help."],
+          ["Ask the owner for feedback midway", "A new habit that could help."],
+        ],
+        stop: [
+          ["Taking on more points than our velocity", "Overcommitting hurt the sprint."],
+          ["Letting blockers sit for days", "It slowed the whole team."],
+        ],
+        continue: [
+          ["Short, focused standups", "It's already working."],
+          ["Showing working software every sprint", "It's already working."],
+        ],
+      }),
+    },
+    footnote: FA.retro,
+  },
+  {
+    id: "pz-17", phase: "Review & improve", title: "Your sprint plan",
+    explanation: "You planned a whole sprint from the backlog to the retro. Here's everything you decided, on one page.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// 🎸 Launch a Fan Website for a Local Band
+// ---------------------------------------------------------------------------
+
+const bandSteps: PlanStep[] = [
+  {
+    id: "bd-1", phase: "Set up", title: "What does agile mean?",
+    explanation:
+      "Imagine a team of three building a fan website for a local band. Agile means building small pieces, showing them, and changing the plan based on what you learn.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which approach is agile?",
+      options: [
+        "Design the entire site, including a store and tour map, before showing anyone",
+        "Launch a one-page site with tour dates in two weeks, get fan feedback, then plan the next piece",
+        "Each person builds a page their own way",
+        "Wait until all the songs are recorded",
+      ],
+      correct: 1,
+    },
+    footnote: FA.agile,
+  },
+  {
+    id: "bd-2", phase: "Set up", title: "Who's on a Scrum team?",
+    explanation: "A Scrum team has a few clear roles, so everyone knows who decides what.",
+    role: "raci",
+    exercise: {
+      type: "match",
+      prompt: "Match each job to the Scrum role.",
+      leftLabel: "The job",
+      rightLabel: "The role",
+      pairs: pairs([
+        ["Band manager who decides what matters most", "Product Owner"],
+        ["Keeps a steady rhythm and clears blockers", "Scrum Master"],
+        ["Designs, builds, and tests the site", "Developers"],
+        ["Gives feedback at the sprint review", "Stakeholders (the band and fans)"],
+      ]),
+    },
+    footnote: FA.roles,
+  },
+  {
+    id: "bd-3", phase: "Set up", title: "Write a user story",
+    explanation:
+      'A user story says who wants what and why, with a "done when" line so everyone agrees on success.',
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best user story?",
+      options: [
+        "Add a tour page",
+        "As a fan, I want to see upcoming tour dates, so that I can buy tickets for a show near me. Done when: dates are listed with the city and a ticket link.",
+        "Fans like shows",
+        "Tour dates should be good",
+      ],
+      correct: 1,
+    },
+    footnote: FA.story,
+  },
+  {
+    id: "bd-4", phase: "Set up", title: "Sort the backlog",
+    explanation:
+      "The product backlog holds more than stories. Knowing what kind of item each one is helps the team plan it.",
+    exercise: {
+      type: "buckets",
+      rule: typeRule,
+      hint: "Ask: can a user see or do it (story), is it broken (bug), is it hidden setup (task), or is it a question to research (spike)?",
+      buckets: typeBuckets,
+      cards: bucketCards({
+        story: [
+          ["As a fan, I want to hear song previews", "A user can see and use it."],
+          ["As the band, I want to update tour dates myself", "A user can see and use it."],
+        ],
+        bug: [
+          ["Two song previews play at the same time", "Something that should work is broken."],
+          ["Tour dates show in the wrong time zone", "Something that should work is broken."],
+        ],
+        task: [
+          ["Set up hosting and a domain name", "Behind-the-scenes setup users never see."],
+          ["Set up a database for tour dates", "Behind-the-scenes setup users never see."],
+        ],
+        spike: [
+          ["Research whether a simple store plugin can sell merch", "It's a question to answer, not a feature to ship."],
+          ["Find out how to embed the band's streaming playlist", "It's a question to answer, not a feature to ship."],
+        ],
+      }),
+    },
+    footnote: FA.backlog,
+  },
+  {
+    id: "bd-5", phase: "Set up", title: "Size it with story points",
+    explanation:
+      "Scrum teams estimate in story points, not hours. Points are RELATIVE: something three times the work gets three times the points.",
+    exercise: {
+      type: "number",
+      question:
+        "\"Show tour dates\" is 2 points. \"Mailing list sign-up with email confirmation\" is about three times as much work. How many points should it be?",
+      answer: 6,
+      hint: "Relative sizing: three times the work means three times the points.",
+      unit: "points",
+    },
+    footnote: FA.points,
+  },
+  {
+    id: "bd-6", phase: "Plan the sprint", title: "What does \"done\" mean?",
+    explanation:
+      "\"Done\" can't mean \"I think it's done.\" Teams agree on a Definition of Done so every finished story is really finished.",
+    role: "dod",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which story is truly Done?",
+      options: [
+        "I finished the page design",
+        "It works on my computer",
+        "It's built, tested on phone and desktop, reviewed by a teammate, and live on the staging site",
+        "The band liked the sketch",
+      ],
+      correct: 2,
+    },
+    footnote: FA.dod,
+  },
+  {
+    id: "bd-7", phase: "Plan the sprint", title: "Set a sprint goal",
+    explanation:
+      "Every sprint needs one goal that ties its stories together, so the team knows what it's aiming for.",
+    role: "sprintgoal",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best goal for Sprint 1?",
+      options: [
+        "Build the whole site",
+        "Fans can see tour dates and hear song previews",
+        "Do more than last sprint",
+        "Make it look cool",
+      ],
+      correct: 1,
+    },
+    footnote: FA.sprintgoal,
+  },
+  {
+    id: "bd-8", phase: "Plan the sprint", title: "How much can we take on?",
+    explanation:
+      "Velocity is how many points the team usually finishes in a sprint. Use the average of recent sprints to decide how much to plan.",
+    exercise: {
+      type: "number",
+      question: "In the last three sprints, the team finished 12, 15, and 9 points. What's the average velocity?",
+      answer: 12,
+      hint: "Add the three sprints together, then divide by 3.",
+      unit: "points",
+    },
+    footnote: FA.velocity,
+  },
+  {
+    id: "bd-9", phase: "Plan the sprint", title: "Plan the sprint",
+    explanation:
+      "The band manager (Product Owner) has put the backlog in priority order. The team pulls stories from the top until the sprint is full.",
+    role: "sprint",
+    exercise: {
+      type: "sprint",
+      rule:
+        "How to decide: take stories from the TOP of the backlog, in order, and stop when the next one won't fit under the team's capacity. Priority matters more than squeezing in small stories.",
+      capacity: 12,
+      stories: [
+        { id: "dates", label: "Tour dates list", points: 3 },
+        { id: "previews", label: "Song previews", points: 5 },
+        { id: "gallery", label: "Photo gallery", points: 2 },
+        { id: "mailing", label: "Mailing list sign-up", points: 6 },
+        { id: "merch", label: "Merch page", points: 8 },
+        { id: "contact", label: "Contact form", points: 2 },
+      ],
+    },
+    footnote: FA.planning,
+  },
+  {
+    id: "bd-10", phase: "Run the sprint", title: "Know the Scrum meetings",
+    explanation: "Scrum has four regular meetings. Each has one clear job, which keeps meetings short and useful.",
+    exercise: {
+      type: "match",
+      prompt: "Match each Scrum event to its job.",
+      leftLabel: "The event",
+      rightLabel: "Its job",
+      pairs: eventsMatch(),
+    },
+    footnote: FA.events,
+  },
+  {
+    id: "bd-11", phase: "Run the sprint", title: "Give a good standup update",
+    explanation:
+      "The daily scrum is 15 minutes. Each person shares what they did, what they'll do, and anything in their way.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best standup update?",
+      options: [
+        "I'm working on the website",
+        "Yesterday I built the tour dates list. Today I'll start the song previews. I'm waiting on the band's audio files.",
+        "All good",
+        "I'd like to talk about my feelings about fonts",
+      ],
+      correct: 1,
+    },
+    footnote: FA.standup,
+  },
+  {
+    id: "bd-12", phase: "Run the sprint", title: "Update the sprint board",
+    explanation: "The sprint board shows where every story stands, so nobody has to ask.",
+    exercise: {
+      type: "kanban",
+      scenario:
+        "It's day 5 of a 10-day sprint. The tour dates are live, song previews are in progress, and the photo gallery hasn't started.",
+      cards: kanban([
+        ["Tour dates list", "done"],
+        ["Song previews", "doing"],
+        ["Photo gallery", "todo"],
+        ["Mailing list sign-up", "todo"],
+      ]),
+    },
+    footnote: FA.board,
+  },
+  {
+    id: "bd-13", phase: "Run the sprint", title: "Handle a blocker",
+    explanation:
+      "A blocker is anything stopping progress. The worst thing you can do with one is hide it.",
+    exercise: {
+      type: "multiple-choice",
+      question:
+        "The song files haven't arrived and the singer is on tour. A developer can't finish previews. What's the best move?",
+      options: [
+        "Wait quietly",
+        "Raise it at standup and have the Scrum Master or band manager reach the singer today, with a backup plan like placeholder audio",
+        "Make up the audio",
+        "Cancel the sprint",
+      ],
+      correct: 1,
+    },
+    footnote: FA.blocker,
+  },
+  {
+    id: "bd-14", phase: "Run the sprint", title: "Protect the sprint",
+    explanation:
+      "Mid-sprint, someone will always have a great new idea. The sprint is a promise to the team, so new ideas wait their turn.",
+    exercise: {
+      type: "multiple-choice",
+      question: "On day 4 the drummer asks, \"Can we add a merch store?\" What do you do?",
+      options: [
+        "Add it to this sprint",
+        "Say no forever",
+        "Add it to the product backlog, discuss its priority at the next sprint planning, and keep the sprint goal",
+        "Cancel the sprint",
+      ],
+      correct: 2,
+    },
+    footnote: FA.midsprint,
+  },
+  {
+    id: "bd-15", phase: "Review & improve", title: "The sprint cycle",
+    explanation: "A sprint is a loop. At the end, you review, improve, and start again.",
+    exercise: {
+      type: "order",
+      prompt: "Drag the events into the order they happen in a sprint cycle.",
+      items: cycleOrder,
+    },
+    footnote: FA.cycle,
+  },
+  {
+    id: "bd-16", phase: "Review & improve", title: "Run a retrospective",
+    explanation: "The retro is where the team gets better. Be honest and kind, and aim for a few specific changes.",
+    role: "retro",
+    exercise: {
+      type: "buckets",
+      rule: retroRule,
+      hint: "Ask: is it a new habit (start), something that hurt (stop), or something already working (continue)?",
+      buckets: retroBuckets,
+      cards: bucketCards({
+        start: [
+          ["Ask the band to review designs every few days", "A new habit that could help."],
+          ["Write \"done when\" lines before building", "A new habit that could help."],
+        ],
+        stop: [
+          ["Waiting for audio files before starting anything", "It stalled the team."],
+          ["Adding last-minute pages without telling the team", "It hurt the sprint."],
+        ],
+        continue: [
+          ["Short daily standups", "It's already working."],
+          ["Releasing a small piece every sprint", "It's already working."],
+        ],
+      }),
+    },
+    footnote: FA.retro,
+  },
+  {
+    id: "bd-17", phase: "Review & improve", title: "Your sprint plan",
+    explanation: "You planned a whole sprint from the backlog to the retro. Here's everything you decided, on one page.",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// 📚 Build a Flashcard App for Your Study Group
+// ---------------------------------------------------------------------------
+
+const flashSteps: PlanStep[] = [
+  {
+    id: "fl-1", phase: "Set up", title: "What does agile mean?",
+    explanation:
+      "Imagine a four-person study group building a flashcard app. Agile means building small pieces, testing them with the group, and changing the plan based on what you learn.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which approach is agile?",
+      options: [
+        "Plan every feature for the whole semester before writing any code",
+        "Build a simple deck and quiz screen in two weeks, test it with the group, then decide what's next",
+        "Everyone works on a different app",
+        "Wait until finals week to launch",
+      ],
+      correct: 1,
+    },
+    footnote: FA.agile,
+  },
+  {
+    id: "fl-2", phase: "Set up", title: "Who's on a Scrum team?",
+    explanation: "A Scrum team has a few clear roles, so everyone knows who decides what.",
+    role: "raci",
+    exercise: {
+      type: "match",
+      prompt: "Match each job to the Scrum role.",
+      leftLabel: "The job",
+      rightLabel: "The role",
+      pairs: pairs([
+        ["Decides which features matter most to the group", "Product Owner"],
+        ["Runs the meetings and clears blockers", "Scrum Master"],
+        ["Builds and tests the app", "Developers"],
+        ["Tries the app and gives feedback", "Stakeholders (the study group)"],
+      ]),
+    },
+    footnote: FA.roles,
+  },
+  {
+    id: "fl-3", phase: "Set up", title: "Write a user story",
+    explanation:
+      'A user story says who wants what and why, with a "done when" line so everyone agrees on success.',
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best user story?",
+      options: [
+        "Build the card component",
+        "As a student, I want to flip a card to see the answer, so that I can test myself. Done when: tapping a card reveals its answer.",
+        "Students like cards",
+        "Cards should work",
+      ],
+      correct: 1,
+    },
+    footnote: FA.story,
+  },
+  {
+    id: "fl-4", phase: "Set up", title: "Sort the backlog",
+    explanation:
+      "The product backlog holds more than stories. Knowing what kind of item each one is helps the team plan it.",
+    exercise: {
+      type: "buckets",
+      rule: typeRule,
+      hint: "Ask: can a user see or do it (story), is it broken (bug), is it hidden setup (task), or is it a question to research (spike)?",
+      buckets: typeBuckets,
+      cards: bucketCards({
+        story: [
+          ["As a student, I want to shuffle my deck", "A user can see and use it."],
+          ["As a student, I want to see which cards I got wrong", "A user can see and use it."],
+        ],
+        bug: [
+          ["Flipping a card twice breaks the animation", "Something that should work is broken."],
+          ["The deck list is empty after a refresh", "Something that should work is broken."],
+        ],
+        task: [
+          ["Set up the project and code repository", "Behind-the-scenes setup users never see."],
+          ["Set up automated tests", "Behind-the-scenes setup users never see."],
+        ],
+        spike: [
+          ["Research the best way to store decks offline", "It's a question to answer, not a feature to ship."],
+          ["Find out if we can import cards from a spreadsheet", "It's a question to answer, not a feature to ship."],
+        ],
+      }),
+    },
+    footnote: FA.backlog,
+  },
+  {
+    id: "fl-5", phase: "Set up", title: "Size it with story points",
+    explanation:
+      "Scrum teams estimate in story points, not hours. Points are RELATIVE: something twice the work gets twice the points.",
+    exercise: {
+      type: "number",
+      question:
+        "\"Shuffle the deck\" is 4 points. \"Track which cards you got wrong\" is about twice as much work. How many points should it be?",
+      answer: 8,
+      hint: "Relative sizing: twice the work means twice the points.",
+      unit: "points",
+    },
+    footnote: FA.points,
+  },
+  {
+    id: "fl-6", phase: "Plan the sprint", title: "What does \"done\" mean?",
+    explanation:
+      "\"Done\" can't mean \"I think it's done.\" Teams agree on a Definition of Done so every finished story is really finished.",
+    role: "dod",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which story is truly Done?",
+      options: [
+        "The code is merged",
+        "It works in my demo deck",
+        "It's built, passes the automated tests, reviewed by a teammate, and working in the test version the group uses",
+        "It looks right in the mockup",
+      ],
+      correct: 2,
+    },
+    footnote: FA.dod,
+  },
+  {
+    id: "fl-7", phase: "Plan the sprint", title: "Set a sprint goal",
+    explanation:
+      "Every sprint needs one goal that ties its stories together, so the team knows what it's aiming for.",
+    role: "sprintgoal",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best goal for Sprint 1?",
+      options: [
+        "Finish as many cards as possible",
+        "Students can create a deck and flip through its cards",
+        "Build the whole app",
+        "Make it pretty",
+      ],
+      correct: 1,
+    },
+    footnote: FA.sprintgoal,
+  },
+  {
+    id: "fl-8", phase: "Plan the sprint", title: "How much can we take on?",
+    explanation:
+      "Velocity is how many points the team usually finishes in a sprint. Use the average of recent sprints to decide how much to plan.",
+    exercise: {
+      type: "number",
+      question: "In the last three sprints, the team finished 24, 30, and 27 points. What's the average velocity?",
+      answer: 27,
+      hint: "Add the three sprints together, then divide by 3.",
+      unit: "points",
+    },
+    footnote: FA.velocity,
+  },
+  {
+    id: "fl-9", phase: "Plan the sprint", title: "Plan the sprint",
+    explanation:
+      "The Product Owner has put the backlog in priority order. The team pulls stories from the top until the sprint is full.",
+    role: "sprint",
+    exercise: {
+      type: "sprint",
+      rule:
+        "How to decide: take stories from the TOP of the backlog, in order, and stop when the next one won't fit under the team's capacity. Priority matters more than squeezing in small stories.",
+      capacity: 27,
+      stories: [
+        { id: "deck", label: "Create a deck", points: 8 },
+        { id: "flip", label: "Flip through cards", points: 5 },
+        { id: "shuffle", label: "Shuffle the deck", points: 4 },
+        { id: "wrong", label: "Track wrong cards", points: 8 },
+        { id: "import", label: "Import from a spreadsheet", points: 13 },
+        { id: "dark", label: "Dark mode", points: 3 },
+      ],
+    },
+    footnote: FA.planning,
+  },
+  {
+    id: "fl-10", phase: "Run the sprint", title: "Know the Scrum meetings",
+    explanation: "Scrum has four regular meetings. Each has one clear job, which keeps meetings short and useful.",
+    exercise: {
+      type: "match",
+      prompt: "Match each Scrum event to its job.",
+      leftLabel: "The event",
+      rightLabel: "Its job",
+      pairs: eventsMatch(),
+    },
+    footnote: FA.events,
+  },
+  {
+    id: "fl-11", phase: "Run the sprint", title: "Give a good standup update",
+    explanation:
+      "The daily scrum is 15 minutes. Each person shares what they did, what they'll do, and anything in their way.",
+    exercise: {
+      type: "multiple-choice",
+      question: "Which is the best standup update?",
+      options: [
+        "I did some coding",
+        "Yesterday I built the deck creation screen. Today I'll start flipping cards. I'm blocked because the test server is down.",
+        "Fine",
+        "I had a rough week and want to talk about my other classes",
+      ],
+      correct: 1,
+    },
+    footnote: FA.standup,
+  },
+  {
+    id: "fl-12", phase: "Run the sprint", title: "Update the sprint board",
+    explanation: "The sprint board shows where every story stands, so nobody has to ask.",
+    exercise: {
+      type: "kanban",
+      scenario:
+        "It's day 5 of a 10-day sprint. Deck creation is done, flipping cards is in progress, and shuffling hasn't started.",
+      cards: kanban([
+        ["Create a deck", "done"],
+        ["Flip through cards", "doing"],
+        ["Shuffle the deck", "todo"],
+        ["Track wrong cards", "todo"],
+      ]),
+    },
+    footnote: FA.board,
+  },
+  {
+    id: "fl-13", phase: "Run the sprint", title: "Handle a blocker",
+    explanation:
+      "A blocker is anything stopping progress. The worst thing you can do with one is hide it.",
+    exercise: {
+      type: "multiple-choice",
+      question:
+        "A developer is blocked because the test server is down, and only the IT volunteer can fix it. What's the best move?",
+      options: [
+        "Wait quietly",
+        "Raise it at standup and have the Scrum Master contact the IT volunteer today, while the developer works on a story that doesn't need the server",
+        "Skip testing for the whole sprint",
+        "Rebuild the server yourself",
+      ],
+      correct: 1,
+    },
+    footnote: FA.blocker,
+  },
+  {
+    id: "fl-14", phase: "Run the sprint", title: "Protect the sprint",
+    explanation:
+      "Mid-sprint, someone will always have a great new idea. The sprint is a promise to the team, so new ideas wait their turn.",
+    exercise: {
+      type: "multiple-choice",
+      question: "On day 4 a classmate asks, \"Can you add a timer and a leaderboard?\" What do you do?",
+      options: [
+        "Add them to this sprint",
+        "Say no forever",
+        "Add them to the product backlog, discuss priority at the next sprint planning, and keep the sprint goal",
+        "Cancel the sprint",
+      ],
+      correct: 2,
+    },
+    footnote: FA.midsprint,
+  },
+  {
+    id: "fl-15", phase: "Review & improve", title: "The sprint cycle",
+    explanation: "A sprint is a loop. At the end, you review, improve, and start again.",
+    exercise: {
+      type: "order",
+      prompt: "Drag the events into the order they happen in a sprint cycle.",
+      items: cycleOrder,
+    },
+    footnote: FA.cycle,
+  },
+  {
+    id: "fl-16", phase: "Review & improve", title: "Run a retrospective",
+    explanation: "The retro is where the team gets better. Be honest and kind, and aim for a few specific changes.",
+    role: "retro",
+    exercise: {
+      type: "buckets",
+      rule: retroRule,
+      hint: "Ask: is it a new habit (start), something that hurt (stop), or something already working (continue)?",
+      buckets: retroBuckets,
+      cards: bucketCards({
+        start: [
+          ["Write \"done when\" lines before coding", "A new habit that could help."],
+          ["Demo to the group every Friday", "A new habit that could help."],
+        ],
+        stop: [
+          ["Coding all night before the demo", "It burned the team out."],
+          ["Starting a new card before finishing the last one", "It left work half done."],
+        ],
+        continue: [
+          ["Pairing on hard cards", "It's already working."],
+          ["A 15-minute daily standup", "It's already working."],
+        ],
+      }),
+    },
+    footnote: FA.retro,
+  },
+  {
+    id: "fl-17", phase: "Review & improve", title: "Your sprint plan",
+    explanation: "You planned a whole sprint from the backlog to the retro. Here's everything you decided, on one page.",
+  },
+];
+
+// ============================================================================
 // The list the page uses. Add new projects here.
 // ============================================================================
 
@@ -3114,5 +4061,47 @@ export const planProjects: PlanProject[] = [
     summaryTitle: "My Product Brief: A Coffee Subscription Box",
     badge: "Certified Product Thinker ✨",
     steps: coffeeSteps,
+  },
+  {
+    id: "pizza-app",
+    track: "agile",
+    phases: AGILE_PHASES,
+    termLabel: "Real-world agile term",
+    emoji: "🍕",
+    label: "Ship a Pizza Ordering App",
+    description:
+      "Run a sprint with a four-person team: build the backlog, size the work, plan a sprint that fits, and hold the retro.",
+    level: "Beginner",
+    summaryTitle: "My Sprint Plan: Ship a Pizza Ordering App",
+    badge: "Certified Sprint Planner ✨",
+    steps: pizzaSteps,
+  },
+  {
+    id: "band-site",
+    track: "agile",
+    phases: AGILE_PHASES,
+    termLabel: "Real-world agile term",
+    emoji: "🎸",
+    label: "Launch a Fan Website for a Local Band",
+    description:
+      "A small team, a band manager with opinions, and a missing audio file. Practice standups, blockers, and saying \"next sprint.\"",
+    level: "Beginner",
+    summaryTitle: "My Sprint Plan: A Fan Website for a Local Band",
+    badge: "Certified Sprint Planner ✨",
+    steps: bandSteps,
+  },
+  {
+    id: "flashcard-app",
+    track: "agile",
+    phases: AGILE_PHASES,
+    termLabel: "Real-world agile term",
+    emoji: "📚",
+    label: "Build a Flashcard App for Your Study Group",
+    description:
+      "Try Scrum with a study group: sprint goals, velocity, a definition of done, and a retro that changes something.",
+    level: "Beginner",
+    summaryTitle: "My Sprint Plan: A Flashcard App for My Study Group",
+    badge: "Certified Sprint Planner ✨",
+    steps: flashSteps,
   },
 ];

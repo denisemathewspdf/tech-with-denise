@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Guides",
   description:
-    "Learn React, Python, AI, Terminal, TypeScript, Web3, Project Management, and Product Management — explained like you're five.",
+    "Learn React, Python, AI, Terminal, TypeScript, Web3, Project Management, Product Management, and Agile — explained like you're five.",
 };
 
 // All available topic filters
@@ -22,6 +22,7 @@ const allTopics = [
   "Projects",
   "Project Management",
   "Product Management",
+  "Agile",
 ];
 
 type GuidesPageProps = {
